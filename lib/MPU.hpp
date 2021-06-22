@@ -113,6 +113,10 @@
         #define  ZA_OFFSET_L         0x7E
         #define  I2C_SLV0_EN         0x80
         #define  I2C_READ_FLAG       0x80
+
+
+
+
 class xyz{
 public:
     int16_t x,y,z;
@@ -132,12 +136,12 @@ public:
 
 };
 
-class all {
+class all_values  {
 public:
     xyz gyr;
     xyz acc;
     int temp;
-    all(xyz gyr, xyz acc, int temp):
+    all_values(xyz gyr, xyz acc, int temp):
     gyr(gyr),
     acc(acc),
     temp(temp)
@@ -168,11 +172,11 @@ public:
     xyz getAccdata(int desired_range);
     xyz getGyrodata(int desired_range);
     int16_t getTempdata();
-    all getAlldata(int desired_range);
+    all_values getAlldata(int desired_range);
     xyz getAccdata_raw();
     xyz getGyrodata_raw();
     int16_t getTempdata_raw();
-    all getAlldata_raw();
+    all_values getAlldata_raw();
     int16_t calculateData_div();
     void test(hwlib::pin_in & switch_button);
 

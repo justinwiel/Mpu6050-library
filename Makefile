@@ -9,10 +9,10 @@
 #############################################################################
 
 # source files in this project (main.cpp is automatically assumed)
-SOURCES := MPU.cpp
+SOURCES := src/entities.cpp src/enemy.cpp lib/MPU.cpp
 
 # header files in this project
-HEADERS := MPU.hpp
+HEADERS := src/entities.hpp src/enemy.hpp lib/MPU.hpp
 
 # other places to look for files for this project
 SEARCH  := 

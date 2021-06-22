@@ -1,9 +1,7 @@
 #include "hwlib.hpp"
 #include <array>
-#include "src/enemy.hpp"
-#include "src/entities.hpp"
-#include "lib/MPU.hpp"
-
+#include "enemy.hpp"
+#include "entities.hpp"
 int main(){
     auto scl = hwlib::target::pin_oc( hwlib::target::pins::scl );
     auto sda = hwlib::target::pin_oc( hwlib::target::pins::sda );

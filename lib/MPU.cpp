@@ -125,8 +125,8 @@ int16_t MPU6050::getTempdata(){
     return temp/340+36.53;
 }
 
-all MPU6050::getAlldata(int desired_range){
-    return all(getGyrodata(desired_range),getAccdata(desired_range),getTempdata());
+all_values MPU6050::getAlldata(int desired_range){
+    return all_values( getGyrodata(desired_range),getAccdata(desired_range),getTempdata());
 }
 
 xyz MPU6050::getAccdata_raw(){
@@ -153,8 +153,8 @@ int16_t MPU6050::getTempdata_raw(){
     return temp;
 }
 
-all MPU6050::getAlldata_raw(){
-    return all(getGyrodata_raw(),getAccdata_raw(),getTempdata_raw());
+all_values MPU6050::getAlldata_raw(){
+    return all_values( getGyrodata_raw(),getAccdata_raw(),getTempdata_raw());
 }
 
 void MPU6050::test(hwlib::pin_in & switch_button ){
@@ -164,7 +164,7 @@ void MPU6050::test(hwlib::pin_in & switch_button ){
     auto d1 = hwlib::terminal_from(oled,f1);
     setup(3);
     writeRegister(PWR_MGMT_1, 0x00);
-    all all_data = getAlldata(10);
+    all_values all_data = getAlldata(10);
     bool raw = false;
     for(;;){
         if(switch_button.read()){
