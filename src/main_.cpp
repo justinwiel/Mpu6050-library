@@ -13,7 +13,7 @@ int main(){
     auto bottom = border(oled, hwlib::xy(0,oled.size.y-1), hwlib::xy(128,oled.size.y-1),hwlib::xy(1,-1));
     auto player1 = deathwall(oled,hwlib::xy(1,1),hwlib::xy(1,62),1);
     auto player2 = deathwall(oled,hwlib::xy(127,1),hwlib::xy(127,62),2);
-    auto ai = enemy(oled, hwlib::xy(120,18),hwlib::xy(123,36),hwlib::xy(-1,1),10);
+    auto ai = enemy(oled, hwlib::xy(120,18),hwlib::xy(123,36),hwlib::xy(-1,1),2);
     ball pong(oled,hwlib::xy(60,28), hwlib::xy(64,32), hwlib::xy(4,5));
     std::array< sprite *, 6 > objects = { &pong, &top, &bottom, &player1, &player2, &ai };
     while(true){
@@ -23,7 +23,7 @@ int main(){
             p->draw();
         }
         oled.flush();
-        hwlib::wait_ms( 50 );
+        //hwlib::wait_ms( 50 );
         for( auto & p : objects ){
             p->update();
       }

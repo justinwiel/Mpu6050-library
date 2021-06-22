@@ -8,46 +8,92 @@ bool within( int x, int a, int b ){
 }
 
 bool ball::overlaps( const sprite & other ){
-   
-   bool x_overlap = within( 
-      start.x + speed.x,
-      other.start.x,
-      other.end.x )
+    bool x_overlap_start = within( 
+        start.x ,
+        other.start.x,
+        other.end.x )
     || within( 
-      other.start.x, 
-      start.x, 
-      end.x
+        other.start.x , 
+        start.x, 
+        end.x
    );
      
-   bool y_overlap = within( 
-      start.y + speed.y,
-      other.start.y, 
-      other.end.y
-   ) || within( 
-      other.start.y, 
-      start.y, 
-      end.y
-   );
-   bool x_overlap_end = within( 
-      end.x,  
-      other.start.x,
-      other.end.x )
+   bool y_overlap_start = within( 
+        start.y,
+        other.start.y , 
+        other.end.y
+    ) || within( 
+        other.start.y , 
+        start.y, 
+        end.y
+    ); 
+    bool x_overlap_end = within( 
+        end.x ,
+        other.start.x,
+        other.end.x )
     || within( 
-      other.end.x, 
-      start.x, 
-      end.x
+        other.end.x , 
+        start.x, 
+        end.x
    );
      
    bool y_overlap_end = within( 
-      end.y, 
-      other.start.y, 
-      other.end.y
-   ) || within( 
-      other.end.y, 
+        end.y,
+        other.start.y , 
+        other.end.y
+    ) || within( 
+        other.end.y , 
+        start.y, 
+        end.y
+    ); 
+    bool x_overlap_start_speed = within( 
+        start.x -speed.x,
+        other.start.x,
+        other.end.x )
+    || within( 
+        other.start.x +speed.x , 
+        start.x, 
+        end.x
+   );
+     
+    bool y_overlap_start_speed = within( 
+        start.y -speed.y ,
+        other.start.y , 
+        other.end.y
+    ) || within( 
+      other.start.y +speed.y , 
       start.y, 
       end.y
    );
-   return (x_overlap && y_overlap) || (x_overlap_end && y_overlap_end);
+   bool x_overlap_end_speed = within( 
+      end.x +speed.x,  
+      other.start.x,
+      other.end.x )
+    || within( 
+      other.end.x - speed.x, 
+      start.x, 
+      end.x
+   );
+     
+   bool y_overlap_end_speed = within( 
+      end.y +speed.x , 
+      other.start.y, 
+      other.end.y
+   ) || within( 
+      other.end.y - speed.y  , 
+      start.y, 
+      end.y
+   );
+    return (x_overlap_start_speed && y_overlap_start_speed) || (x_overlap_end_speed && y_overlap_end_speed) || (x_overlap_start && y_overlap_start) || (x_overlap_end && y_overlap_end);
+}
+
+void ball::check_next_pos(const sprite & ai){
+    if(overlaps(ai)){
+        start.x -= 1;
+        end.x -= 1;
+        start.y -= 1;
+        end.y -= 1;
+    }
 }
 
 void ball::draw() {
@@ -113,21 +159,21 @@ bool border::overlaps( const sprite & other ){
       end.y
    );
    bool x_overlap_end = within( 
-      end.x,  
-      other.start.x,
-      other.end.x )
+      end.x ,  
+      other.start.x - 4,
+      other.end.x  )
     || within( 
-      other.end.x, 
+      other.end.x -4, 
       start.x, 
       end.x
    );
      
    bool y_overlap_end = within( 
-      end.y, 
+      end.y , 
       other.start.y, 
       other.end.y
    ) || within( 
-      other.end.y, 
+      other.end.y , 
       start.y, 
       end.y
    );

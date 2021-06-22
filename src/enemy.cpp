@@ -5,20 +5,20 @@
 
 
 void enemy::get_target(const sprite & ball){
-    goal =  ball.end.y - (ball.end.y - ball.start.y);
+    goal =  (ball.end.y - (ball.end.y - ball.start.y)/2);
 }
 
 void enemy::move_toTarget(){
-    int16_t  diff = goal - (end.y - int16_t(end.y - start.y));
+    int16_t  diff = goal - (end.y - (int16_t(end.y - start.y)/2));
     if(diff > max_movement){
         diff = max_movement;
-        start.y += diff +2;
-        end.y += diff +2;
+        start.y += diff ;
+        end.y += diff ;
         return;
     }else if(diff < (max_movement * -1)){
         diff = (max_movement * -1);
-        start.y += diff -2 ;
-        end.y += diff -2;
+        start.y += diff  ;
+        end.y += diff ;
         return;
     }
     start.y += diff;
@@ -27,11 +27,11 @@ void enemy::move_toTarget(){
 }
 
 void enemy::check_next_pos(const border & top, const border & bottom){
-    while(overlaps(bottom) || end.y > 58 ){
+    while( end.y > 58 ){
         start.y -=1;
         end.y -= 1;
     }
-    while(overlaps(top)|| start.y < 5){
+    while(start.y < 5){
         start.y +=1;
         end.y += 1;
     }

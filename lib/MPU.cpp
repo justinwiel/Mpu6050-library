@@ -22,17 +22,17 @@ void MPU6050::setup(uint8_t range_setting){
     auto to_write =  (fs_range << 4) ; // first three bytes are ignored as such the value needs to be shifted 3 before being written
     writeRegister(I2C_MST_STATUS,0b10000000);
     writeRegister(PWR_MGMT_1,0x80);
-    hwlib::wait_ms(100);
+    //hwlib::wait_ms(100);
     writeRegister(PWR_MGMT_1,0b0001);
     writeRegister(PWR_MGMT_2,0x00);
-    hwlib::wait_ms(200);
+    //hwlib::wait_ms(200);
     writeRegister(INT_ENABLE,0x00);
     writeRegister(FIFO_EN,0x00);
     writeRegister(PWR_MGMT_1,0x00);
     writeRegister(I2C_MST_CTRL,0x00);
     writeRegister(USER_CTRL,0x00);
     writeRegister(USER_CTRL,0x0c);
-    hwlib::wait_ms(15);
+    //hwlib::wait_ms(15);
     writeRegister(CONFIG,0b00000001);
     writeRegister(SMPLRT_DIV, 0);
     writeRegister(GYRO_CONFIG,to_write);
@@ -176,7 +176,7 @@ void MPU6050::test(hwlib::pin_in & switch_button ){
                     raw = true;
                     break;
             }
-            hwlib::wait_ms(1);
+            //hwlib::wait_ms(1);
         }
         switch (raw){
             case true:
@@ -191,7 +191,7 @@ void MPU6050::test(hwlib::pin_in & switch_button ){
         d1 <<  '\f' << "acc_x: " << all_data.acc.x  << "\nacc_y: " << all_data.acc.y
         << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << 
         "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z <<hwlib::flush;
-        hwlib::wait_ms(10);
+        //hwlib::wait_ms(10);
     }
  	
 }

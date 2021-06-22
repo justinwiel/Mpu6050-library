@@ -35,6 +35,7 @@ public:
         {}
     void draw() ;
     void update() ;
+    void check_next_pos( const sprite & ai);
     bool overlaps(const sprite & other);
     void interact(const sprite & other) ;
 
