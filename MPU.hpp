@@ -121,33 +121,62 @@ public:
     y(y),
     z(z)
     {}
+    xyz operator-(xyz & rhs);
+    xyz operator-=(xyz & rhs);
+    xyz operator+(xyz & rhs);
+    xyz operator+=(xyz & rhs);
+    xyz operator*(xyz & rhs);
+    xyz operator*=(xyz & rhs);
+    xyz operator*(int16_t & rhs);
+    xyz operator*=(int16_t & rhs);
+
 };
+
+class all {
+public:
+    xyz gyr;
+    xyz acc;
+    int temp;
+    all(xyz gyr, xyz acc, int temp):
+    gyr(gyr),
+    acc(acc),
+    temp(temp)
+    {}
+
+};
+
 
 class MPU6050 {
 protected: 
-    uint16_t  gyrosensitivity  = 131;   
-    uint16_t  accelsensitivity = 16384;
-    bool inerrupt_en =false;
+    int16_t  gyrosensitivity  = 131;   
+    int16_t  accelsensitivity = 16384;
+    bool interrupt_en =false;
     uint8_t   address;
     bool  A0;
+    int16_t fs_range = 0;
     hwlib::i2c_bus_bit_banged_scl_sda & I2C_bus;
 public:
     MPU6050(hwlib::i2c_bus_bit_banged_scl_sda & I2C_bus, bool  A0=0):
     A0(A0),
     I2C_bus(I2C_bus)
-    { //The setting of A0 sets the adrress to 0x68 when low or 0x69 when high
-        address = 0x68 + (int)A0;
+    { 
+        address = 0x68 + (int)A0; //The setting of A0 sets the adrress to 0x68 when low or 0x69 when high
     } 
     void writeRegister(uint8_t sub_adrr, uint8_t  data);
     uint8_t* readRegister(uint8_t sub_addr, uint8_t* data, uint8_t size);
-    void setup();
-    xyz getAccdata();
-    xyz getGyrodata();
+    void setup(uint8_t range_setting);
+    xyz getAccdata(int desired_range);
+    xyz getGyrodata(int desired_range);
     int16_t getTempdata();
-    void interrupt_enable();
-    void wait_4_data(hwlib::pin_in & int_pin);
-    void interrupt_disable();
-    void writeGyroOffset(int8_t  data[6]);
+    all getAlldata(int desired_range);
+    xyz getAccdata_raw();
+    xyz getGyrodata_raw();
+    int16_t getTempdata_raw();
+    all getAlldata_raw();
+    int16_t calculateData_div();
+    void test(hwlib::pin_in & switch_button);
+
+
 
 
 };
