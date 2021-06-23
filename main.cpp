@@ -30,6 +30,7 @@
 #include "src/pong/entities.hpp"
 #include "lib/MPU.hpp"
 #include "src/pong/player.hpp"
+#include "src/snake/snake.hpp"
 
 int main(){
     auto scl = hwlib::target::pin_oc( hwlib::target::pins::scl );
