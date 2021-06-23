@@ -1,6 +1,7 @@
 #include "hwlib.hpp"
 #include "entities.hpp"
 #include "enemy.hpp"
+#include <random>
 
 
 
@@ -10,19 +11,21 @@ void enemy::get_target(const sprite & ball){
 
 void enemy::move_toTarget(){
     int16_t  diff = goal - (end.y - (int16_t(end.y - start.y)/2));
-    if(diff > max_movement){
-        diff = max_movement;
+    std::srand(start.x*start.y);
+    int8_t random = std::rand() % 2;
+    if(diff > max_movement + random){
+        diff = max_movement + random;
         start.y += diff ;
         end.y += diff ;
         return;
-    }else if(diff < (max_movement * -1)){
-        diff = (max_movement * -1);
+    }else if(diff < ((max_movement +random) * -1)){
+        diff = ((max_movement +random) * -1);
         start.y += diff  ;
         end.y += diff ;
         return;
     }
-    start.y += diff;
-    end.y += diff;
+    start.y += diff + random;
+    end.y += diff + random;
 
 }
 

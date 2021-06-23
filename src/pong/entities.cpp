@@ -1,4 +1,5 @@
 #include "entities.hpp"
+#include "../../lib/MPU.hpp"
 
 
 
@@ -105,8 +106,14 @@ void ball::draw() {
 }
 
 void ball::update() {
-    start = start + speed;
-    end = end + speed;
+    // auto scl = hwlib::target::pin_oc( hwlib::target::pins::scl );
+    // auto sda = hwlib::target::pin_oc( hwlib::target::pins::sda );
+    // auto i2c_bus = hwlib::i2c_bus_bit_banged_scl_sda( scl,sda );
+    // auto chip = MPU6050(i2c_bus,0);
+    // chip.setup(3);
+    // auto data = chip.getAccdata(5);
+    start = start + speed; //+ hwlib::xy(data.x*2,data.y*2);
+    end = end + speed; //+ hwlib::xy(data.x*2,data.y*2);
 }
 
 void ball::interact(const sprite & other){
@@ -140,11 +147,11 @@ void border::interact(const sprite & other){
 bool border::overlaps( const sprite & other ){
    
    bool x_overlap = within( 
-      start.x ,
+      start.x - 4,
       other.start.x,
       other.end.x )
     || within( 
-      other.start.x, 
+      other.start.x -4, 
       start.x, 
       end.x
    );

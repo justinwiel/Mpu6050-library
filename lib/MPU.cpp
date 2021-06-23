@@ -157,42 +157,37 @@ all_values MPU6050::getAlldata_raw(){
     return all_values( getGyrodata_raw(),getAccdata_raw(),getTempdata_raw());
 }
 
-void MPU6050::test(hwlib::pin_in & switch_button ){
+all_values MPU6050::test(hwlib::pin_in & switch_button ){
     writeRegister(0x6b,0);
-    auto oled = hwlib::glcd_oled( I2C_bus, 0x3c );  
-    auto f1 = hwlib::font_default_8x8();
-    auto d1 = hwlib::terminal_from(oled,f1);
+
     setup(3);
     writeRegister(PWR_MGMT_1, 0x00);
     all_values all_data = getAlldata(10);
     bool raw = false;
-    for(;;){
-        if(switch_button.read()){
-            switch(raw){
-                case true:
-                    raw  = false;
-                    break;
-                case false:
-                    raw = true;
-                    break;
-            }
-            //hwlib::wait_ms(1);
-        }
-        switch (raw){
+    if(switch_button.read()){
+        switch(raw){
             case true:
-                all_data = getAlldata_raw();
+                raw  = false;
                 break;
             case false:
-                all_data = getAlldata(10);
+                raw = true;
                 break;
-
-
         }
-        d1 <<  '\f' << "acc_x: " << all_data.acc.x  << "\nacc_y: " << all_data.acc.y
-        << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << 
-        "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z <<hwlib::flush;
-        //hwlib::wait_ms(10);
     }
- 	
+    switch (raw){
+        case true:
+            all_data = getAlldata_raw();
+            break;
+        case false:
+            all_data = getAlldata(10);
+            break;
+
+
+    }
+
+
+    return all_data;
 }
+ 	
+
 

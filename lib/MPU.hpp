@@ -178,7 +178,7 @@ public:
     int16_t getTempdata_raw();
     all_values getAlldata_raw();
     int16_t calculateData_div();
-    void test(hwlib::pin_in & switch_button);
+    all_values test(hwlib::pin_in & switch_button);
 
 
 

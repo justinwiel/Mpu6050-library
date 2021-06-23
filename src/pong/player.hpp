@@ -2,7 +2,7 @@
 #define PLAYER_HPP
 #include "hwlib.hpp"
 #include "entities.hpp" 
-#include "../lib/MPU.hpp"
+#include "../../lib/MPU.hpp"
 using namespace hwlib;
 class Player :public border{
 public:

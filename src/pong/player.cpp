@@ -1,7 +1,7 @@
 #include "hwlib.hpp"
 #include "player.hpp"
 #include "entities.hpp" 
-#include "../lib/MPU.hpp"
+#include "../../lib/MPU.hpp"
 
 
 void Player::get_movement(){
