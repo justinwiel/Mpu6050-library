@@ -28,10 +28,18 @@
 void head::draw() {
     for(int x  = start.x; x <= end.x;x++){
         for(int y = start.y; y <= end.y;y++){
-            if(eye != xy(x,y)){
+            if((y < eye_start.y) || (y > eye_end.y) || (x< eye_start.x ) || (x > eye_end.x)){
                 w.write(xy(x,y));
             }
 
         }
     }
+}
+
+void head::update() {
+
+}
+
+void head::interact(const block & other){
+
 }

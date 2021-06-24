@@ -2,7 +2,10 @@
 #include <array>
 #include "enemy.hpp"
 #include "entities.hpp"
-int main(){
+#include "src/snake/snake.hpp"
+
+
+void play_pong(){
     auto scl = hwlib::target::pin_oc( hwlib::target::pins::scl );
     auto sda = hwlib::target::pin_oc( hwlib::target::pins::sda );
    
@@ -47,5 +50,8 @@ int main(){
     player2.clear = true;
   }
 
+}
+
+int main(){
 }
 

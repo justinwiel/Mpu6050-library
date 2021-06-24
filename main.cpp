@@ -32,13 +32,7 @@
 #include "src/pong/player.hpp"
 #include "src/snake/snake.hpp"
 
-int main(){
-    auto scl = hwlib::target::pin_oc( hwlib::target::pins::scl );
-    auto sda = hwlib::target::pin_oc( hwlib::target::pins::sda );
-    auto i2c_bus = hwlib::i2c_bus_bit_banged_scl_sda( scl,sda );
-    auto button = hwlib::target::pin_in( hwlib::target::pins::d10 );
-    auto button2 = hwlib::target::pin_in( hwlib::target::pins::d11 );
-    auto oled = hwlib::glcd_oled( i2c_bus, 0x3c ); 
+void play_pong(hwlib::glcd_oled & oled, MPU6050 & chip, hwlib::pin_in & button, hwlib::pin_in & button2){
     auto top = border(oled, hwlib::xy(0,0), hwlib::xy(128,0),hwlib::xy(1,-1));
     auto bottom = border(oled, hwlib::xy(0,oled.size.y-1), hwlib::xy(128,oled.size.y-1),hwlib::xy(1,-1));
     auto goal1 = deathwall(oled,hwlib::xy(1,1),hwlib::xy(1,62),1);
@@ -47,7 +41,7 @@ int main(){
     auto me = Player(oled, hwlib::xy(6,18),hwlib::xy(10,36),hwlib::xy(-1,1));
     ball pong(oled,hwlib::xy(60,28), hwlib::xy(64,32), hwlib::xy(4,5));
     std::array< sprite *, 7 > objects = { &pong, &top, &bottom, &goal1, &goal2, &ai, &me };
-    auto chip = MPU6050(i2c_bus, 0);
+
     for(;;){
       while(goal1.clear && goal2.clear){
         if(button.read()){
@@ -95,5 +89,21 @@ int main(){
     goal1.clear = true;
     goal2.clear = true;
   }
+
+}
+
+int main(){
+    auto scl = hwlib::target::pin_oc( hwlib::target::pins::scl );
+    auto sda = hwlib::target::pin_oc( hwlib::target::pins::sda );
+    auto i2c_bus = hwlib::i2c_bus_bit_banged_scl_sda( scl,sda );
+    auto button = hwlib::target::pin_in( hwlib::target::pins::d10 );
+    auto button2 = hwlib::target::pin_in( hwlib::target::pins::d11 );
+    auto oled = hwlib::glcd_oled( i2c_bus, 0x3c ); 
+    auto chip = MPU6050(i2c_bus, 0);
+    auto test = head(oled,hwlib::xy(60,28),hwlib::xy(68,36),hwlib::xy(65,30),hwlib::xy(67,32));
+    oled.clear();
+    test.draw();
+    oled.flush();
+    // play_pong(oled,chip,button,button2);
 
 }

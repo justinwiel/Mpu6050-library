@@ -35,12 +35,10 @@ protected:
 public:
     xy start;
     xy end;
-    xy bounce;
-    block(window & w,xy  start, xy  end, xy bounce):
+    block(window & w,xy  start, xy  end):
         w(w),
         start(start),
-        end(end),
-        bounce(bounce)
+        end(end)
         {}
     virtual void draw() = 0;
     virtual void update() = 0;
@@ -50,14 +48,16 @@ public:
 
 class head :public block {
 private:
-    xy eye;
+    xy eye_start;
+    xy eye_end;
 public:
-    head(window & w,xy  start, xy  end, xy bounce, xy eye):
-        block(w,start,end ,bounce),
-        eye(eye)
+    head(window & w,xy  start, xy  end,xy eye_start,xy eye_end):
+        block(w,start,end),
+        eye_start(eye_start),
+        eye_end(eye_end)
         {}
     void  draw();
     void update();
-    l void interact(const block & other) ;
+    void interact(const block & other) ;
 };
 #endif
