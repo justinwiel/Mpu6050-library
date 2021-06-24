@@ -46,18 +46,44 @@ public:
 
 };
 
-class head :public block {
-private:
-    xy eye_start;
-    xy eye_end;
+class body: public block{
 public:
-    head(window & w,xy  start, xy  end,xy eye_start,xy eye_end):
-        block(w,start,end),
-        eye_start(eye_start),
-        eye_end(eye_end)
+    body(window & w,xy  start, xy  end):
+        block(w,start,end)
         {}
     void  draw();
     void update();
     void interact(const block & other) ;
+};
+
+
+class head :public body {
+private:
+    xy eye_start;
+    xy eye_end;
+    xy start_prev = start;
+    xy end_prev = end;
+public:
+    head(window & w,xy  start, xy  end,xy eye_start,xy eye_end):
+        body(w,start,end),
+        eye_start(eye_start),
+        eye_end(eye_end)
+        {}
+    void  draw() override;
+    void update() override;
+    void interact(const block & other) override;
+    void gameOver();
+    void gameWon();
+    bool overlaps(const block & other);
+    void change_pos_x(int8_t val );
+    void change_pos_y(int8_t val );
+};
+
+
+class snake{
+protected:
+    body tail[20];
+public:
+    
 };
 #endif

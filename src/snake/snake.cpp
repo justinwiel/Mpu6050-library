@@ -23,6 +23,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 #include "snake.hpp"
+#include "../../lib/MPU.hpp"
 
 
 void head::draw() {
@@ -36,10 +37,167 @@ void head::draw() {
     }
 }
 
+void body::draw(){
+    for(int x  = start.x; x <= end.x;x++){
+        for(int y = start.y; y <= end.y;y++){
+            w.write(xy(x,y));
+        }
+    }
+}
+void head::change_pos_x(int8_t val ){
+    start_prev.x = start.x;
+    end_prev.x = end.x;
+    start.x += val;
+    end.x += val;
+    eye_start.x += val;
+    eye_end.x += val;
+}
+
+void head::change_pos_y(int8_t val ){
+    start_prev.y = start.y;
+    end_prev.y = end.y;
+    start.y += val;
+    end.y += val;
+    eye_start.y += val;
+    eye_end.y += val;
+}
+
+
 void head::update() {
+    auto scl = hwlib::target::pin_oc( hwlib::target::pins::scl );
+    auto sda = hwlib::target::pin_oc( hwlib::target::pins::sda );
+    auto i2c_bus = hwlib::i2c_bus_bit_banged_scl_sda( scl,sda );
+    auto chip = MPU6050(i2c_bus,0);
+    chip.setup(3);
+    auto data = chip.getAccdata(10);
+    if(data.z > data.x){
+        change_pos_y(10);
+    }else if(data.z < data.x && data.z < -4){
+        change_pos_y(-10);
+    }else if(data.y > 4){
+        change_pos_x(-10);
+    }else if(data.y < -4){
+        change_pos_x(10);
+
+    }
+
 
 }
 
 void head::interact(const block & other){
+    if(this != & other){
+        if(overlaps(other)){
+            gameOver();
+        }
+        
+    }
+}
 
+void body::update() {
+
+}
+
+void body::interact(const block & other){
+    
+}
+namespace snakes{
+    bool within( int x, int a, int b ){
+        return ( x >= a ) && ( x <= b );
+}
+}
+
+
+bool head::overlaps( const block & other ){
+    bool out_bounds = start.y < 0 || end.y > 64;
+    bool x_overlap_start = snakes::within( 
+        start.x ,
+        other.start.x,
+        other.end.x )
+    || snakes::within( 
+        other.start.x , 
+        start.x, 
+        end.x
+   );
+     
+   bool y_overlap_start = snakes::within( 
+        start.y,
+        other.start.y , 
+        other.end.y
+    ) || snakes::within( 
+        other.start.y , 
+        start.y, 
+        end.y
+    ); 
+    bool x_overlap_end = snakes::within( 
+        end.x ,
+        other.start.x,
+        other.end.x )
+    || snakes::within( 
+        other.end.x , 
+        start.x, 
+        end.x
+   );
+     
+   bool y_overlap_end = snakes::within( 
+        end.y,
+        other.start.y , 
+        other.end.y
+    ) || snakes::within( 
+        other.end.y , 
+        start.y, 
+        end.y
+    ); 
+    bool x_overlap_start_speed = snakes::within( 
+        start.x -1,
+        other.start.x,
+        other.end.x )
+    || snakes::within( 
+        other.start.x +1 , 
+        start.x, 
+        end.x
+   );
+     
+    bool y_overlap_start_speed = snakes::within( 
+        start.y -1 ,
+        other.start.y , 
+        other.end.y
+    ) || snakes::within( 
+      other.start.y +1 , 
+      start.y, 
+      end.y
+   );
+   bool x_overlap_end_speed = snakes::within( 
+      end.x +1,  
+      other.start.x,
+      other.end.x )
+    || snakes::within( 
+      other.end.x - 1, 
+      start.x, 
+      end.x
+   );
+     
+   bool y_overlap_end_speed = snakes::within( 
+      end.y +1 , 
+      other.start.y, 
+      other.end.y
+   ) || snakes::within( 
+      other.end.y - 1 , 
+      start.y, 
+      end.y
+   );
+    return (x_overlap_start_speed && y_overlap_start_speed) || (x_overlap_end_speed && y_overlap_end_speed) || (x_overlap_start && y_overlap_start) || (x_overlap_end && y_overlap_end) || out_bounds;
+}
+void head::gameOver(){
+    auto f = hwlib::font_default_8x8();
+    auto terminal = hwlib::terminal_from(w,f);
+    w.clear();
+    terminal << '\f' << "\n\n\n" << "    Game over" << hwlib::flush;
+
+}
+
+void head::gameWon(){
+    auto f = hwlib::font_default_8x8();
+    auto terminal = hwlib::terminal_from(w,f);
+    w.clear();
+    terminal << '\f' << "\n\n\n" << "     You Win!" << hwlib::flush; 
 }

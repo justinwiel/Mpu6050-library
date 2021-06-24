@@ -101,9 +101,33 @@ int main(){
     auto oled = hwlib::glcd_oled( i2c_bus, 0x3c ); 
     auto chip = MPU6050(i2c_bus, 0);
     auto test = head(oled,hwlib::xy(60,28),hwlib::xy(68,36),hwlib::xy(65,30),hwlib::xy(67,32));
+    auto test2 = body(oled,hwlib::xy(50,28),hwlib::xy(58,36));
+     std::array< block *, 2 > objects = { &test, &test2};
     oled.clear();
-    test.draw();
-    oled.flush();
-    // play_pong(oled,chip,button,button2);
+    chip.test(button);
+    // for(;;){
+    //   auto f1 = hwlib::font_default_8x8();
+    //   auto d1 = hwlib::terminal_from(oled,f1);
+    //   auto all_data = chip.test(button);
+    //   d1 <<  '\f' << "acc_x: " << all_data.acc.x  << "\nacc_y: " << all_data.acc.y
+    //     << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << 
+    //     "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z <<hwlib::flush;
+    // }
+    for(;;){
+        oled.clear();
+        for( auto & p : objects ){
+            p->draw();
+        }
+        oled.flush();
+        for( auto & p : objects ){
+            p->update();
+      }
+        for( auto & p : objects ){
+          for( auto & other : objects ){
+              p->interact( *other );
+          }
+    }
 
+
+  }
 }

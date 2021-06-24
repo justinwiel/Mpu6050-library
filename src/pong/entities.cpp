@@ -102,7 +102,7 @@ bool ball::overlaps( const sprite & other ){
    );
      
    bool y_overlap_end_speed = within( 
-      end.y +speed.x , 
+      end.y +speed.y , 
       other.start.y, 
       other.end.y
    ) || within( 
