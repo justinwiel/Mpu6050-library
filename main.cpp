@@ -30,34 +30,25 @@
 #include "src/pong/entities.hpp"
 #include "lib/MPU.hpp"
 #include "src/pong/player.hpp"
-#include "src/snake/snake.hpp"
+#include "src/dodge/obstacle.hpp"
 
-void play_pong(hwlib::glcd_oled & oled, MPU6050 & chip, hwlib::pin_in & button, hwlib::pin_in & button2){
+
+void play_pong(hwlib::glcd_oled & oled, MPU6050 & chip, hwlib::pin_in & button){
     auto top = border(oled, hwlib::xy(0,0), hwlib::xy(128,0),hwlib::xy(1,-1));
     auto bottom = border(oled, hwlib::xy(0,oled.size.y-1), hwlib::xy(128,oled.size.y-1),hwlib::xy(1,-1));
     auto goal1 = deathwall(oled,hwlib::xy(1,1),hwlib::xy(1,62),1);
     auto goal2 = deathwall(oled,hwlib::xy(127,1),hwlib::xy(127,62),2);
-    auto ai = enemy(oled, hwlib::xy(117,18),hwlib::xy(122,36),hwlib::xy(-1,1),1);
+    auto ai = enemy(oled, hwlib::xy(117,18),hwlib::xy(122,36),hwlib::xy(-1,1),3);
     auto me = Player(oled, hwlib::xy(6,18),hwlib::xy(10,36),hwlib::xy(-1,1));
     ball pong(oled,hwlib::xy(60,28), hwlib::xy(64,32), hwlib::xy(4,5));
     std::array< sprite *, 7 > objects = { &pong, &top, &bottom, &goal1, &goal2, &ai, &me };
 
     for(;;){
       while(goal1.clear && goal2.clear){
-        if(button.read()){
-          oled.clear();
-          for(;;){
-            auto f1 = hwlib::font_default_8x8();
-            auto d1 = hwlib::terminal_from(oled,f1);
-            auto all_data = chip.test(button);
-            if(button2.read()){
-              break;
-            }
-            d1 <<  '\f' << "acc_x: " << all_data.acc.x  << "\nacc_y: " << all_data.acc.y
-                << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << 
-                "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z <<hwlib::flush;
-        }
-          }
+      if(button.read()){
+        hwlib::wait_ms(100);
+        return;
+      }
 
         oled.clear();
         for( auto & p : objects ){
@@ -80,7 +71,11 @@ void play_pong(hwlib::glcd_oled & oled, MPU6050 & chip, hwlib::pin_in & button, 
           }
 
         }
-      } 
+      }
+      if(!(goal1.clear) || !(goal2.clear)){
+        me.reset();
+        ai.reset();
+      }
     }
     hwlib::wait_ms(2000);
     pong.start = hwlib::xy(60,28);
@@ -92,28 +87,17 @@ void play_pong(hwlib::glcd_oled & oled, MPU6050 & chip, hwlib::pin_in & button, 
 
 }
 
-int main(){
-    auto scl = hwlib::target::pin_oc( hwlib::target::pins::scl );
-    auto sda = hwlib::target::pin_oc( hwlib::target::pins::sda );
-    auto i2c_bus = hwlib::i2c_bus_bit_banged_scl_sda( scl,sda );
-    auto button = hwlib::target::pin_in( hwlib::target::pins::d10 );
-    auto button2 = hwlib::target::pin_in( hwlib::target::pins::d11 );
-    auto oled = hwlib::glcd_oled( i2c_bus, 0x3c ); 
-    auto chip = MPU6050(i2c_bus, 0);
-    auto test = head(oled,hwlib::xy(60,28),hwlib::xy(68,36),hwlib::xy(65,30),hwlib::xy(67,32));
-    auto test2 = body(oled,hwlib::xy(50,28),hwlib::xy(58,36));
-     std::array< block *, 2 > objects = { &test, &test2};
-    oled.clear();
-    chip.test(button);
-    // for(;;){
-    //   auto f1 = hwlib::font_default_8x8();
-    //   auto d1 = hwlib::terminal_from(oled,f1);
-    //   auto all_data = chip.test(button);
-    //   d1 <<  '\f' << "acc_x: " << all_data.acc.x  << "\nacc_y: " << all_data.acc.y
-    //     << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << 
-    //     "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z <<hwlib::flush;
-    // }
+void play_dodge(MPU6050 & chip, hwlib::glcd_oled & oled,hwlib::pin_in & button ){
+    auto player = dodge::Player(oled,hwlib::xy(60,28),hwlib::xy(68,36),chip ,hwlib::xy(65,30),hwlib::xy(67,32));
+    
+    auto target = dodge::obstacle(oled,hwlib::xy(80,0),hwlib::xy(90,40),1);
+    auto target2 = dodge::obstacle(oled,hwlib::xy(130,24),hwlib::xy(140,64),1);
+    auto target3 = dodge::obstacle(oled,hwlib::xy(180,20),hwlib::xy(190,45),1);
+    std::array<dodge::sprite *, 4> objects = {&player,&target,&target2,&target3};
     for(;;){
+        if(button.read()){
+          return;
+        }
         oled.clear();
         for( auto & p : objects ){
             p->draw();
@@ -121,13 +105,100 @@ int main(){
         oled.flush();
         for( auto & p : objects ){
             p->update();
-      }
+        }
         for( auto & p : objects ){
           for( auto & other : objects ){
+            if(p!=other){
               p->interact( *other );
+            }
           }
+        }
+          if(player.hit){
+            player.gameOver();
+            hwlib::wait_ms(2000);
+            for( auto & p : objects ){
+              p->reset();
+            }
+          }
+          if(target3.end.x < 0 ){
+            target.reset();
+            target2.reset();
+            target3.reset();
+          }
+    }
+}
+
+void test(hwlib::pin_in & button,hwlib::pin_in & button2,MPU6050 & chip, hwlib::glcd_oled  &oled){
+    auto green = hwlib::target::pin_out(hwlib::target::pins::d9);
+    auto yellow = hwlib::target::pin_out(hwlib::target::pins::d8);
+    auto interrupt = hwlib::target::pin_in(hwlib::target::pins::d7);
+    chip.interrupt_enable();
+    for(;;){
+      auto f1 = hwlib::font_default_8x8();
+      auto d1 = hwlib::terminal_from(oled,f1);
+      auto all_data = chip.test(button);
+      if(button2.read()){
+        chip.interrupt_disable();
+        return;
+      }
+      oled.clear();
+      uint8_t data[1];
+      chip.read_interrupt(data);
+      if((data[0] & 0b00000001) != 0){ //data ready interrupt
+        green.write(1); 
+        hwlib::wait_ms(10);
+      }else{
+        green.write(0);
+        hwlib::wait_ms(10);
+      }
+      if((data[0] & 0b00010000) != 0){ //data ready interrupt
+        yellow.write(1); 
+        hwlib::wait_ms(10);
+      }else{
+        yellow.write(0);
+        hwlib::wait_ms(10);
+        }
+
+      d1 <<  '\f' << "acc_x: " << all_data.acc.x  << "\nacc_y: " << all_data.acc.y
+        << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << 
+        "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z <<hwlib::flush;
+      hwlib::wait_ms(2000);
+      all_data = chip.fifo_read(10);
+      d1 <<  '\f' << "acc_x: " << all_data.acc.x << "    fifo" << "\nacc_y: " << all_data.acc.y
+        << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << 
+        "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z <<hwlib::flush;
+      hwlib::wait_ms(2000);
+  }
+}
+
+
+int main(){
+    auto scl = hwlib::target::pin_oc( hwlib::target::pins::scl );
+    auto sda = hwlib::target::pin_oc( hwlib::target::pins::sda );
+    auto i2c_bus = hwlib::i2c_bus_bit_banged_scl_sda( scl,sda );
+    auto button = hwlib::target::pin_in( hwlib::target::pins::d10 );
+    auto button2 = hwlib::target::pin_in( hwlib::target::pins::d11 );
+    auto button3 = hwlib::target::pin_in( hwlib::target::pins::d12 );
+    auto oled = hwlib::glcd_oled( i2c_bus, 0x3c ); 
+    auto chip = MPU6050(i2c_bus, 0);
+    for(;;){
+      oled.clear();
+      auto f1 = hwlib::font_default_8x8();
+      auto d1 = hwlib::terminal_from(oled,f1);
+      d1 << '\f' << "select a game, \n\nbutton 1 pong, \n\nbutton 2 dodge, \n\npress button 3 \nfor testing" <<  hwlib::flush;
+      if(button.read()){
+        play_pong(oled,chip,button2);
+      }
+      if(button2.read()){
+        play_dodge(chip,oled,button);
+      }
+      if(button3.read()){
+        test(button,button2,chip,oled);
+      }
     }
 
 
-  }
+
+
+  
 }

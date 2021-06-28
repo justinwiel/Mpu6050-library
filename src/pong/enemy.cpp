@@ -35,7 +35,7 @@ void enemy::get_target(const sprite & ball){
 
 void enemy::move_toTarget(){
     int16_t  diff = goal - (end.y - (int16_t(end.y - start.y)/2));
-    std::srand(start.x*start.y);
+    std::srand(hwlib::now_ticks());
     int8_t random = std::rand() % 2;
     if(diff > max_movement + random){
         diff = max_movement + random;

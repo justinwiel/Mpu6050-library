@@ -68,6 +68,9 @@ public:
 };
 
 class border :public sprite{
+private:
+    xy org_start = start;
+    xy org_end = end;
 public:
     border(window & w,xy  start, xy  end, xy bounce):
         sprite(w,  start,  end, bounce)
@@ -76,6 +79,7 @@ public:
     void update() ;
     bool overlaps(const sprite & other);
     virtual void interact(const sprite & other) ;
+    void reset();
 
 };
 

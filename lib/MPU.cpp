@@ -27,6 +27,45 @@
 #include "hwlib.hpp"
 
 
+xyz xyz::operator-(xyz & rhs){
+    return xyz(x - rhs.x , y - rhs.y, z - rhs.z);
+}
+
+xyz xyz::operator-=(xyz & rhs){
+    x -= rhs.x;
+    y -= rhs.y;
+    z -= rhs.z;
+    return *this;
+}
+xyz xyz::operator+(xyz & rhs){
+    return xyz(x + rhs.x,y + rhs.y,  z + rhs.z);
+}
+xyz xyz::operator+=(xyz & rhs){
+    x += rhs.x;
+    y += rhs.y;
+    z += rhs.z;
+    return *this;
+}
+xyz xyz::operator*(xyz & rhs){
+    return xyz(x * rhs.x,y * rhs.y,  z * rhs.z);
+
+}
+xyz xyz::operator*=(xyz & rhs){
+    x *= rhs.x;
+    y *= rhs.y;
+    z *= rhs.z;
+    return *this;
+}
+xyz xyz::operator*(int16_t & rhs){
+    return xyz(x * rhs,y * rhs,  z * rhs);
+}
+xyz xyz::operator*=(int16_t & rhs){
+    x *= rhs;
+    y *= rhs;
+    z *= rhs;
+    return *this;
+}
+
 
 void MPU6050::setup(uint8_t range_setting){
     switch(range_setting){
@@ -86,44 +125,7 @@ uint8_t* MPU6050::readRegister(uint8_t sub_addr, uint8_t* data, uint8_t size){
     return data;
 }
 
-xyz xyz::operator-(xyz & rhs){
-    return xyz(x - rhs.x , y - rhs.y, z - rhs.z);
-}
 
-xyz xyz::operator-=(xyz & rhs){
-    x -= rhs.x;
-    y -= rhs.y;
-    z -= rhs.z;
-    return *this;
-}
-xyz xyz::operator+(xyz & rhs){
-    return xyz(x + rhs.x,y + rhs.y,  z + rhs.z);
-}
-xyz xyz::operator+=(xyz & rhs){
-    x += rhs.x;
-    y += rhs.y;
-    z += rhs.z;
-    return *this;
-}
-xyz xyz::operator*(xyz & rhs){
-    return xyz(x * rhs.x,y * rhs.y,  z * rhs.z);
-
-}
-xyz xyz::operator*=(xyz & rhs){
-    x *= rhs.x;
-    y *= rhs.y;
-    z *= rhs.z;
-    return *this;
-}
-xyz xyz::operator*(int16_t & rhs){
-    return xyz(x * rhs,y * rhs,  z * rhs);
-}
-xyz xyz::operator*=(int16_t & rhs){
-    x *= rhs;
-    y *= rhs;
-    z *= rhs;
-    return *this;
-}
 
 
 xyz MPU6050::getAccdata(int desired_range){
@@ -213,6 +215,57 @@ all_values MPU6050::test(hwlib::pin_in & switch_button ){
 
     return all_data;
 }
+
+void MPU6050::interrupt_enable(){
+    writeRegister(0x37, 0b11110000);
+    writeRegister(0x38, 0b00010001); //all interrupts except i2c master enabled
+}
+void MPU6050::interrupt_disable(){
+    writeRegister(0x37, 0b00000000);
+    writeRegister(0x38, 0b0000000); //all interrupts disabled 
+}
+
+
+bool MPU6050::check_interrupt(hwlib::pin_in & interrupt_pin){
+    return interrupt_pin.read();
+}
+
+void MPU6050::read_interrupt(uint8_t data[1]){
+    readRegister(0x3a,data,1);
+}
+
+
+void MPU6050::fifo_enable(){
+    writeRegister(0x23, 0b11111000); //all enabled
+}
+
+void MPU6050::fifo_disable(){
+    writeRegister(0x23, 0b00000000); //all disabled
+}
+
+all_values MPU6050::fifo_read(uint8_t desired_range){
+    fifo_enable();
+    hwlib::wait_ms(20);
+    uint8_t count [2];
+    readRegister(0x72,count,2);
+    int16_t packetcount = (count[0] << 8) | count[1];
+    int16_t data[7];
+    if (packetcount > 0 ){
+        uint8_t temp[14];
+        readRegister(0x74, temp,14);
+        for(int i = 0; i< 14;i++){
+            data[0] = (temp[0] << 8) | temp[1];
+            data[1] = (temp[2] << 8) | temp[3]; 
+            data[2] = (temp[4] << 8) | temp[5];
+            data[3] = (temp[6] << 8) | temp[7];
+            data[4] = (temp[8] << 8) | temp[9];
+            data[5] = (temp[10] << 8) | temp[11];
+            data[6] = (temp[12] << 8) | temp[13];
+        }
+    }
+    return all_values( xyz(data[4]/(fs_range/desired_range),data[5]/(fs_range/desired_range),data[6]/(fs_range/desired_range)),xyz(data[0]/(fs_range/desired_range),data[1]/(fs_range/desired_range),data[2]/(fs_range/desired_range)), data[3]/340+36.53);
+}
+
  	
 
 

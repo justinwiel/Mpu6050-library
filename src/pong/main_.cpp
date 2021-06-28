@@ -2,7 +2,7 @@
 #include <array>
 #include "enemy.hpp"
 #include "entities.hpp"
-#include "src/snake/snake.hpp"
+#include "src/dodge/dodge.hpp"
 
 
 void play_pong(){

@@ -22,11 +22,12 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-#include "snake.hpp"
+#include "obstacle.hpp"
 #include "../../lib/MPU.hpp"
 
+using namespace dodge;
 
-void head::draw() {
+void Player::draw() {
     for(int x  = start.x; x <= end.x;x++){
         for(int y = start.y; y <= end.y;y++){
             if((y < eye_start.y) || (y > eye_end.y) || (x< eye_start.x ) || (x > eye_end.x)){
@@ -37,14 +38,16 @@ void head::draw() {
     }
 }
 
-void body::draw(){
+
+void obstacle::draw(){
     for(int x  = start.x; x <= end.x;x++){
         for(int y = start.y; y <= end.y;y++){
             w.write(xy(x,y));
         }
     }
 }
-void head::change_pos_x(int8_t val ){
+
+void Player::change_pos_x(int8_t val ){
     start_prev.x = start.x;
     end_prev.x = end.x;
     start.x += val;
@@ -53,7 +56,7 @@ void head::change_pos_x(int8_t val ){
     eye_end.x += val;
 }
 
-void head::change_pos_y(int8_t val ){
+void Player::change_pos_y(int8_t val ){
     start_prev.y = start.y;
     end_prev.y = end.y;
     start.y += val;
@@ -63,131 +66,156 @@ void head::change_pos_y(int8_t val ){
 }
 
 
-void head::update() {
-    auto scl = hwlib::target::pin_oc( hwlib::target::pins::scl );
-    auto sda = hwlib::target::pin_oc( hwlib::target::pins::sda );
-    auto i2c_bus = hwlib::i2c_bus_bit_banged_scl_sda( scl,sda );
-    auto chip = MPU6050(i2c_bus,0);
+void Player::update() {
     chip.setup(3);
-    auto data = chip.getAccdata(10);
+    auto data = chip.getAccdata(5);
     if(data.z > data.x){
-        change_pos_y(10);
+        change_pos_y(9);
     }else if(data.z < data.x && data.z < -4){
-        change_pos_y(-10);
+        change_pos_y(-9);
     }else if(data.y > 4){
-        change_pos_x(-10);
+        change_pos_x(-9);
     }else if(data.y < -4){
-        change_pos_x(10);
+        change_pos_x(9);
 
     }
+    check_next_pos();
 
 
 }
 
-void head::interact(const block & other){
+void Player::check_next_pos(){
+    while( end.y > 58 ){
+        start.y -=1;
+        end.y -= 1;
+        eye_start.y -= 1;
+        eye_end.y -= 1;
+    }
+    while(start.y < 5){
+        start.y +=1 ;
+        end.y += 1 ;
+        eye_start.y += 1;
+        eye_end.y += 1;
+    }
+    while( end.x > 126 ){
+        start.x -=1;
+        end.x -= 1;
+        eye_start.x -= 1;
+        eye_end.x -= 1;
+    }
+    while(start.x < 5){
+        start.x +=1 ;
+        end.x += 1 ;
+        eye_start.x += 1;
+        eye_end.x += 1;
+    }
+}
+
+void Player::interact(sprite & other){
     if(this != & other){
         if(overlaps(other)){
-            gameOver();
+            hit = true;
         }
         
     }
 }
 
-void body::update() {
-
+void obstacle::update() {
+    start.x -= speed;
+    end.x -= speed;
 }
 
-void body::interact(const block & other){
+void obstacle::interact(sprite & other){
     
 }
-namespace snakes{
-    bool within( int x, int a, int b ){
-        return ( x >= a ) && ( x <= b );
-}
+
+bool obstacle::within( int x, int a, int b ){
+    return ( x >= a ) && ( x <= b );
+
 }
 
 
-bool head::overlaps( const block & other ){
+bool Player::overlaps( sprite & other ){
     bool out_bounds = start.y < 0 || end.y > 64;
-    bool x_overlap_start = snakes::within( 
+    bool x_overlap_start = within( 
         start.x ,
         other.start.x,
         other.end.x )
-    || snakes::within( 
+    || within( 
         other.start.x , 
         start.x, 
         end.x
    );
      
-   bool y_overlap_start = snakes::within( 
+   bool y_overlap_start = within( 
         start.y,
         other.start.y , 
         other.end.y
-    ) || snakes::within( 
+    ) || within( 
         other.start.y , 
         start.y, 
         end.y
     ); 
-    bool x_overlap_end = snakes::within( 
+    bool x_overlap_end = within( 
         end.x ,
         other.start.x,
         other.end.x )
-    || snakes::within( 
+    || within( 
         other.end.x , 
         start.x, 
         end.x
    );
      
-   bool y_overlap_end = snakes::within( 
+   bool y_overlap_end = within( 
         end.y,
         other.start.y , 
         other.end.y
-    ) || snakes::within( 
+    ) || within( 
         other.end.y , 
         start.y, 
         end.y
     ); 
-    bool x_overlap_start_speed = snakes::within( 
+    bool x_overlap_start_speed = within( 
         start.x -1,
         other.start.x,
         other.end.x )
-    || snakes::within( 
+    || within( 
         other.start.x +1 , 
         start.x, 
         end.x
    );
      
-    bool y_overlap_start_speed = snakes::within( 
+    bool y_overlap_start_speed = within( 
         start.y -1 ,
         other.start.y , 
         other.end.y
-    ) || snakes::within( 
+    ) || within( 
       other.start.y +1 , 
       start.y, 
       end.y
    );
-   bool x_overlap_end_speed = snakes::within( 
+   bool x_overlap_end_speed = within( 
       end.x +1,  
       other.start.x,
       other.end.x )
-    || snakes::within( 
+    || within( 
       other.end.x - 1, 
       start.x, 
       end.x
    );
      
-   bool y_overlap_end_speed = snakes::within( 
+   bool y_overlap_end_speed = within( 
       end.y +1 , 
       other.start.y, 
       other.end.y
-   ) || snakes::within( 
+   ) || within( 
       other.end.y - 1 , 
       start.y, 
       end.y
    );
     return (x_overlap_start_speed && y_overlap_start_speed) || (x_overlap_end_speed && y_overlap_end_speed) || (x_overlap_start && y_overlap_start) || (x_overlap_end && y_overlap_end) || out_bounds;
 }
-void head::gameOver(){
+void Player::gameOver(){
     auto f = hwlib::font_default_8x8();
     auto terminal = hwlib::terminal_from(w,f);
     w.clear();
@@ -195,9 +223,16 @@ void head::gameOver(){
 
 }
 
-void head::gameWon(){
-    auto f = hwlib::font_default_8x8();
-    auto terminal = hwlib::terminal_from(w,f);
-    w.clear();
-    terminal << '\f' << "\n\n\n" << "     You Win!" << hwlib::flush; 
+void Player::reset(){
+    start = org_start;
+    end = org_end;
+    eye_start  = org_start_eye;
+    eye_end = org_end_eye;
+    hit = false;
 }
+void obstacle::reset(){
+    start = org_start;
+    end = org_end;
+}
+
+

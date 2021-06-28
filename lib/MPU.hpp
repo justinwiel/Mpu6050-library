@@ -203,7 +203,15 @@ public:
     int16_t getTempdata_raw();
     all_values getAlldata_raw();
     int16_t calculateData_div();
+    void interrupt_enable();
+    void interrupt_disable();
+    bool check_interrupt(hwlib::pin_in & interrupt_pin);
+    void read_interrupt(uint8_t data[1]);
     all_values test(hwlib::pin_in & switch_button);
+    void fifo_enable();
+    all_values fifo_read(uint8_t desired_range);
+    void fifo_disable();
+
 
 
 
