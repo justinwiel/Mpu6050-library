@@ -1646,7 +1646,7 @@ LOAD c:/ti_spul/v1oopc-examples/nieuwe_omgeving/gcc-arm-none-eabi-9-2019-q4-majo
                 [!provide]                PROVIDE (__ram_size = __ram_size)
                 [!provide]                PROVIDE (__ram_end = __ram_end)
 
-.text           0x00000000     0x3a60
+.text           0x00000000     0x3abc
                 0x00000000                . = ALIGN (0x4)
                 0x00000000                __text_start = .
                 [!provide]                PROVIDE (__text_start = __text_start)
@@ -1907,286 +1907,289 @@ LOAD c:/ti_spul/v1oopc-examples/nieuwe_omgeving/gcc-arm-none-eabi-9-2019-q4-majo
  .text._ZN7MPU60509fifo_readEh
                 0x000012f0      0x120 lib/MPU.o
                 0x000012f0                MPU6050::fifo_read(unsigned char)
+ .text._ZN7MPU605010fifo_resetEv
+                0x00001410        0x8 lib/MPU.o
+                0x00001410                MPU6050::fifo_reset()
  .text._ZN7MPU60504testERN5hwlib6pin_inERNS0_29glcd_oled_i2c_128x64_bufferedE
-                0x00001410      0x320 lib/MPU.o
-                0x00001410                MPU6050::test(hwlib::pin_in&, hwlib::glcd_oled_i2c_128x64_buffered&)
+                0x00001418      0x374 lib/MPU.o
+                0x00001418                MPU6050::test(hwlib::pin_in&, hwlib::glcd_oled_i2c_128x64_buffered&)
  .text._ZN5dodge8obstacle6updateEv
-                0x00001730       0x12 src/dodge/obstacle.o
-                0x00001730                dodge::obstacle::update()
+                0x0000178c       0x12 src/dodge/obstacle.o
+                0x0000178c                dodge::obstacle::update()
  .text._ZN5dodge8obstacle8interactERNS_6spriteE
-                0x00001742        0x2 src/dodge/obstacle.o
-                0x00001742                dodge::obstacle::interact(dodge::sprite&)
+                0x0000179e        0x2 src/dodge/obstacle.o
+                0x0000179e                dodge::obstacle::interact(dodge::sprite&)
  .text._ZN5dodge6Player5resetEv
-                0x00001744       0x3a src/dodge/obstacle.o
-                0x00001744                dodge::Player::reset()
+                0x000017a0       0x3a src/dodge/obstacle.o
+                0x000017a0                dodge::Player::reset()
  .text._ZN5dodge8obstacle5resetEv
-                0x0000177e       0x1c src/dodge/obstacle.o
-                0x0000177e                dodge::obstacle::reset()
- *fill*         0x0000179a        0x2 
+                0x000017da       0x1c src/dodge/obstacle.o
+                0x000017da                dodge::obstacle::reset()
+ *fill*         0x000017f6        0x2 
  .text._ZN5dodge6Player4drawEv
-                0x0000179c       0x58 src/dodge/obstacle.o
-                0x0000179c                dodge::Player::draw()
+                0x000017f8       0x58 src/dodge/obstacle.o
+                0x000017f8                dodge::Player::draw()
  .text._ZN5dodge8obstacle4drawEv
-                0x000017f4       0x40 src/dodge/obstacle.o
-                0x000017f4                dodge::obstacle::draw()
+                0x00001850       0x40 src/dodge/obstacle.o
+                0x00001850                dodge::obstacle::draw()
  .text._ZN5dodge6Player12change_pos_xEa
-                0x00001834       0x1e src/dodge/obstacle.o
-                0x00001834                dodge::Player::change_pos_x(signed char)
+                0x00001890       0x1e src/dodge/obstacle.o
+                0x00001890                dodge::Player::change_pos_x(signed char)
  .text._ZN5dodge6Player12change_pos_yEa
-                0x00001852       0x1e src/dodge/obstacle.o
-                0x00001852                dodge::Player::change_pos_y(signed char)
+                0x000018ae       0x1e src/dodge/obstacle.o
+                0x000018ae                dodge::Player::change_pos_y(signed char)
  .text._ZN5dodge6Player14check_next_posEv
-                0x00001870       0x7a src/dodge/obstacle.o
-                0x00001870                dodge::Player::check_next_pos()
+                0x000018cc       0x7a src/dodge/obstacle.o
+                0x000018cc                dodge::Player::check_next_pos()
  .text._ZN5dodge6Player6updateEv
-                0x000018ea       0x5e src/dodge/obstacle.o
-                0x000018ea                dodge::Player::update()
+                0x00001946       0x5e src/dodge/obstacle.o
+                0x00001946                dodge::Player::update()
  .text._ZN5dodge6Player8overlapsERNS_6spriteE
-                0x00001948      0x180 src/dodge/obstacle.o
-                0x00001948                dodge::Player::overlaps(dodge::sprite&)
+                0x000019a4      0x180 src/dodge/obstacle.o
+                0x000019a4                dodge::Player::overlaps(dodge::sprite&)
  .text._ZN5dodge6Player8interactERNS_6spriteE
-                0x00001ac8       0x16 src/dodge/obstacle.o
-                0x00001ac8                dodge::Player::interact(dodge::sprite&)
- *fill*         0x00001ade        0x2 
+                0x00001b24       0x16 src/dodge/obstacle.o
+                0x00001b24                dodge::Player::interact(dodge::sprite&)
+ *fill*         0x00001b3a        0x2 
  .text._ZN5dodge6Player8gameOverEv
-                0x00001ae0       0x8c src/dodge/obstacle.o
-                0x00001ae0                dodge::Player::gameOver()
+                0x00001b3c       0x8c src/dodge/obstacle.o
+                0x00001b3c                dodge::Player::gameOver()
  .text._ZNK5hwlib9image_8x819read_implementationENS_2xyE
-                0x00001b6c       0x4c hwlib.o
-                0x00001b6c                hwlib::image_8x8::read_implementation(hwlib::xy) const
+                0x00001bc8       0x4c hwlib.o
+                0x00001bc8                hwlib::image_8x8::read_implementation(hwlib::xy) const
  .text._ZN5hwlib6window20clear_implementationENS_5colorE
-                0x00001bb8       0x6c hwlib.o
-                0x00001bb8                hwlib::window::clear_implementation(hwlib::color)
+                0x00001c14       0x6c hwlib.o
+                0x00001c14                hwlib::window::clear_implementation(hwlib::color)
  .text._ZN5hwlib6window5clearENS_5colorE
-                0x00001c24       0x3c hwlib.o
-                0x00001c24                hwlib::window::clear(hwlib::color)
+                0x00001c80       0x3c hwlib.o
+                0x00001c80                hwlib::window::clear(hwlib::color)
  .text._ZN5hwlib5panicEPKcj
-                0x00001c60        0x2 hwlib.o
-                0x00001c60                hwlib::panic(char const*, unsigned int)
- *fill*         0x00001c62        0x2 
+                0x00001cbc        0x2 hwlib.o
+                0x00001cbc                hwlib::panic(char const*, unsigned int)
+ *fill*         0x00001cbe        0x2 
  .text._ZN5hwlib15background_base18do_background_workEv
-                0x00001c64       0x3c hwlib.o
-                0x00001c64                hwlib::background_base::do_background_work()
+                0x00001cc0       0x3c hwlib.o
+                0x00001cc0                hwlib::background_base::do_background_work()
  .text._ZN5hwlib3allENS_2xyE
-                0x00001ca0       0x16 hwlib.o
-                0x00001ca0                hwlib::all(hwlib::xy)
+                0x00001cfc       0x16 hwlib.o
+                0x00001cfc                hwlib::all(hwlib::xy)
  .text._ZNK5hwlib5colorngEv
-                0x00001cb6       0x2e hwlib.o
-                0x00001cb6                hwlib::color::operator-() const
+                0x00001d12       0x2e hwlib.o
+                0x00001d12                hwlib::color::operator-() const
  .text._ZNK5hwlib5image4readENS_2xyE
-                0x00001ce4       0x38 hwlib.o
-                0x00001ce4                hwlib::image::read(hwlib::xy) const
+                0x00001d40       0x38 hwlib.o
+                0x00001d40                hwlib::image::read(hwlib::xy) const
  .text._ZNK5hwlib14image_invert_t19read_implementationENS_2xyE
-                0x00001d1c       0x4a hwlib.o
-                0x00001d1c                hwlib::image_invert_t::read_implementation(hwlib::xy) const
- *fill*         0x00001d66        0x2 
+                0x00001d78       0x4a hwlib.o
+                0x00001d78                hwlib::image_invert_t::read_implementation(hwlib::xy) const
+ *fill*         0x00001dc2        0x2 
  .text._ZN5hwlib6invertERKNS_5imageE
-                0x00001d68       0x18 hwlib.o
-                0x00001d68                hwlib::invert(hwlib::image const&)
+                0x00001dc4       0x18 hwlib.o
+                0x00001dc4                hwlib::invert(hwlib::image const&)
  .text._ZN5hwlib9now_ticksEv
-                0x00001d80        0x8 hwlib.o
-                0x00001d80                hwlib::now_ticks()
+                0x00001ddc        0x8 hwlib.o
+                0x00001ddc                hwlib::now_ticks()
  .text._ZN5hwlib6now_usEv
-                0x00001d88       0x1c hwlib.o
-                0x00001d88                hwlib::now_us()
+                0x00001de4       0x1c hwlib.o
+                0x00001de4                hwlib::now_us()
  .text._ZN5hwlib7wait_usEi
-                0x00001da4       0x22 hwlib.o
-                0x00001da4                hwlib::wait_us(int)
+                0x00001e00       0x22 hwlib.o
+                0x00001e00                hwlib::wait_us(int)
  .text._ZN5hwlib7wait_msEi
-                0x00001dc6       0x16 hwlib.o
-                0x00001dc6                hwlib::wait_ms(int)
+                0x00001e22       0x16 hwlib.o
+                0x00001e22                hwlib::wait_ms(int)
  .text._ZN5hwlib29glcd_oled_i2c_128x64_buffered20write_implementationENS_2xyENS_5colorE
-                0x00001ddc       0x64 main.o
-                0x00001ddc                hwlib::glcd_oled_i2c_128x64_buffered::write_implementation(hwlib::xy, hwlib::color)
+                0x00001e38       0x64 main.o
+                0x00001e38                hwlib::glcd_oled_i2c_128x64_buffered::write_implementation(hwlib::xy, hwlib::color)
  .text._ZN5hwlib21i2c_write_transaction5writeEPKhj.isra.0
-                0x00001e40        0x6 main.o
+                0x00001e9c        0x6 main.o
  .text._ZN5hwlib11ssd1306_i2c7commandENS_16ssd1306_commandsEhh
-                0x00001e46       0x3c main.o
-                0x00001e46                hwlib::ssd1306_i2c::command(hwlib::ssd1306_commands, unsigned char, unsigned char)
+                0x00001ea2       0x3c main.o
+                0x00001ea2                hwlib::ssd1306_i2c::command(hwlib::ssd1306_commands, unsigned char, unsigned char)
  .text._ZN5hwlib29glcd_oled_i2c_128x64_buffered5flushEv
-                0x00001e82       0x58 main.o
-                0x00001e82                hwlib::glcd_oled_i2c_128x64_buffered::flush()
- *fill*         0x00001eda        0x2 
+                0x00001ede       0x58 main.o
+                0x00001ede                hwlib::glcd_oled_i2c_128x64_buffered::flush()
+ *fill*         0x00001f36        0x2 
  .text._ZN3due6pin_inC2ENS_4pinsE
-                0x00001edc       0x34 main.o
-                0x00001edc                due::pin_in::pin_in(due::pins)
-                0x00001edc                due::pin_in::pin_in(due::pins)
+                0x00001f38       0x34 main.o
+                0x00001f38                due::pin_in::pin_in(due::pins)
+                0x00001f38                due::pin_in::pin_in(due::pins)
  .text._Z9play_pongRN5hwlib29glcd_oled_i2c_128x64_bufferedER7MPU6050RNS_6pin_inE
-                0x00001f10      0x2c0 main.o
-                0x00001f10                play_pong(hwlib::glcd_oled_i2c_128x64_buffered&, MPU6050&, hwlib::pin_in&)
+                0x00001f6c      0x2c0 main.o
+                0x00001f6c                play_pong(hwlib::glcd_oled_i2c_128x64_buffered&, MPU6050&, hwlib::pin_in&)
  .text._Z10play_dodgeR7MPU6050RN5hwlib29glcd_oled_i2c_128x64_bufferedERNS1_6pin_inE
-                0x000021d0      0x204 main.o
-                0x000021d0                play_dodge(MPU6050&, hwlib::glcd_oled_i2c_128x64_buffered&, hwlib::pin_in&)
+                0x0000222c      0x204 main.o
+                0x0000222c                play_dodge(MPU6050&, hwlib::glcd_oled_i2c_128x64_buffered&, hwlib::pin_in&)
  .text.startup.main
-                0x000023d4      0x1ec main.o
-                0x000023d4                main
+                0x00002430      0x1ec main.o
+                0x00002430                main
  .text.__startup
-                0x000025c0       0x40 bmptk_cortex.o
-                0x000025c0                __startup
+                0x0000261c       0x40 bmptk_cortex.o
+                0x0000261c                __startup
  .text.__cxa_pure_virtual
-                0x00002600        0x2 bmptk_cortex.o
-                0x00002600                __cxa_pure_virtual
- *fill*         0x00002602        0x2 
- .text          0x00002604      0x378 c:/ti_spul/v1oopc-examples/nieuwe_omgeving/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7-m/nofp\libgcc.a(_arm_addsubdf3.o)
-                0x00002604                __aeabi_drsub
-                0x0000260c                __aeabi_dsub
-                0x0000260c                __subdf3
-                0x00002610                __aeabi_dadd
-                0x00002610                __adddf3
-                0x00002888                __floatunsidf
-                0x00002888                __aeabi_ui2d
-                0x000028a8                __floatsidf
-                0x000028a8                __aeabi_i2d
-                0x000028cc                __aeabi_f2d
-                0x000028cc                __extendsfdf2
-                0x00002910                __floatundidf
-                0x00002910                __aeabi_ul2d
-                0x00002920                __floatdidf
-                0x00002920                __aeabi_l2d
- .text          0x0000297c       0x50 c:/ti_spul/v1oopc-examples/nieuwe_omgeving/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7-m/nofp\libgcc.a(_arm_fixdfsi.o)
-                0x0000297c                __aeabi_d2iz
-                0x0000297c                __fixdfsi
- .text          0x000029cc       0x30 c:/ti_spul/v1oopc-examples/nieuwe_omgeving/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7-m/nofp\libgcc.a(_aeabi_uldivmod.o)
-                0x000029cc                __aeabi_uldivmod
- .text          0x000029fc      0x2c4 c:/ti_spul/v1oopc-examples/nieuwe_omgeving/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7-m/nofp\libgcc.a(_udivmoddi4.o)
-                0x000029fc                __udivmoddi4
- .text          0x00002cc0        0x4 c:/ti_spul/v1oopc-examples/nieuwe_omgeving/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7-m/nofp\libgcc.a(_dvmd_tls.o)
-                0x00002cc0                __aeabi_ldiv0
- .text.srand    0x00002cc4       0x10 c:/ti_spul/v1oopc-examples/nieuwe_omgeving/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libc.a(lib_a-rand.o)
-                0x00002cc4                srand
- .text.rand     0x00002cd4       0x3c c:/ti_spul/v1oopc-examples/nieuwe_omgeving/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libc.a(lib_a-rand.o)
-                0x00002cd4                rand
-                0x00002d10                . = ALIGN (0x4)
+                0x0000265c        0x2 bmptk_cortex.o
+                0x0000265c                __cxa_pure_virtual
+ *fill*         0x0000265e        0x2 
+ .text          0x00002660      0x378 c:/ti_spul/v1oopc-examples/nieuwe_omgeving/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7-m/nofp\libgcc.a(_arm_addsubdf3.o)
+                0x00002660                __aeabi_drsub
+                0x00002668                __aeabi_dsub
+                0x00002668                __subdf3
+                0x0000266c                __aeabi_dadd
+                0x0000266c                __adddf3
+                0x000028e4                __floatunsidf
+                0x000028e4                __aeabi_ui2d
+                0x00002904                __floatsidf
+                0x00002904                __aeabi_i2d
+                0x00002928                __aeabi_f2d
+                0x00002928                __extendsfdf2
+                0x0000296c                __floatundidf
+                0x0000296c                __aeabi_ul2d
+                0x0000297c                __floatdidf
+                0x0000297c                __aeabi_l2d
+ .text          0x000029d8       0x50 c:/ti_spul/v1oopc-examples/nieuwe_omgeving/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7-m/nofp\libgcc.a(_arm_fixdfsi.o)
+                0x000029d8                __aeabi_d2iz
+                0x000029d8                __fixdfsi
+ .text          0x00002a28       0x30 c:/ti_spul/v1oopc-examples/nieuwe_omgeving/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7-m/nofp\libgcc.a(_aeabi_uldivmod.o)
+                0x00002a28                __aeabi_uldivmod
+ .text          0x00002a58      0x2c4 c:/ti_spul/v1oopc-examples/nieuwe_omgeving/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7-m/nofp\libgcc.a(_udivmoddi4.o)
+                0x00002a58                __udivmoddi4
+ .text          0x00002d1c        0x4 c:/ti_spul/v1oopc-examples/nieuwe_omgeving/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7-m/nofp\libgcc.a(_dvmd_tls.o)
+                0x00002d1c                __aeabi_ldiv0
+ .text.srand    0x00002d20       0x10 c:/ti_spul/v1oopc-examples/nieuwe_omgeving/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libc.a(lib_a-rand.o)
+                0x00002d20                srand
+ .text.rand     0x00002d30       0x3c c:/ti_spul/v1oopc-examples/nieuwe_omgeving/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libc.a(lib_a-rand.o)
+                0x00002d30                rand
+                0x00002d6c                . = ALIGN (0x4)
  *(.glue_7t .glue_7)
- .glue_7        0x00002d10        0x0 linker stubs
- .glue_7t       0x00002d10        0x0 linker stubs
-                0x00002d10                . = ALIGN (0x4)
+ .glue_7        0x00002d6c        0x0 linker stubs
+ .glue_7t       0x00002d6c        0x0 linker stubs
+                0x00002d6c                . = ALIGN (0x4)
  *(.rodata .rodata.* .gnu.linkonce.r.*)
  .rodata._ZN3due8pin_infoENS_4pinsE.str1.1
-                0x00002d10       0x32 src/pong/entities.o
+                0x00002d6c       0x32 src/pong/entities.o
  .rodata._ZN9deathwall8gameOverEv.str1.1
-                0x00002d42       0x12 src/pong/entities.o
+                0x00002d9e       0x12 src/pong/entities.o
  .rodata._ZN9deathwall7gameWonEv.str1.1
-                0x00002d54        0xe src/pong/entities.o
- *fill*         0x00002d62        0x2 
+                0x00002db0        0xe src/pong/entities.o
+ *fill*         0x00002dbe        0x2 
  .rodata._ZTVN5hwlib13terminal_fromE
-                0x00002d64       0x20 src/pong/entities.o
-                0x00002d64                vtable for hwlib::terminal_from
+                0x00002dc0       0x20 src/pong/entities.o
+                0x00002dc0                vtable for hwlib::terminal_from
  .rodata._ZTVN5hwlib16font_default_8x8E
-                0x00002d84        0xc src/pong/entities.o
-                0x00002d84                vtable for hwlib::font_default_8x8
+                0x00002de0        0xc src/pong/entities.o
+                0x00002de0                vtable for hwlib::font_default_8x8
  .rodata._ZN5hwlibL11unspecifiedE
-                0x00002d90        0x4 src/pong/entities.o
+                0x00002dec        0x4 src/pong/entities.o
  .rodata._ZTV4ball
-                0x00002d94       0x14 src/pong/entities.o
-                0x00002d94                vtable for ball
+                0x00002df0       0x14 src/pong/entities.o
+                0x00002df0                vtable for ball
  .rodata._ZTV6border
-                0x00002da8       0x14 src/pong/entities.o
-                0x00002da8                vtable for border
+                0x00002e04       0x14 src/pong/entities.o
+                0x00002e04                vtable for border
  .rodata._ZTV9deathwall
-                0x00002dbc       0x14 src/pong/entities.o
-                0x00002dbc                vtable for deathwall
+                0x00002e18       0x14 src/pong/entities.o
+                0x00002e18                vtable for deathwall
  .rodata._ZZN3due8pin_infoENS_4pinsEE14pin_info_array
-                0x00002dd0       0xa4 src/pong/entities.o
+                0x00002e2c       0xa4 src/pong/entities.o
  .rodata._ZTVN5hwlib26i2c_bus_bit_banged_scl_sdaE
-                0x00002e74       0x34 src/pong/player.o
-                0x00002e74                vtable for hwlib::i2c_bus_bit_banged_scl_sda
+                0x00002ed0       0x34 src/pong/player.o
+                0x00002ed0                vtable for hwlib::i2c_bus_bit_banged_scl_sda
  .rodata._ZTVN3due6pin_ocE
-                0x00002ea8       0x18 src/pong/player.o
-                0x00002ea8                vtable for due::pin_oc
+                0x00002f04       0x18 src/pong/player.o
+                0x00002f04                vtable for due::pin_oc
  .rodata._ZN7MPU60504testERN5hwlib6pin_inERNS0_29glcd_oled_i2c_128x64_bufferedE.str1.1
-                0x00002ec0       0x54 lib/MPU.o
+                0x00002f1c       0x54 lib/MPU.o
  .rodata._ZTVN3due7pin_outE
-                0x00002f14       0x10 lib/MPU.o
-                0x00002f14                vtable for due::pin_out
+                0x00002f70       0x10 lib/MPU.o
+                0x00002f70                vtable for due::pin_out
  .rodata._ZN5hwlibL11unspecifiedE
-                0x00002f24        0x4 lib/MPU.o
+                0x00002f80        0x4 lib/MPU.o
  .rodata._ZN5dodge6Player8gameOverEv.str1.1
-                0x00002f28       0x12 src/dodge/obstacle.o
+                0x00002f84       0x12 src/dodge/obstacle.o
  .rodata._ZN5hwlibL11unspecifiedE
-                0x00002f28        0x4 src/dodge/obstacle.o
+                0x00002f84        0x4 src/dodge/obstacle.o
  .rodata._ZTVN5dodge6PlayerE
-                0x00002f2c       0x18 src/dodge/obstacle.o
-                0x00002f2c                vtable for dodge::Player
+                0x00002f88       0x18 src/dodge/obstacle.o
+                0x00002f88                vtable for dodge::Player
  .rodata._ZTVN5dodge8obstacleE
-                0x00002f44       0x18 src/dodge/obstacle.o
-                0x00002f44                vtable for dodge::obstacle
+                0x00002fa0       0x18 src/dodge/obstacle.o
+                0x00002fa0                vtable for dodge::obstacle
  .rodata._ZTVN5hwlib9image_8x8E
-                0x00002f5c        0xc hwlib.o
-                0x00002f5c                vtable for hwlib::image_8x8
+                0x00002fb8        0xc hwlib.o
+                0x00002fb8                vtable for hwlib::image_8x8
  .rodata._ZTVN5hwlib14image_invert_tE
-                0x00002f68        0xc hwlib.o
-                0x00002f68                vtable for hwlib::image_invert_t
+                0x00002fc4        0xc hwlib.o
+                0x00002fc4                vtable for hwlib::image_invert_t
  .rodata._ZTVN5hwlib6windowE
-                0x00002f74       0x18 hwlib.o
-                0x00002f74                vtable for hwlib::window
+                0x00002fd0       0x18 hwlib.o
+                0x00002fd0                vtable for hwlib::window
  .rodata._ZN5hwlib16font_default_8x86imagesE
-                0x00002f8c      0xa00 hwlib.o
-                0x00002f8c                hwlib::font_default_8x8::images
+                0x00002fe8      0xa00 hwlib.o
+                0x00002fe8                hwlib::font_default_8x8::images
  .rodata._ZN5hwlibL5blackE
-                0x0000398c        0x4 hwlib.o
+                0x000039e8        0x4 hwlib.o
  .rodata._ZN5hwlibL5whiteE
-                0x00003990        0x4 hwlib.o
+                0x000039ec        0x4 hwlib.o
  .rodata.main.str1.1
-                0x00003994       0x47 main.o
- *fill*         0x000039db        0x1 
+                0x000039f0       0x47 main.o
+ *fill*         0x00003a37        0x1 
  .rodata._ZTVN5hwlib29glcd_oled_i2c_128x64_bufferedE
-                0x000039dc       0x18 main.o
-                0x000039dc                vtable for hwlib::glcd_oled_i2c_128x64_buffered
+                0x00003a38       0x18 main.o
+                0x00003a38                vtable for hwlib::glcd_oled_i2c_128x64_buffered
  .rodata._ZTVN3due6pin_inE
-                0x000039f4       0x10 main.o
-                0x000039f4                vtable for due::pin_in
+                0x00003a50       0x10 main.o
+                0x00003a50                vtable for due::pin_in
  .rodata._ZTV5enemy
-                0x00003a04       0x14 main.o
-                0x00003a04                vtable for enemy
+                0x00003a60       0x14 main.o
+                0x00003a60                vtable for enemy
  .rodata._ZTV6Player
-                0x00003a18       0x14 main.o
-                0x00003a18                vtable for Player
+                0x00003a74       0x14 main.o
+                0x00003a74                vtable for Player
  .rodata._ZN5hwlibL11unspecifiedE
-                0x00003a2c        0x4 main.o
+                0x00003a88        0x4 main.o
  .rodata._ZN5hwlibL22ssd1306_initializationE
-                0x00003a30       0x29 main.o
+                0x00003a8c       0x29 main.o
  .rodata._ZN5hwlibL5blackE
-                0x00003a59        0x4 main.o
-                0x00003a60                . = ALIGN (0x4)
- *fill*         0x00003a5d        0x3 
+                0x00003ab5        0x4 main.o
+                0x00003abc                . = ALIGN (0x4)
+ *fill*         0x00003ab9        0x3 
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x00003a60                . = ALIGN (0x4)
+                0x00003abc                . = ALIGN (0x4)
  *(.gcc_except_table)
-                0x00003a60                . = ALIGN (0x4)
+                0x00003abc                . = ALIGN (0x4)
  *(.eh_frame_hdr)
-                0x00003a60                . = ALIGN (0x4)
+                0x00003abc                . = ALIGN (0x4)
  *(.eh_frame)
-                0x00003a60                . = ALIGN (0x4)
-                0x00003a60                __text_end = .
+                0x00003abc                . = ALIGN (0x4)
+                0x00003abc                __text_end = .
                 [!provide]                PROVIDE (__text_end = __text_end)
 
-.vfp11_veneer   0x00003a60        0x0
- .vfp11_veneer  0x00003a60        0x0 linker stubs
+.vfp11_veneer   0x00003abc        0x0
+ .vfp11_veneer  0x00003abc        0x0 linker stubs
 
-.v4_bx          0x00003a60        0x0
- .v4_bx         0x00003a60        0x0 linker stubs
+.v4_bx          0x00003abc        0x0
+ .v4_bx         0x00003abc        0x0 linker stubs
 
-.iplt           0x00003a60        0x0
- .iplt          0x00003a60        0x0 src/pong/entities.o
+.iplt           0x00003abc        0x0
+ .iplt          0x00003abc        0x0 src/pong/entities.o
 
 .IF_YOU_SEE_THIS_YOU_HAVE_ONE_OR_MORE_GLOBAL_OBJECT_CONSTRUCTORS
  *(.init)
  *(.preinit_array)
  *(SORT_BY_NAME(.init_array.*))
  *(.init_array)
-                0x00003a60                . = ALIGN (0x4)
-                0x00003a60                __exidx_start = .
+                0x00003abc                . = ALIGN (0x4)
+                0x00003abc                __exidx_start = .
                 [!provide]                PROVIDE (__exidx_start = __exidx_start)
 
-.ARM.exidx      0x00003a60        0x8
+.ARM.exidx      0x00003abc        0x8
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
- .ARM.exidx     0x00003a60        0x8 c:/ti_spul/v1oopc-examples/nieuwe_omgeving/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7-m/nofp\libgcc.a(_udivmoddi4.o)
+ .ARM.exidx     0x00003abc        0x8 c:/ti_spul/v1oopc-examples/nieuwe_omgeving/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7-m/nofp\libgcc.a(_udivmoddi4.o)
 
-.rel.dyn        0x00003a68        0x0
- .rel.iplt      0x00003a68        0x0 src/pong/entities.o
-                0x00003a68                . = ALIGN (0x4)
-                0x00003a68                __exidx_end = .
+.rel.dyn        0x00003ac4        0x0
+ .rel.iplt      0x00003ac4        0x0 src/pong/entities.o
+                0x00003ac4                . = ALIGN (0x4)
+                0x00003ac4                __exidx_end = .
                 [!provide]                PROVIDE (__exidx_end = __exidx_end)
 
 .bss            0x20070000    0x1201c
@@ -2231,9 +2234,9 @@ LOAD c:/ti_spul/v1oopc-examples/nieuwe_omgeving/gcc-arm-none-eabi-9-2019-q4-majo
                 0x2008201c                __bss_end = .
                 [!provide]                PROVIDE (__bss_end = __bss_end)
 
-.data           0x20082020      0x430 load address 0x00003a68
+.data           0x20082020      0x430 load address 0x00003ac4
                 0x20082020                . = ALIGN (0x4)
-                0x00003a68                __data_init_start = LOADADDR (.data)
+                0x00003ac4                __data_init_start = LOADADDR (.data)
                 [!provide]                PROVIDE (__data_init_start = __data_init_start)
                 0x20082020                __data_start = .
                 [!provide]                PROVIDE (__data_start = __data_start)
@@ -2250,13 +2253,13 @@ LOAD c:/ti_spul/v1oopc-examples/nieuwe_omgeving/gcc-arm-none-eabi-9-2019-q4-majo
                 0x20082450                . = ALIGN (0x4)
                 0x20082450                __data_end = .
                 [!provide]                PROVIDE (__data_end = __data_end)
-                0x00003a68                __data_init_end = LOADADDR (.data)
+                0x00003ac4                __data_init_end = LOADADDR (.data)
                 [!provide]                PROVIDE (__data_init_end = __data_init_end)
                 [!provide]                PROVIDE (__data_size = (__data_end - __data_start))
                 [!provide]                PROVIDE (__data_init_size = __data_size)
                 [!provide]                PROVIDE (__data_init_end = (__data_init_start + __data_init_size))
 
-.igot.plt       0x20082450        0x0 load address 0x00003e98
+.igot.plt       0x20082450        0x0 load address 0x00003ef4
  .igot.plt      0x20082450        0x0 src/pong/entities.o
                 0x20082450                . = ALIGN (0x4)
                 0x20082450                __heap_start = .

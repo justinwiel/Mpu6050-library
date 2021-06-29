@@ -287,6 +287,7 @@ public:
     all_values fifo_read(uint8_t desired_range);
     all_values fifo_read_raw();
     void fifo_disable();
+    void fifo_reset();
 };
 
 
