@@ -81,10 +81,15 @@ void MPU6050::setup(uint8_t range_setting){
         case 3: 
             fs_range = 2000;
             break;
+        default:
+            if(range_setting > 3){
+                fs_range = 2000;
+            }else{
+                fs_range = 250;  
+            }
 
     }
-    auto to_write =  (fs_range << 4) ; // first three bytes are ignored as such the value needs to be shifted 3 before being written
-    writeRegister(I2C_MST_STATUS,0b10000000);
+    auto to_write =  (range_setting << 3) ; // first three bytes are ignored as such the value needs to be shifted 3 before being written
     writeRegister(PWR_MGMT_1,0x80);
     //hwlib::wait_ms(100);
     writeRegister(PWR_MGMT_1,0b0001);
@@ -131,17 +136,17 @@ uint8_t* MPU6050::readRegister(uint8_t sub_addr, uint8_t* data, uint8_t size){
 xyz MPU6050::getAccdata(int desired_range){
     uint8_t data[6];
         readRegister(ACCEL_XOUT_H,data,6);
-    int16_t x = (int16_t)(data[0] << 8) | data[1];
-    int16_t y = (int16_t)(data[2] << 8) | data[3];
-    int16_t z = (int16_t)(data[4] << 8) | data[5];
+    int16_t x = (data[0] << 8) | data[1];
+    int16_t y = (data[2] << 8) | data[3];
+    int16_t z = (data[4] << 8) | data[5];
     return xyz((x/(fs_range/desired_range))%(desired_range+1),(y/(fs_range/desired_range))%(desired_range+1),(z/(fs_range/desired_range))%(desired_range+1)); 
 }
 xyz MPU6050::getGyrodata(int desired_range){
     uint8_t data[6];
         readRegister(GYRO_XOUT_H,data,6);
-    int16_t x = (int16_t)(data[0] << 8) | data[1];
-    int16_t y = (int16_t)(data[2] << 8) | data[3];
-    int16_t z = (int16_t)(data[4] << 8) | data[5];
+    int16_t x = (data[0] << 8) | data[1];
+    int16_t y = (data[2] << 8) | data[3];
+    int16_t z = (data[4] << 8) | data[5];
     return xyz((x/(fs_range/desired_range))%(desired_range+1),(y/(fs_range/desired_range))%(desired_range+1),(z/(fs_range/desired_range))%(desired_range+1)); 
 }
 int16_t MPU6050::getTempdata(){
@@ -159,17 +164,17 @@ all_values MPU6050::getAlldata(int desired_range){
 xyz MPU6050::getAccdata_raw(){
     uint8_t data[6];
         readRegister(ACCEL_XOUT_H,data,6);
-    int16_t x = (int16_t)(data[0] << 8) | data[1];
-    int16_t y = (int16_t)(data[2] << 8) | data[3];
-    int16_t z = (int16_t)(data[4] << 8) | data[5];
+    int16_t x = (data[0] << 8) | data[1];
+    int16_t y = (data[2] << 8) | data[3];
+    int16_t z = (data[4] << 8) | data[5];
     return xyz(x,y,z); 
 }
 xyz MPU6050::getGyrodata_raw(){
     uint8_t data[6];
         readRegister(GYRO_XOUT_H,data,6);
-    int16_t x = (int16_t)(data[0] << 8) | data[1];
-    int16_t y = (int16_t)(data[2] << 8) | data[3];
-    int16_t z = (int16_t)(data[4] << 8) | data[5];
+    int16_t x = (data[0] << 8) | data[1];
+    int16_t y = (data[2] << 8) | data[3];
+    int16_t z = (data[4] << 8) | data[5];
     return xyz(x,y,z); 
 }
 int16_t MPU6050::getTempdata_raw(){
@@ -184,45 +189,77 @@ all_values MPU6050::getAlldata_raw(){
     return all_values( getGyrodata_raw(),getAccdata_raw(),getTempdata_raw());
 }
 
-all_values MPU6050::test(hwlib::pin_in & switch_button ){
-    writeRegister(0x6b,0);
-
+void MPU6050::test(hwlib::pin_in & button, hwlib::glcd_oled &  oled){
     setup(3);
-    writeRegister(PWR_MGMT_1, 0x00);
-    all_values all_data = getAlldata(10);
-    bool raw = false;
-    if(switch_button.read()){
-        switch(raw){
-            case true:
-                raw  = false;
-                break;
-            case false:
-                raw = true;
-                break;
+    auto green = hwlib::target::pin_out(hwlib::target::pins::d9);
+    auto yellow = hwlib::target::pin_out(hwlib::target::pins::d8);
+    auto interrupt = hwlib::target::pin_in(hwlib::target::pins::d7);
+    interrupt_enable();
+    for(;;){
+      auto f1 = hwlib::font_default_8x8();
+      auto d1 = hwlib::terminal_from(oled,f1);
+      hwlib::wait_ms(10); //wait to give the sensor some time to start
+      auto all_data = getAlldata(10);
+      if(button.read()){
+        interrupt_disable();
+        return;
+      }
+      oled.clear();
+      uint8_t data[1];
+      read_interrupt(data);
+      if((data[0] & 0b00000001) != 0){ //data ready interrupt
+        green.write(1); 
+        hwlib::wait_ms(10);
+      }else{
+        green.write(0);
+        hwlib::wait_ms(10);
+      }
+      if((data[0] & 0b00010000) != 0){ //fifo overflow interrupt
+        yellow.write(1); 
+        hwlib::wait_ms(10);
+      }else{
+        yellow.write(0);
+        hwlib::wait_ms(10);
         }
+
+      d1 <<  '\f' << "acc_x: " << all_data.acc.x << "   reg" << "\nacc_y: " << all_data.acc.y
+        << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << 
+        "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z <<hwlib::flush;
+      hwlib::wait_ms(2000);
+    if(button.read()){
+        interrupt_disable();
+        return;
+      }
+      fifo_enable();
+      all_data = fifo_read(10);
+      d1 <<  '\f' << "acc_x: " << all_data.acc.x << "  fifo" << "\nacc_y: " << all_data.acc.y
+        << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << 
+        "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z <<hwlib::flush;
+      hwlib::wait_ms(2000);
+    if(button.read()){
+        interrupt_disable();
+        return;
+      }
+      all_data = getAlldata_raw();
+      d1 <<  '\f' << "acc_x: " << all_data.acc.x << "  raw" << "\nacc_y: " << all_data.acc.y
+        << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << 
+        "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z <<hwlib::flush;
+    if(button.read()){
+        interrupt_disable();
+        return;
+      }
+      hwlib::wait_ms(2000);
     }
-    switch (raw){
-        case true:
-            all_data = getAlldata_raw();
-            break;
-        case false:
-            all_data = getAlldata(10);
-            break;
 
-
-    }
-
-
-    return all_data;
 }
 
 void MPU6050::interrupt_enable(){
-    writeRegister(0x37, 0b11110000);
-    writeRegister(0x38, 0b00010001); //all interrupts except i2c master enabled
+    writeRegister(INT_PIN_CFG, 0b11110000);
+    writeRegister(INT_ENABLE, 0b00010001); //all interrupts except i2c master enabled
 }
 void MPU6050::interrupt_disable(){
-    writeRegister(0x37, 0b00000000);
-    writeRegister(0x38, 0b0000000); //all interrupts disabled 
+    writeRegister(INT_PIN_CFG, 0b00000000);
+    writeRegister(INT_ENABLE, 0b0000000); //all interrupts disabled 
 }
 
 
@@ -231,28 +268,28 @@ bool MPU6050::check_interrupt(hwlib::pin_in & interrupt_pin){
 }
 
 void MPU6050::read_interrupt(uint8_t data[1]){
-    readRegister(0x3a,data,1);
+    readRegister(INT_STATUS,data,1);
 }
 
 
 void MPU6050::fifo_enable(){
-    writeRegister(0x23, 0b11111000); //all enabled
+    writeRegister(FIFO_EN, 0b11111000); //all enabled
 }
 
 void MPU6050::fifo_disable(){
-    writeRegister(0x23, 0b00000000); //all disabled
+    writeRegister(FIFO_EN, 0b00000000); //all disabled
 }
 
 all_values MPU6050::fifo_read(uint8_t desired_range){
     fifo_enable();
     hwlib::wait_ms(20);
     uint8_t count [2];
-    readRegister(0x72,count,2);
+    readRegister(FIFO_COUNTH,count,2);
     int16_t packetcount = (count[0] << 8) | count[1];
     int16_t data[7];
     if (packetcount > 0 ){
         uint8_t temp[14];
-        readRegister(0x74, temp,14);
+        readRegister(FIFO_R_W, temp,14);
         for(int i = 0; i< 14;i++){
             data[0] = (temp[0] << 8) | temp[1];
             data[1] = (temp[2] << 8) | temp[3]; 
@@ -263,8 +300,11 @@ all_values MPU6050::fifo_read(uint8_t desired_range){
             data[6] = (temp[12] << 8) | temp[13];
         }
     }
+    fifo_disable();
     return all_values( xyz(data[4]/(fs_range/desired_range),data[5]/(fs_range/desired_range),data[6]/(fs_range/desired_range)),xyz(data[0]/(fs_range/desired_range),data[1]/(fs_range/desired_range),data[2]/(fs_range/desired_range)), data[3]/340+36.53);
 }
+
+
 
  	
 

@@ -22,12 +22,24 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+/// @file
+/// \brief 
+/// c++ library for basic interaction with the mpu6050
+/// \mainpage
+/// \author Justin van der Wiel
+/// \version 1.0 (last edited 29-6-2021)
+/// \copyright boost license
+///
+/// ------------------------------------
+///  This library is meant to be used with the mpu6050 chip, it does not include the i2c master capabilities or the auxilary bus
+///  to use the library it's important you read the documentation and understand the way it outputs data
+/// -------------------------------------
 
 #ifndef MPU_HPP
 #include "hwlib.hpp"
 #define MPU_HPP
 
-        #define  SELF_TEST_X_ACCEL   0x0D
+        #define  SELF_TEST_X_ACCEL   0x0D //adaptatio of 
         #define  SELF_TEST_Y_ACCEL   0x0E    
         #define  SELF_TEST_Z_ACCEL   0x0F
         #define  SELF_TEST_A         0x10
@@ -140,33 +152,97 @@
         #define  I2C_READ_FLAG       0x80
 
 
-
+/// \brief
+/// custom datatype for storing 3-dimentional values
+/// \details
+// xyz contains 3 int16_t variables which can be used to store the (processed or raw) output of the sensor
 
 class xyz{
 public:
     int16_t x,y,z;
+    /// \brief
+    /// constructor for the xyz data type
+    /// \details
+    /// constructs an xyz from the given x,y and z coördinates
     xyz(int16_t x, int16_t y, int16_t z):
     x(x),
     y(y),
     z(z)
     {}
+    /// \brief
+    /// constructor for the xyz data type
+    /// \details
+    /// constructs an xyz containing all zeros, can be used to create dummy xyz variables
+    xyz():
+    x(0),
+    y(0),
+    z(0)
+    {}
+    /// \brief
+    /// a operator- for the xyz datatype 
+    /// \details
+    /// subtracts one xyz from another
+    /// subtracting is done by adding together the individual integers
     xyz operator-(xyz & rhs);
+    /// \brief
+    /// a operator-= for the xyz datatype 
+    /// \details
+    /// subtracts one xyz from another and assigns it to the left operand
+    /// subtracting is done by adding together the individual integers
     xyz operator-=(xyz & rhs);
+    /// \brief
+    /// a operator+ for the xyz datatype
+    /// \details
+    /// adds one xyz to another 
+    /// subtracting is done by adding together the individual integers
     xyz operator+(xyz & rhs);
-    xyz operator+=(xyz & rhs);
+    /// \brief
+    ///  a operator+= for the xyz datatype
+    /// \details
+    /// adds one xyz to another and assigns it to the left operand
+    /// adding is done by adding together the individual integers
+    xyz operator+=(xyz & rhs);    
+    /// \brief
+    ///  a operator* for the xyz datatype
+    /// \details
+    /// multiplies one xyz with another 
+    /// multlying is done by multplying the individual integers with thieir counterpart from the second xyz
     xyz operator*(xyz & rhs);
+    /// \brief
+    ///  a operator*= for the xyz datatype
+    /// \details
+    /// multiplies one xyz with another  and assigns it to the left operand
+    /// multlying is done by multplying the individual integers with thieir counterpart from the second xyz
     xyz operator*=(xyz & rhs);
+    /// \brief
+    ///  a operator* for the xyz datatype
+    /// \details
+    /// multpiplies a xyz with an integer 
+    /// multlying is done by multplying the individual integers with the given integer
     xyz operator*(int16_t & rhs);
+    /// \brief
+    ///  a operator*= for the xyz datatype
+    /// \details
+    /// multpiplies a xyz with an integer and assigns it to the left operand
+    /// multlying is done by multplying the individual integers with the given integer
     xyz operator*=(int16_t & rhs);
 
 };
-
+/// \brief 
+/// a container for the full range output of the chip
+/// \details
+/// a class for storing and transfering the output of a mpu6050, this is NOT a data type, there are no operators
+/// it is only meant as a means of quickly moving around variables
 class all_values  {
 public:
     xyz gyr;
     xyz acc;
-    int temp;
-    all_values(xyz gyr, xyz acc, int temp):
+    int16_t temp;
+    /// \brief 
+    /// this function takes the desired values and stores them int the class
+    /// \details
+    /// function takes two xyz variables and an integer to store and transport.
+    all_values(xyz gyr, xyz acc, int16_t temp):
     gyr(gyr),
     acc(acc),
     temp(temp)
@@ -176,7 +252,7 @@ public:
 
 
 class MPU6050 {
-protected: 
+private: 
     int16_t  gyrosensitivity  = 131;   
     int16_t  accelsensitivity = 16384;
     bool interrupt_en =false;
@@ -189,7 +265,7 @@ public:
     A0(A0),
     I2C_bus(I2C_bus)
     { 
-        address = 0x68 + (int)A0; //The setting of A0 sets the adrress to 0x68 when low or 0x69 when high
+        address = 0x68 + (int)A0; //The setting of A0 pin sets the adrress to 0x68 when low or 0x69 when high
     } 
     void writeRegister(uint8_t sub_adrr, uint8_t  data);
     uint8_t* readRegister(uint8_t sub_addr, uint8_t* data, uint8_t size);
@@ -202,20 +278,15 @@ public:
     xyz getGyrodata_raw();
     int16_t getTempdata_raw();
     all_values getAlldata_raw();
-    int16_t calculateData_div();
     void interrupt_enable();
     void interrupt_disable();
     bool check_interrupt(hwlib::pin_in & interrupt_pin);
     void read_interrupt(uint8_t data[1]);
-    all_values test(hwlib::pin_in & switch_button);
+    void test(hwlib::pin_in & button, hwlib::glcd_oled &  oled);
     void fifo_enable();
     all_values fifo_read(uint8_t desired_range);
+    all_values fifo_read_raw();
     void fifo_disable();
-
-
-
-
-
 };
 
 

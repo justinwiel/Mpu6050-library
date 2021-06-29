@@ -357,3 +357,5 @@ MigrationBackup/
 
 # test mains functions
 main_.cpp
+
+latex

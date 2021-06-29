@@ -68,7 +68,7 @@ void Player::change_pos_y(int8_t val ){
 
 void Player::update() {
     chip.setup(3);
-    auto data = chip.getAccdata(5);
+    auto data = chip.getAccdata(10);
     if(data.z > data.x){
         change_pos_y(9);
     }else if(data.z < data.x && data.z < -4){
