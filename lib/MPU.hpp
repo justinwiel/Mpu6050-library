@@ -256,8 +256,8 @@ public:
 /// contains a number of functions to activate differerent and use different functions of the mpu6050 gyroscope/accelerometer
 class MPU6050 {
 private: 
-    int16_t  gyrosensitivity  = 131;   
-    int16_t  accelsensitivity = 16384;
+    double  gyrosensitivity  = 0;  //has decimal values 
+    int16_t  accelsensitivity = 0; // only has whole values
     bool interrupt_en =false;
     uint8_t   address;
     bool  A0;

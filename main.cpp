@@ -44,11 +44,11 @@ void play_pong(hwlib::glcd_oled & oled, MPU6050 & chip, hwlib::pin_in & button){
     std::array< sprite *, 7 > objects = { &pong, &top, &bottom, &goal1, &goal2, &ai, &me };
 
     for(;;){
-      while(goal1.clear && goal2.clear){
       if(button.read()){
         hwlib::wait_ms(100);
         return;
       }
+      while(goal1.clear && goal2.clear){
 
         oled.clear();
         for( auto & p : objects ){
@@ -58,12 +58,19 @@ void play_pong(hwlib::glcd_oled & oled, MPU6050 & chip, hwlib::pin_in & button){
         for( auto & p : objects ){
             p->update();
       }
+      hwlib::cout << "before get target";
       ai.get_target(pong);
+      hwlib::cout << "\nafter get target";
       ai.move_toTarget();
+      hwlib::cout << "\nafter move to target";
       ai.check_next_pos(top,bottom);
+      hwlib::cout << "\nafter check next pos ai";
       me.get_movement();
+      hwlib::cout << "\nafter get movement";
       me.check_next_pos(top,bottom);
+      hwlib::cout << "\nafter check next pos ,me";
       pong.check_next_pos(ai);
+      hwlib::cout << "\nbefore interact";
         for( auto & p : objects ){
           for( auto & other : objects ){
             if(p!=other){
@@ -77,12 +84,6 @@ void play_pong(hwlib::glcd_oled & oled, MPU6050 & chip, hwlib::pin_in & button){
         ai.reset();
       }
     }
-    hwlib::wait_ms(2000);
-    pong.start = hwlib::xy(60,28);
-    pong.end = hwlib::xy(64,32);
-    pong.speed = hwlib::xy(4,5);
-    goal1.clear = true;
-    goal2.clear = true;
   }
 
 }
@@ -138,10 +139,10 @@ int main(){
     auto black = hwlib::target::pin_in( hwlib::target::pins::d7 );
     auto oled = hwlib::glcd_oled( i2c_bus, 0x3c ); 
     auto chip = MPU6050(i2c_bus, 0);
+    oled.clear();
+    auto f1 = hwlib::font_default_8x8();
+    auto d1 = hwlib::terminal_from(oled,f1);
     for(;;){
-      oled.clear();
-      auto f1 = hwlib::font_default_8x8();
-      auto d1 = hwlib::terminal_from(oled,f1);
       d1 << '\f' << "select a game, \n\ngreen pong, \n\nred  dodge, \n\npress yellow \nfor testing" <<  hwlib::flush;
       if(green.read()){
         play_pong(oled,chip,black);

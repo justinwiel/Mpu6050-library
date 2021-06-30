@@ -77,24 +77,36 @@ void MPU6050::setup(int8_t range_setting)
     {
     case 0:
         fs_range = 250;
+        gyrosensitivity = 131;    //lsb per second  sensitivty values from: https://invensense.tdk.com/wp-content/uploads/2015/02/MPU-6000-Datasheet1.pdf part 6.1 and 6.2
+        accelsensitivity = 16384; //lsb per second
         break;
     case 1:
         fs_range = 500;
+        gyrosensitivity = 65.5;  //lsb per second
+        accelsensitivity = 8192; //lsb per second
         break;
     case 2:
         fs_range = 1000;
+        gyrosensitivity = 32.8;  //lsb per second
+        accelsensitivity = 4096; //lsb per second
         break;
     case 3:
         fs_range = 2000;
+        gyrosensitivity = 16.4;  //lsb per second
+        accelsensitivity = 2048; //lsb per second
         break;
     default:
-        if (range_setting > 3)
+        if (range_setting > 3) //if greater than 3 do the same as for 3
         {
             fs_range = 2000;
+            gyrosensitivity = 16.4;
+            accelsensitivity = 16384;
         }
-        else
+        else //if smaller than 0 do the same as for 0
         {
             fs_range = 250;
+            gyrosensitivity = 131;
+            accelsensitivity = 2048;
         }
     }
     auto to_write = (range_setting << 3); // first three bytes are ignored as such the value needs to be shifted 3 before being written
@@ -172,11 +184,10 @@ all_values MPU6050::getAlldata_scale(int desired_range)
     return all_values(getAccdata_scale(desired_range), getGyrodata_scale(desired_range), getTempdata());
 }
 
-
 xyz MPU6050::getAccdata()
 {
     uint8_t data[6];
-    readRegister(GYRO_XOUT_H, data, 6);
+    readRegister(ACCEL_XOUT_H, data, 6);
     int16_t x = (data[0] << 8) | data[1];
     int16_t y = (data[2] << 8) | data[3];
     int16_t z = (data[4] << 8) | data[5];
@@ -185,13 +196,12 @@ xyz MPU6050::getAccdata()
 xyz MPU6050::getGyrodata()
 {
     uint8_t data[6];
-    readRegister(ACCEL_XOUT_H, data, 6);
+    readRegister(GYRO_XOUT_H, data, 6);
     int16_t x = (data[0] << 8) | data[1];
     int16_t y = (data[2] << 8) | data[3];
     int16_t z = (data[4] << 8) | data[5];
     return xyz(x / gyrosensitivity, y / gyrosensitivity, z / gyrosensitivity);
 }
-
 
 all_values MPU6050::getAlldata()
 {
@@ -250,16 +260,9 @@ void MPU6050::test(hwlib::pin_in &button, hwlib::glcd_oled &oled)
             fifo_reset();         //clear fifo
             read_interrupt(data); //read once to clear register
             read_interrupt(data); //read again to get data
-            if ((data[0] & 0b00000001) != 0)
-            { //data ready interrupt
-                green.write(1);
-                hwlib::wait_ms(10);
-            }
-            else
-            {
-                green.write(0);
-                hwlib::wait_ms(10);
-            }
+            green.write(0);
+            hwlib::wait_ms(10);
+
             if ((data[0] & 0b00010000) != 0)
             { //fifo overflow interrupt
                 yellow.write(1);
@@ -298,23 +301,23 @@ void MPU6050::test(hwlib::pin_in &button, hwlib::glcd_oled &oled)
         d1 << '\f' << "acc_x: " << all_data.acc.x << "   std"
            << "\nacc_y: " << all_data.acc.y
            << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z << hwlib::flush;
-        // hwlib::wait_ms(2000);
-        // all_data = getAlldata_scale(10);
-        // d1 << '\f' << "acc_x: " << all_data.acc.x << "  scale"
-        //    << "\nacc_y: " << all_data.acc.y
-        //    << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z << hwlib::flush;
-        // hwlib::wait_ms(2000);
-        // fifo_enable();
-        // all_data = fifo_read_scale_test(10);
-        // d1 << '\f' << "acc_x: " << all_data.acc.x << "  fifo"
-        //    << "\nacc_y: " << all_data.acc.y
-        //    << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z << hwlib::flush;
-        // hwlib::wait_ms(2000);
-        // all_data = getAlldata_raw();
-        // d1 << '\f' << "acc_x: " << all_data.acc.x << "  raw"
-        //    << "\nacc_y: " << all_data.acc.y
-        //    << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z << hwlib::flush;
-        // hwlib::wait_ms(2000);
+        hwlib::wait_ms(500);
+        all_data = getAlldata_scale(10);
+        d1 << '\f' << "acc_x: " << all_data.acc.x << "  scale"
+           << "\nacc_y: " << all_data.acc.y
+           << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z << hwlib::flush;
+        hwlib::wait_ms(500);
+        fifo_enable();
+        all_data = fifo_read_scale_test(10);
+        d1 << '\f' << "acc_x: " << all_data.acc.x << "  fifo"
+           << "\nacc_y: " << all_data.acc.y
+           << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z << hwlib::flush;
+        hwlib::wait_ms(500);
+        all_data = getAlldata_raw();
+        d1 << '\f' << "acc_x: " << all_data.acc.x << "  raw"
+           << "\nacc_y: " << all_data.acc.y
+           << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z << hwlib::flush;
+        hwlib::wait_ms(500);
     }
 }
 
