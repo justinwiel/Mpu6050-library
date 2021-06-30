@@ -39,7 +39,7 @@
 #include "hwlib.hpp"
 #define MPU_HPP
 
-        #define  SELF_TEST_X_ACCEL   0x0D //adaptatio of 
+        #define  SELF_TEST_X_ACCEL   0x0D //adaptation of the #define list from: https://github.com/simondlevy/MPU/blob/master/src/MPU.h
         #define  SELF_TEST_Y_ACCEL   0x0E    
         #define  SELF_TEST_Z_ACCEL   0x0F
         #define  SELF_TEST_A         0x10
@@ -235,22 +235,25 @@ public:
 /// it is only meant as a means of quickly moving around variables
 class all_values  {
 public:
-    xyz gyr;
     xyz acc;
+    xyz gyr;
     int16_t temp;
     /// \brief 
     /// this function takes the desired values and stores them int the class
     /// \details
     /// function takes two xyz variables and an integer to store and transport.
-    all_values(xyz gyr, xyz acc, int16_t temp):
-    gyr(gyr),
+    all_values(xyz acc, xyz gyr, int16_t temp):
     acc(acc),
+    gyr(gyr),
     temp(temp)
     {}
 
 };
 
-
+/// \brief
+/// a class to control the mpu6050 chip with
+/// \details 
+/// contains a number of functions to activate differerent and use different functions of the mpu6050 gyroscope/accelerometer
 class MPU6050 {
 private: 
     int16_t  gyrosensitivity  = 131;   
@@ -260,20 +263,54 @@ private:
     bool  A0;
     int16_t fs_range = 0;
     hwlib::i2c_bus_bit_banged_scl_sda & I2C_bus;
+    all_values fifo_read_scale_test(uint8_t desired_range);
 public:
+    /// \brief
+    /// constructor for the mpu6050 class, takes a bus and a boolian
+    /// \details 
+    /// This constructor for the mpu6050 class takes a bus to write to and a boolian used to determine the chip address, 
+    /// if the A0 pin of the chip is either not connected or connected to ground, set this to 0.
+    /// if the A0 pin of the chip is connected to VCC set this to 1
+    /// this is used to determine chip address and store that in the class
     MPU6050(hwlib::i2c_bus_bit_banged_scl_sda & I2C_bus, bool  A0=0):
     A0(A0),
     I2C_bus(I2C_bus)
     { 
         address = 0x68 + (int)A0; //The setting of A0 pin sets the adrress to 0x68 when low or 0x69 when high
     } 
+    /// \brief
+    /// Writes a byte to a register
+    /// \details
+    /// takes the sub-address of the register you want to write and the data you want to write to it
     void writeRegister(uint8_t sub_adrr, uint8_t  data);
+    /// \brief 
+    /// reads data from a rgeister
+    /// \details 
+    /// takes the sub-address of the register you want to read, a buffer and the amount of data you want to read
+    /// the data gets written into the buffer directly, optionally you can also choose to have the data returned into a second buffer
     uint8_t* readRegister(uint8_t sub_addr, uint8_t* data, uint8_t size);
-    void setup(uint8_t range_setting);
-    xyz getAccdata(int desired_range);
-    xyz getGyrodata(int desired_range);
+    /// \brief
+    /// intializes the chip and sets the fs_range and afs_range
+    /// \details
+    /// takes the desired range setting, this is value from 0 to 3
+    /// 0 = 250
+    /// 1 = 500
+    /// 2= 1000
+    /// 3 = 2000
+    /// sets up everything that needs to be setup for normal operation, this function should always be the first called function in an application using this library
+    void setup(int8_t range_setting);
+    /// \brief
+    /// reads accelerometer data and returns an xyz
+    /// \details
+    /// this function reads all accelerometer data registers and turns them into 3 usable integers on a scale that can be specified by the user, the greater the scale the more unstable the data
+    /// NOTE: the chosen scale should not go above the range chosen in the setup function 
+    xyz getAccdata_scale(int desired_range);
+    xyz getGyrodata_scale(int desired_range);
     int16_t getTempdata();
-    all_values getAlldata(int desired_range);
+    all_values getAlldata_scale(int desired_range);
+    xyz getAccdata();
+    xyz getGyrodata();
+    all_values getAlldata();
     xyz getAccdata_raw();
     xyz getGyrodata_raw();
     int16_t getTempdata_raw();
@@ -282,10 +319,9 @@ public:
     void interrupt_disable();
     bool check_interrupt(hwlib::pin_in & interrupt_pin);
     void read_interrupt(uint8_t data[1]);
-    void test(hwlib::pin_in & button, hwlib::glcd_oled &  oled);
+    void test(hwlib::pin_in & button, hwlib::glcd_oled &oled);
     void fifo_enable();
-    all_values fifo_read(uint8_t desired_range);
-    all_values fifo_read_raw();
+    all_values fifo_read_scale(uint8_t desired_range);
     void fifo_disable();
     void fifo_reset();
 };

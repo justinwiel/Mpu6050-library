@@ -128,67 +128,14 @@ void play_dodge(MPU6050 & chip, hwlib::glcd_oled & oled,hwlib::pin_in & button )
     }
 }
 
-// void test(hwlib::pin_in & button,hwlib::pin_in & button2,MPU6050 & chip, hwlib::glcd_oled  &oled){
-//     auto green = hwlib::target::pin_out(hwlib::target::pins::d9);
-//     auto yellow = hwlib::target::pin_out(hwlib::target::pins::d8);
-//     auto interrupt = hwlib::target::pin_in(hwlib::target::pins::d7);
-//     chip.interrupt_enable();
-//     for(;;){
-//       auto f1 = hwlib::font_default_8x8();
-//       auto d1 = hwlib::terminal_from(oled,f1);
-//       auto all_data = chip.test();
-//       if(button2.read()){
-//         chip.interrupt_disable();
-//         return;
-//       }
-//       oled.clear();
-//       uint8_t data[1];
-//       chip.read_interrupt(data);
-//       if((data[0] & 0b00000001) != 0){ //data ready interrupt
-//         green.write(1); 
-//         hwlib::wait_ms(10);
-//       }else{
-//         green.write(0);
-//         hwlib::wait_ms(10);
-//       }
-//       if((data[0] & 0b00010000) != 0){ //data ready interrupt
-//         yellow.write(1); 
-//         hwlib::wait_ms(10);
-//       }else{
-//         yellow.write(0);
-//         hwlib::wait_ms(10);
-//         }
-
-//       d1 <<  '\f' << "acc_x: " << all_data.acc.x << "   reg" << "\nacc_y: " << all_data.acc.y
-//         << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << 
-//         "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z <<hwlib::flush;
-//       hwlib::wait_ms(2000);
-//       all_data = chip.fifo_read(10);
-//       d1 <<  '\f' << "acc_x: " << all_data.acc.x << "  fifo" << "\nacc_y: " << all_data.acc.y
-//         << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << 
-//         "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z <<hwlib::flush;
-//       hwlib::wait_ms(2000);
-//       all_data = chip.getAlldata_raw();
-//       d1 <<  '\f' << "acc_x: " << all_data.acc.x << "  raw" << "\nacc_y: " << all_data.acc.y
-//         << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << 
-//         "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z <<hwlib::flush;
-//       hwlib::wait_ms(2000);
-//       d1 <<  '\f' << "acc_x: " << all_data.acc.x << " fifo" << "\nacc_y: " << all_data.acc.y << "   raw "
-//         << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << 
-//         "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z <<hwlib::flush;
-//       hwlib::wait_ms(2000);
-//   }
-// }
-
-
 int main(){
     auto scl = hwlib::target::pin_oc( hwlib::target::pins::scl );
     auto sda = hwlib::target::pin_oc( hwlib::target::pins::sda );
     auto i2c_bus = hwlib::i2c_bus_bit_banged_scl_sda( scl,sda );
-    auto button = hwlib::target::pin_in( hwlib::target::pins::d10 );
-    auto button2 = hwlib::target::pin_in( hwlib::target::pins::d11 );
-    auto button3 = hwlib::target::pin_in( hwlib::target::pins::d12 );
-    auto back_button = hwlib::target::pin_in( hwlib::target::pins::d7 );
+    auto green = hwlib::target::pin_in( hwlib::target::pins::d10 );
+    auto red = hwlib::target::pin_in( hwlib::target::pins::d11 );
+    auto yellow = hwlib::target::pin_in( hwlib::target::pins::d12 );
+    auto black = hwlib::target::pin_in( hwlib::target::pins::d7 );
     auto oled = hwlib::glcd_oled( i2c_bus, 0x3c ); 
     auto chip = MPU6050(i2c_bus, 0);
     for(;;){
@@ -196,14 +143,14 @@ int main(){
       auto f1 = hwlib::font_default_8x8();
       auto d1 = hwlib::terminal_from(oled,f1);
       d1 << '\f' << "select a game, \n\ngreen pong, \n\nred  dodge, \n\npress yellow \nfor testing" <<  hwlib::flush;
-      if(button.read()){
-        play_pong(oled,chip,back_button);
+      if(green.read()){
+        play_pong(oled,chip,black);
       }
-      if(button2.read()){
-        play_dodge(chip,oled,back_button);
+      if(red.read()){
+        play_dodge(chip,oled,black);
       }
-      if(button3.read()){
-        chip.test(back_button,oled);
+      if(yellow.read()){
+        chip.test(black,oled);
       }
     }
 

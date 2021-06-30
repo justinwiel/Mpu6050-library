@@ -35,7 +35,7 @@ void Player::get_movement(){
     auto i2c_bus = hwlib::i2c_bus_bit_banged_scl_sda( scl,sda );
     auto chip = MPU6050(i2c_bus,0);
     chip.setup(3);
-    auto data = chip.getAccdata(5) ;
+    auto data = chip.getAccdata_scale(5) ;
     start.y += data.z * 2;
     end.y += data.z  *2;
 }
