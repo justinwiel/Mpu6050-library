@@ -170,13 +170,13 @@ void border::interact(const sprite & other){
 
 
 bool border::overlaps( const sprite & other ){
-   //fairly standard bounce function, starts are transposed by 4 to detect collisions before they happen
+   //fairly standard bounce function, starts are transposed by 6 on the x axis to detect collisions before they happen
    bool x_overlap = within( 
-      start.x - 4,
+      start.x - 6,
       other.start.x,
       other.end.x )
     || within( 
-      other.start.x -4, 
+      other.start.x -6, 
       start.x, 
       end.x
    );
@@ -192,10 +192,10 @@ bool border::overlaps( const sprite & other ){
    );
    bool x_overlap_end = within( 
       end.x ,  
-      other.start.x - 4,
+      other.start.x - 6,
       other.end.x  )
     || within( 
-      other.end.x -4, 
+      other.end.x -6, 
       start.x, 
       end.x
    );

@@ -58,11 +58,11 @@ void enemy::move_toTarget(){
 }
 
 void enemy::check_next_pos(const border & top, const border & bottom){
-    while( end.y > 58 ){
+    while( end.y > 60 ){
         start.y -=1;
         end.y -= 1;
     }
-    while(start.y < 5){
+    while(start.y < 2){
         start.y +=1;
         end.y += 1;
     }

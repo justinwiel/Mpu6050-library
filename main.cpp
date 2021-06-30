@@ -36,8 +36,8 @@ void play_pong(hwlib::glcd_oled &oled, MPU6050 &chip, hwlib::pin_in &button)
   auto bottom = border(oled, hwlib::xy(0, oled.size.y - 1), hwlib::xy(128, oled.size.y - 1), hwlib::xy(1, -1));
   auto goal1 = deathwall(oled, hwlib::xy(1, 1), hwlib::xy(1, 62), 1);
   auto goal2 = deathwall(oled, hwlib::xy(127, 1), hwlib::xy(127, 62), 2);
-  auto ai = enemy(oled, hwlib::xy(117, 18), hwlib::xy(122, 36), hwlib::xy(-1, 1), 4);
-  auto me = Player(oled, hwlib::xy(6, 18), hwlib::xy(10, 36), hwlib::xy(-1, 1));
+  auto ai = enemy(oled, hwlib::xy(115, 18), hwlib::xy(120, 36), hwlib::xy(-1, 1), 3);
+  auto me = Player(oled, hwlib::xy(8, 18), hwlib::xy(12, 36), hwlib::xy(-1, 1));
   ball pong(oled, hwlib::xy(60, 28), hwlib::xy(64, 32), hwlib::xy(4, 5));
   std::array<sprite *, 7> objects = {&pong, &top, &bottom, &goal1, &goal2, &ai, &me};
 
