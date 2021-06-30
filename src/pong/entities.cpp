@@ -33,7 +33,7 @@ bool within( int x, int a, int b ){
    return ( x >= a ) && ( x <= b );
 }
 
-bool ball::overlaps( const sprite & other ){
+bool ball::overlaps( const sprite & other ){//if the ball is going to hit a wall on the next move it returns true
     bool x_overlap_start = within( 
         start.x ,
         other.start.x,
@@ -110,7 +110,7 @@ bool ball::overlaps( const sprite & other ){
       start.y, 
       end.y
    );
-    return (x_overlap_start_speed && y_overlap_start_speed) || (x_overlap_end_speed && y_overlap_end_speed) || (x_overlap_start && y_overlap_start) || (x_overlap_end && y_overlap_end);
+    return (x_overlap_start_speed && y_overlap_start_speed) || (x_overlap_end_speed && y_overlap_end_speed)|| (x_overlap_start && y_overlap_start) || (x_overlap_end && y_overlap_end);
 }
 
 void ball::check_next_pos(const sprite & ai){
@@ -122,7 +122,7 @@ void ball::check_next_pos(const sprite & ai){
     }
 }
 
-void ball::draw() {
+void ball::draw() {//draw the ball
     for(int x  = start.x; x <= end.x;x++){
         for(int y = start.y; y <= end.y;y++){
             w.write(xy(x,y));
@@ -130,12 +130,12 @@ void ball::draw() {
     }
 }
 
-void ball::update() {
+void ball::update() {//move the ball
     start = start + speed; 
     end = end + speed; 
 }
 
-void ball::interact(const sprite & other){
+void ball::interact(const sprite & other){ //interact to bounce the ball
     if(this != & other){
         if(overlaps(other)){
             speed.x = speed.x * other.bounce.x;
@@ -144,6 +144,12 @@ void ball::interact(const sprite & other){
     }
 
 
+}
+
+void ball::reset(){//reset the ball
+    start = org_start;
+    end = org_end;
+    speed = org_speed;
 }
 
 void border::draw(){
@@ -156,15 +162,15 @@ void border::draw(){
 
 void border::update(){
 
-}
+}//empty function to keep the compiler happy
 
 void border::interact(const sprite & other){
     
-}
+}//empty function to keep the compiler happy
 
 
 bool border::overlaps( const sprite & other ){
-   
+   //fairly standard bounce function, starts are transposed by 4 to detect collisions before they happen
    bool x_overlap = within( 
       start.x - 4,
       other.start.x,
@@ -206,9 +212,14 @@ bool border::overlaps( const sprite & other ){
    return (x_overlap && y_overlap) || (x_overlap_end && y_overlap_end);
 }
 
-void border::reset(){
+void border::reset(){//reset the item
     start = org_start;
     end = org_end;
+}
+
+void deathwall::reset(){//reset the item
+    border::reset();
+    clear = true;
 }
 void deathwall::gameOver(){
     auto f = hwlib::font_default_8x8();
@@ -226,7 +237,7 @@ void deathwall::gameWon(){
     terminal << '\f' << "\n\n\n" << "     You Win!" << hwlib::flush;
     clear = false;   
 }
-void deathwall::interact(const sprite & other){
+void deathwall::interact(const sprite & other){//if players wall was hit game over, if ai wall is hit game won
     if(this != & other){
         if(overlaps(other)&&player == 1){
             gameOver();

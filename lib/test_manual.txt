@@ -1,0 +1,99 @@
+In order to test this library you will need to set up a few thins first
+
+
+connect two leds to any of the digital pins (one pin per led) 
+
+connect a button to another digital pin
+
+connect the MPU6050 SDA pin to the arduino due SDA pin 
+connect the MPU6050 SCL pin to the arduino due SCL pin 
+
+place a resistor between A0 and the ground coming from the arduino 
+
+
+Firstly, create a bit banged bus using the scl and sda pins you just connected, in the main() of function your main.cpp (example available in the main of the application)
+create a glcd_oled in the same fashion
+then create two pin_outs with the numbers you just connected the leds to, call these led1 and led2
+create a pin_in with the number you just connected the button to, call this button
+
+create a MPU6050 object give it the bus you created before and the setting of the A0 pin of the chip which is 0 if you followed this guide. call this chip
+
+call the test member function of the object you just created 
+
+this is it's interface:
+
+void test(hwlib::pin_in & button, hwlib::glcd_oled &oled, hwlib::pin_out & data_rdy, hwlib::pin_out & fifo_overflow);
+this is how you should call it
+
+chip.test(button, oled, led1, led2);
+
+after your code has compiled and uploaded youre ready to start
+
+---------------------------------------------------------------------------
+
+output will be shown on the oled aswell as the terminal (if using bmptk)
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+make sure the chip is in a straight angle
+
+at start-up
+
+std should have one accelerometer axis with value 1, two with 0, the gyroscope should have one -2, one 0 and one 2 (not in that order per sé)
+
+the data in the fifo mode should be equal or similar to those in std(fifo follows directly after std) 
+
+the first led should be on from the start (this displays the data ready interrupt)
+
+the scale mode should display one  accelerometer value at 10, this should be the same axis as was one in std and fifo and the other accelerometer values at 0, the temperature at a reasonable level, all the gyroscope positions should be at 0 aswell
+
+the raw mode should display the acc value that was 10 in scale mode as somewhere between 2000-2300 the other two acc values should be somewhere between -100 and 100 all gyro values should be between -50 and 50, the temperature should be between 
+-4000 and -3000 (if ambient temperature is very low or high it might go out of these bounds accordingly)
+
+
+after the second led turns on (fifo overflow) the fifo data should be mostly incoherent, the other modes should be similar to the previous pass
+
+
+if you press the button (you might need to press and hold ) the program should end, the first led will always turn off (this is hard coded),
+
+the second led should turn off well
+
+
+---------------------------------------------------
+checklist:
+-----------------------------------
+pass1:
+
+first led turned on
+
+std hits requirments 
+
+temperature seems reasonable in all outputs except raw
+
+fifo matches or very similar to std
+
+scale hits requirments
+
+raw hits requirments
+
+second led turned on 
+-------------------------------------
+pass2:
+
+first led turned on
+
+std hits requirments 
+
+temperature seems reasonable in all outputs except raw
+
+fifo is mostly giberish
+
+scale hits requirments
+
+raw hits requirments
+------------------------------------------------------------------------
+if all requirments are hit the test is passed
+
+
+
+
+

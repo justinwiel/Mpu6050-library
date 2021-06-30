@@ -39,5 +39,6 @@ public:
     void get_target(const sprite & ball);
     void move_toTarget();
     void check_next_pos(const border & top, const border & bottom);
+    virtual void update() override;
 };
 #endif

@@ -52,9 +52,9 @@ namespace dodge{
 
     class obstacle :public sprite{
     protected:
-        int8_t speed;
+        xy speed;
     public:
-        obstacle(window & w,xy  start, xy  end, int8_t speed):
+        obstacle(window & w,xy  start, xy  end, xy speed):
             sprite(w,start,end),
             speed(speed)
             {}
@@ -80,7 +80,7 @@ namespace dodge{
         xy end_prev = end;
         bool hit =false;
         Player(window & w,xy  start, xy  end, MPU6050 & chip,xy eye_start,xy eye_end):
-            obstacle(w,start,end,0),
+            obstacle(w,start,end,xy(0,0)),
             chip(chip),
             eye_start(eye_start),
             eye_end(eye_end)
@@ -89,6 +89,7 @@ namespace dodge{
         void update()override ;
         void interact(sprite & other)override ;
         void gameOver();
+        void gameWon();
         void check_next_pos();
         bool overlaps(sprite & other) ;
         void change_pos_x(int8_t val );

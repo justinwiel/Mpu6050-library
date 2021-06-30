@@ -33,6 +33,10 @@ void enemy::get_target(const sprite & ball){
     goal =  (ball.end.y - (ball.end.y - ball.start.y)/2);
 }
 
+void enemy::update(){
+    move_toTarget();
+}
+
 void enemy::move_toTarget(){
     int16_t  diff = goal - (end.y - (int16_t(end.y - start.y)/2));
     std::srand(hwlib::now_ticks());

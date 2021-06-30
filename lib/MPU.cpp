@@ -100,28 +100,28 @@ void MPU6050::setup(int8_t range_setting)
         {
             fs_range = 2000;
             gyrosensitivity = 16.4;
-            accelsensitivity = 16384;
+            accelsensitivity = 2048;
         }
         else //if smaller than 0 do the same as for 0
         {
             fs_range = 250;
             gyrosensitivity = 131;
-            accelsensitivity = 2048;
+            accelsensitivity = 16384;
         }
     }
     auto to_write = (range_setting << 3); // first three bytes are ignored as such the value needs to be shifted 3 before being written
     writeRegister(PWR_MGMT_1, 0x80);
-    //hwlib::wait_ms(100);
+    hwlib::wait_ms(100);
     writeRegister(PWR_MGMT_1, 0b0001);
     writeRegister(PWR_MGMT_2, 0x00);
-    //hwlib::wait_ms(200);
+    hwlib::wait_ms(200);
     writeRegister(INT_ENABLE, 0x00);
     writeRegister(FIFO_EN, 0x00);
     writeRegister(PWR_MGMT_1, 0x00);
     writeRegister(I2C_MST_CTRL, 0x00);
     writeRegister(USER_CTRL, 0x00);
     writeRegister(USER_CTRL, 0x0c);
-    //hwlib::wait_ms(15);
+    hwlib::wait_ms(15);
     writeRegister(CONFIG, 0b00000001);
     writeRegister(SMPLRT_DIV, 0);
     writeRegister(GYRO_CONFIG, to_write);
@@ -131,6 +131,7 @@ void MPU6050::setup(int8_t range_setting)
     writeRegister(SIGNAL_PATH_RESET, 0b00000000);
     writeRegister(GYRO_CONFIG, 0b00011000);
     writeRegister(ACCEL_CONFIG, 0b00011000);
+    writeRegister(INT_PIN_CFG, 0b00100010);
 }
 
 void MPU6050::writeRegister(uint8_t sub_adrr, uint8_t data)
@@ -144,10 +145,10 @@ void MPU6050::writeRegister(uint8_t sub_adrr, uint8_t data)
 uint8_t *MPU6050::readRegister(uint8_t sub_addr, uint8_t *data, uint8_t size)
 {
     auto wbus = hwlib::i2c_write_transaction(I2C_bus, address);
-    wbus.write(sub_addr);
+    wbus.write(sub_addr); //send the adrress we want to read
     wbus.~i2c_write_transaction();
-    auto rbus = hwlib::i2c_read_transaction(I2C_bus, 0x68);
-    rbus.read(data, size);
+    auto rbus = hwlib::i2c_read_transaction(I2C_bus, address);
+    rbus.read(data, size); //read the register, if you read more than once the chip auto increments the register address
     rbus.~i2c_read_transaction();
     return data;
 }
@@ -155,8 +156,8 @@ uint8_t *MPU6050::readRegister(uint8_t sub_addr, uint8_t *data, uint8_t size)
 xyz MPU6050::getAccdata_scale(int desired_range)
 {
     uint8_t data[6];
-    readRegister(ACCEL_XOUT_H, data, 6);
-    int16_t x = (data[0] << 8) | data[1];
+    readRegister(ACCEL_XOUT_H, data, 6);//read acclerometer data registers
+    int16_t x = (data[0] << 8) | data[1]; //create 16 bit signed integers from your read 8 bit unsigned integers
     int16_t y = (data[2] << 8) | data[3];
     int16_t z = (data[4] << 8) | data[5];
     return xyz((x / (fs_range / desired_range)) % (desired_range + 1), (y / (fs_range / desired_range)) % (desired_range + 1), (z / (fs_range / desired_range)) % (desired_range + 1));
@@ -164,8 +165,8 @@ xyz MPU6050::getAccdata_scale(int desired_range)
 xyz MPU6050::getGyrodata_scale(int desired_range)
 {
     uint8_t data[6];
-    readRegister(GYRO_XOUT_H, data, 6);
-    int16_t x = (data[0] << 8) | data[1];
+    readRegister(GYRO_XOUT_H, data, 6);//read gyroscope data registers
+    int16_t x = (data[0] << 8) | data[1];//create 16 bit signed integers from your read 8 bit unsigned integers
     int16_t y = (data[2] << 8) | data[3];
     int16_t z = (data[4] << 8) | data[5];
     return xyz((x / (fs_range / desired_range)) % (desired_range + 1), (y / (fs_range / desired_range)) % (desired_range + 1), (z / (fs_range / desired_range)) % (desired_range + 1));
@@ -205,7 +206,7 @@ xyz MPU6050::getGyrodata()
 
 all_values MPU6050::getAlldata()
 {
-    return all_values(getAccdata(), getGyrodata(), getTempdata());
+    return all_values(getAccdata(), getGyrodata(), getTempdata()); //get all values and put them in an all_values
 }
 
 xyz MPU6050::getAccdata_raw()
@@ -240,12 +241,11 @@ all_values MPU6050::getAlldata_raw()
     return all_values(getAccdata_raw(), getGyrodata_raw(), getTempdata_raw());
 }
 
-void MPU6050::test(hwlib::pin_in &button, hwlib::glcd_oled &oled)
+void MPU6050::test(hwlib::pin_in &button, hwlib::glcd_oled &oled, hwlib::pin_out &data_rdy, hwlib::pin_out &fifo_overflow)
 {
+
     setup(3);
-    auto green = hwlib::target::pin_out(hwlib::target::pins::d9);
-    auto yellow = hwlib::target::pin_out(hwlib::target::pins::d8);
-    auto interrupt = hwlib::target::pin_in(hwlib::target::pins::d7);
+    hwlib::wait_ms(2000); //wait a while to allow data to get written out to the registers
     interrupt_enable();
     for (;;)
     {
@@ -260,17 +260,17 @@ void MPU6050::test(hwlib::pin_in &button, hwlib::glcd_oled &oled)
             fifo_reset();         //clear fifo
             read_interrupt(data); //read once to clear register
             read_interrupt(data); //read again to get data
-            green.write(0);
+            data_rdy.write(0);
             hwlib::wait_ms(10);
 
             if ((data[0] & 0b00010000) != 0)
             { //fifo overflow interrupt
-                yellow.write(1);
+                fifo_overflow.write(1);
                 hwlib::wait_ms(10);
             }
             else
             {
-                yellow.write(0);
+                fifo_overflow.write(0);
                 hwlib::wait_ms(10);
             }
             interrupt_disable(); //shut off interrupt
@@ -280,40 +280,51 @@ void MPU6050::test(hwlib::pin_in &button, hwlib::glcd_oled &oled)
         read_interrupt(data);
         if ((data[0] & 0b00000001) != 0)
         { //data ready interrupt
-            green.write(1);
+            data_rdy.write(1);
             hwlib::wait_ms(10);
         }
         else
         {
-            green.write(0);
+            data_rdy.write(0);
             hwlib::wait_ms(10);
         }
         if ((data[0] & 0b00010000) != 0)
         { //fifo overflow interrupt
-            yellow.write(1);
+            fifo_overflow.write(1);
             hwlib::wait_ms(10);
         }
         else
         {
-            yellow.write(0);
+            fifo_overflow.write(0);
             hwlib::wait_ms(10);
-        }
+        }//output results to the oled and to the terminal
+        hwlib::cout << "\n\nacc_x: " << all_data.acc.x << "   std"
+                    << "\nacc_y: " << all_data.acc.y
+                    << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z;
         d1 << '\f' << "acc_x: " << all_data.acc.x << "   std"
            << "\nacc_y: " << all_data.acc.y
            << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z << hwlib::flush;
         hwlib::wait_ms(500);
-        all_data = getAlldata_scale(10);
-        d1 << '\f' << "acc_x: " << all_data.acc.x << "  scale"
-           << "\nacc_y: " << all_data.acc.y
-           << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z << hwlib::flush;
-        hwlib::wait_ms(500);
-        fifo_enable();
-        all_data = fifo_read_scale_test(10);
+        all_data = fifo_read_test();
+        hwlib::cout << "\n\nacc_x: " << all_data.acc.x << "   fifo"
+                    << "\nacc_y: " << all_data.acc.y
+                    << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z;
         d1 << '\f' << "acc_x: " << all_data.acc.x << "  fifo"
            << "\nacc_y: " << all_data.acc.y
            << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z << hwlib::flush;
         hwlib::wait_ms(500);
+        all_data = getAlldata_scale(10);
+        hwlib::cout << "\n\nacc_x: " << all_data.acc.x << "   scale"
+                    << "\nacc_y: " << all_data.acc.y
+                    << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z;
+        d1 << '\f' << "acc_x: " << all_data.acc.x << "  scale"
+           << "\nacc_y: " << all_data.acc.y
+           << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z << hwlib::flush;
+        hwlib::wait_ms(500);
         all_data = getAlldata_raw();
+        hwlib::cout << "\n\nacc_x: " << all_data.acc.x << "   raw"
+                    << "\nacc_y: " << all_data.acc.y
+                    << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z;
         d1 << '\f' << "acc_x: " << all_data.acc.x << "  raw"
            << "\nacc_y: " << all_data.acc.y
            << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z << hwlib::flush;
@@ -332,11 +343,6 @@ void MPU6050::interrupt_disable()
     writeRegister(INT_ENABLE, 0b0000000); //all interrupts disabled
 }
 
-bool MPU6050::check_interrupt(hwlib::pin_in &interrupt_pin)
-{
-    return interrupt_pin.read();
-}
-
 void MPU6050::read_interrupt(uint8_t data[1])
 {
     readRegister(INT_STATUS, data, 1);
@@ -344,65 +350,59 @@ void MPU6050::read_interrupt(uint8_t data[1])
 
 void MPU6050::fifo_enable()
 {
-    writeRegister(FIFO_EN, 0b11111000); //all enabled
+    writeRegister(FIFO_EN, 0b11111000); //set accelerometer and gyroscope fifo_en flags to 1
 }
 
 void MPU6050::fifo_disable()
 {
-    writeRegister(FIFO_EN, 0b00000000); //all disabled
+    writeRegister(FIFO_EN, 0b00000000); //set accelerometer and gyroscope fifo_en flags to 0
 }
 
-all_values MPU6050::fifo_read_scale(uint8_t desired_range)
+all_values MPU6050::fifo_read()
 {
-    fifo_enable();
+    fifo_enable();//open fifo 
     hwlib::wait_ms(50);
     uint8_t count[2];
-    readRegister(FIFO_COUNTH, count, 2);
+    readRegister(FIFO_COUNTH, count, 2); //read the amount of bytes in fifo buffer
     int16_t packetcount = (count[0] << 8) | count[1];
     int16_t data[7];
-    if (packetcount > 0)
+    if (packetcount > 0) //don't read if it's empty
     {
         uint8_t temp[14];
         readRegister(FIFO_R_W, temp, 14);
-        for (int i = 0; i < 14; i++)
-        {
-            data[0] = (temp[0] << 8) | temp[1];
-            data[1] = (temp[2] << 8) | temp[3];
-            data[2] = (temp[4] << 8) | temp[5];
-            data[3] = (temp[6] << 8) | temp[7];
-            data[4] = (temp[8] << 8) | temp[9];
-            data[5] = (temp[10] << 8) | temp[11];
-            data[6] = (temp[12] << 8) | temp[13];
-        }
+        data[0] = (temp[0] << 8) | temp[1];
+        data[1] = (temp[2] << 8) | temp[3];
+        data[2] = (temp[4] << 8) | temp[5];
+        data[3] = (temp[6] << 8) | temp[7];
+        data[4] = (temp[8] << 8) | temp[9];
+        data[5] = (temp[10] << 8) | temp[11];
+        data[6] = (temp[12] << 8) | temp[13];
     }
-    fifo_disable();
-    return all_values(xyz(data[0] / (fs_range / desired_range), data[1] / (fs_range / desired_range), data[2] / (fs_range / desired_range)), xyz(data[4] / (fs_range / desired_range), data[5] / (fs_range / desired_range), data[6] / (fs_range / desired_range)), data[3] / 340 + 36.53);
+    fifo_disable(); //close to prevent overflow
+    return all_values(xyz(data[0] / accelsensitivity, data[1] / accelsensitivity, data[2] / accelsensitivity), xyz(data[4] / gyrosensitivity, data[5] / gyrosensitivity, data[6] / gyrosensitivity), data[3] / 340 + 36.53);
 }
-
-all_values MPU6050::fifo_read_scale_test(uint8_t desired_range)
+all_values MPU6050::fifo_read_test()
 {
-    fifo_enable();
+    fifo_enable();//open
     hwlib::wait_ms(20);
     uint8_t count[2];
-    readRegister(FIFO_COUNTH, count, 2);
+    readRegister(FIFO_COUNTH, count, 2);//read the amount of bytes in fifo buffer
     int16_t packetcount = (count[0] << 8) | count[1];
     int16_t data[7];
-    if (packetcount > 0)
+    if (packetcount > 0) //don't read if it's empty
     {
         uint8_t temp[14];
         readRegister(FIFO_R_W, temp, 14);
-        for (int i = 0; i < 14; i++)
-        {
-            data[0] = (temp[0] << 8) | temp[1];
-            data[1] = (temp[2] << 8) | temp[3];
-            data[2] = (temp[4] << 8) | temp[5];
-            data[3] = (temp[6] << 8) | temp[7];
-            data[4] = (temp[8] << 8) | temp[9];
-            data[5] = (temp[10] << 8) | temp[11];
-            data[6] = (temp[12] << 8) | temp[13];
-        }
+        data[0] = (temp[0] << 8) | temp[1];
+        data[1] = (temp[2] << 8) | temp[3];
+        data[2] = (temp[4] << 8) | temp[5];
+        data[3] = (temp[6] << 8) | temp[7];
+        data[4] = (temp[8] << 8) | temp[9];
+        data[5] = (temp[10] << 8) | temp[11];
+        data[6] = (temp[12] << 8) | temp[13];
     }
-    return all_values(xyz(data[0] / (fs_range / desired_range), data[1] / (fs_range / desired_range), data[2] / (fs_range / desired_range)), xyz(data[4] / (fs_range / desired_range), data[5] / (fs_range / desired_range), data[6] / (fs_range / desired_range)), data[3] / 340 + 36.53);
+    //don't close to test oveflow interrupt
+    return all_values(xyz(data[0] / accelsensitivity, data[1] / accelsensitivity, data[2] / accelsensitivity), xyz(data[4] / gyrosensitivity, data[5] / gyrosensitivity, data[6] / gyrosensitivity), data[3] / 340 + 36.53);
 }
 
 void MPU6050::fifo_reset()

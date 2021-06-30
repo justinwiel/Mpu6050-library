@@ -251,28 +251,27 @@ public:
 };
 
 /// \brief
-/// a class to control the mpu6050 chip with
+/// A class to control the mpu6050 chip 
 /// \details 
-/// contains a number of functions to activate differerent and use different functions of the mpu6050 gyroscope/accelerometer
+/// Contains a number of functions to activate differerent and use different functions of the mpu6050 gyroscope/accelerometer
 class MPU6050 {
 private: 
     double  gyrosensitivity  = 0;  //has decimal values 
     int16_t  accelsensitivity = 0; // only has whole values
-    bool interrupt_en =false;
     uint8_t   address;
     bool  A0;
     int16_t fs_range = 0;
     hwlib::i2c_bus_bit_banged_scl_sda & I2C_bus;
-    all_values fifo_read_scale_test(uint8_t desired_range);
+    all_values fifo_read_test();
 public:
     /// \brief
-    /// constructor for the mpu6050 class, takes a bus and a boolian
+    /// Constructor for the mpu6050 class, takes a bus and a boolian
     /// \details 
-    /// This constructor for the mpu6050 class takes a bus to write to and a boolian used to determine the chip address, 
+    /// This constructor for the mpu6050 class takes a bus to write to and a boolian used to determine the chip address. 
     /// if the A0 pin of the chip is either not connected or connected to ground, set this to 0.
-    /// if the A0 pin of the chip is connected to VCC set this to 1
-    /// this is used to determine chip address and store that in the class
-    MPU6050(hwlib::i2c_bus_bit_banged_scl_sda & I2C_bus, bool  A0=0):
+    /// If the A0 pin of the chip is connected to VCC set this to 1
+
+    MPU6050(hwlib::i2c_bus_bit_banged_scl_sda & I2C_bus, bool  A0=0 ):
     A0(A0),
     I2C_bus(I2C_bus)
     { 
@@ -281,48 +280,123 @@ public:
     /// \brief
     /// Writes a byte to a register
     /// \details
-    /// takes the sub-address of the register you want to write and the data you want to write to it
+    /// Takes the sub-address of the register you want to write and the data you want to write to it, if you write more than one byte, the chip auto-increments the address(except the for fifo register)
     void writeRegister(uint8_t sub_adrr, uint8_t  data);
     /// \brief 
-    /// reads data from a rgeister
+    /// Reads data from a register
     /// \details 
-    /// takes the sub-address of the register you want to read, a buffer and the amount of data you want to read
-    /// the data gets written into the buffer directly, optionally you can also choose to have the data returned into a second buffer
+    /// Takes the sub-address of the register you want to read, a buffer and the amount of data you want to read, if you read more than one byte, the chip auto-increments the address(except the for fifo register)
+    /// \n The data gets written into the buffer directly, optionally you can also choose to have the data returned into a second or the same buffer
     uint8_t* readRegister(uint8_t sub_addr, uint8_t* data, uint8_t size);
     /// \brief
-    /// intializes the chip and sets the fs_range and afs_range
+    /// Intializes the chip and sets the fs_range and afs_range
     /// \details
-    /// takes the desired range setting, this is value from 0 to 3
-    /// 0 = 250
-    /// 1 = 500
-    /// 2= 1000
-    /// 3 = 2000
-    /// sets up everything that needs to be setup for normal operation, this function should always be the first called function in an application using this library
+    /// Takes the desired range setting, this is value from 0 to 3
+    /// \n 0 = 250 lowest range highest sensitivity,
+    /// \n 1 = 500,
+    /// \n 2= 1000,
+    /// \n 3 = 2000 highest range lowest sensitivity;
+    /// \n Sets up everything that needs to be setup for normal operation, this function should always be the first called function in an application using this library
     void setup(int8_t range_setting);
     /// \brief
-    /// reads accelerometer data and returns an xyz
+    /// Reads accelerometer data and returns an xyz
     /// \details
-    /// this function reads all accelerometer data registers and turns them into 3 usable integers on a scale that can be specified by the user, the greater the scale the more unstable the data
-    /// NOTE: the chosen scale should not go above the range chosen in the setup function 
+    /// This function reads all accelerometer data registers and turns them into 3 usable integers on a scale that can be specified by the user, the greater the scale the more unstable the data
+    /// \n NOTE: The chosen scale should not go above the range chosen in the setup function 
     xyz getAccdata_scale(int desired_range);
+    /// \brief
+    /// Reads gyroscope data and returns an xyz
+    /// \details
+    /// This function reads all gyroscope data registers and turns them into 3 usable integers on a scale that can be specified by the user, the greater the scale the more unstable the data
+    /// \n NOTE: The chosen scale should not go above the range chosen in the setup function 
     xyz getGyrodata_scale(int desired_range);
+    /// \brief
+    /// Reads temperature data and returns an integer
+    /// \details
+    /// This function reads all temperature data registers and processes the output with the calculation specified in the datasheet
     int16_t getTempdata();
+    /// \brief
+    /// Reads sensor data and returns an all_values
+    /// \details
+    /// This function reads all sensor data registers and turns them into 2 xyz variables, on a scale that can be specified by the user, and an integer combined into an all_values container
+    /// \n NOTE: The chosen scale should not go above the range chosen in the setup function 
     all_values getAlldata_scale(int desired_range);
+    /// \brief
+    /// Reads accelerometer data and returns an xyz
+    /// \details
+    /// Reads accelerometer data registers and processes the data in the way specified in the datasheet and returns it as an xyz
     xyz getAccdata();
+    /// \brief
+    /// Reads gyroscope data and returns an xyz
+    /// \details
+    /// Reads gyroscope data registers and processes the data in the way specified in the datasheet and returns it as an xyz
     xyz getGyrodata();
+    /// \brief
+    /// Reads sensor data and returns an all_values
+    /// \details
+    /// This function reads all sensor data registers, processes them in the way specified in the datasheet and returns them as 2 xyz variables and an integer combined into an all_values container
     all_values getAlldata();
+    /// \brief
+    /// Reads accelerometer data and returns an xyz
+    /// \details
+    /// Reads the accelerometer data registers and returns the raw xyz values
     xyz getAccdata_raw();
+    /// \brief
+    /// Reads gyroscope data and returns an xyz
+    /// \details
+    /// Reads the gyroscope data registers and returns the raw xyz values
     xyz getGyrodata_raw();
+    /// \brief
+    /// Reads temperature data and returns an integer
+    /// \details
+    /// Reads the temperature data registers and returns the raw integer value
     int16_t getTempdata_raw();
+    /// \brief
+    /// Reads all data and returns an all_values
+    /// \details
+    /// Reads the all data registers and returns the raw xyz values and a raw integer combined into an all_values
     all_values getAlldata_raw();
+    /// \brief
+    /// Enables interrupts
+    /// \details 
+    /// Writes to the interrupt enable register and sets the flags for data ready and fifo overflow interrupt to 1
     void interrupt_enable();
+    /// \brief
+    /// Disables interrupts
+    /// \details 
+    /// Writes to the interrupt enable register and sets the flags for data ready and fifo overflow interrupt to 0
     void interrupt_disable();
-    bool check_interrupt(hwlib::pin_in & interrupt_pin);
+    /// \brief
+    /// Reads interrupt register
+    /// \details
+    /// Reads the interrupt status register and writes the output into a buffer 
     void read_interrupt(uint8_t data[1]);
-    void test(hwlib::pin_in & button, hwlib::glcd_oled &oled);
+    /// \brief 
+    /// Tests the library
+    /// \details
+    /// A function to test this library, a full guide to this test will be provided on the github page of this project, the two pin_outs are meant to be connected to two leds
+    void test(hwlib::pin_in & button, hwlib::glcd_oled &oled, hwlib::pin_out & data_rdy, hwlib::pin_out & fifo_overflow);
+    /// \brief
+    /// Enables fifo for accelerometer and the gyroscope
+    /// \details
+    /// Writes to the fifo enable register and sets the enable flags for the gyroscope and accelerometer to 1
+    /// \n NOTE: The fifo_read function triggers this function on it's own this is preferable over manual activation and deactivation, the buffer can get overflowed if not read enough while left open
     void fifo_enable();
-    all_values fifo_read_scale(uint8_t desired_range);
+    /// \brief
+    /// Reads the fifo register
+    /// \details
+    /// This function enables the fifo register, reads the register and then disables the register 
+    all_values fifo_read();
+    /// \brief
+    /// Disables fifo for accelerometer and the gyroscope
+    /// \details
+    /// Writes to the fifo enable register and sets the enable flags for the gyroscope and accelerometer to 0
+    /// \n NOTE: The fifo_read function triggers this function on it's own this is preferable over manual activation and deactivation, the buffer can get overflowed if not read enough while left open
     void fifo_disable();
+    /// \brief
+    /// Resets the fifo buffer
+    /// \details 
+    /// Sets the fifo reset flag in the user control register to 1, this flag returns to 0 after triggering the reset
     void fifo_reset();
 };
 

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>My Project: MPU.hpp Source File</title>
+<title>IPASS MPU6050: MPU.hpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,7 +21,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">My Project
+   <div id="projectname">IPASS MPU6050
    </div>
   </td>
  </tr>
@@ -94,7 +94,7 @@ $(function() {
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="preprocessor">#include &quot;hwlib.hpp&quot;</span></div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="preprocessor">#define MPU_HPP</span></div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="preprocessor">        #define  SELF_TEST_X_ACCEL   0x0D</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="preprocessor">        #define  SELF_TEST_X_ACCEL   0x0D </span><span class="comment">//adaptation of the #define list from: https://github.com/simondlevy/MPU/blob/master/src/MPU.h</span></div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="preprocessor">        #define  SELF_TEST_Y_ACCEL   0x0E    </span></div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="preprocessor">        #define  SELF_TEST_Z_ACCEL   0x0F</span></div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="preprocessor">        #define  SELF_TEST_A         0x10</span></div>
@@ -234,70 +234,95 @@ $(function() {
 <div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;};</div>
 <div class="line"><a name="l00236"></a><span class="lineno"><a class="line" href="classall__values.html">  236</a></span>&#160;<span class="keyword">class </span><a class="code" href="classall__values.html">all_values</a>  {</div>
 <div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;    <a class="code" href="classxyz.html">xyz</a> gyr;</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;    <a class="code" href="classxyz.html">xyz</a> acc;</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;    <a class="code" href="classxyz.html">xyz</a> acc;</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;    <a class="code" href="classxyz.html">xyz</a> gyr;</div>
 <div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;    int16_t temp;</div>
-<div class="line"><a name="l00245"></a><span class="lineno"><a class="line" href="classall__values.html#ae5ea8823a4b36c5b8120f856d45a2999">  245</a></span>&#160;    <a class="code" href="classall__values.html#ae5ea8823a4b36c5b8120f856d45a2999">all_values</a>(<a class="code" href="classxyz.html">xyz</a> gyr, <a class="code" href="classxyz.html">xyz</a> acc, int16_t temp):</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    gyr(gyr),</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;    acc(acc),</div>
+<div class="line"><a name="l00245"></a><span class="lineno"><a class="line" href="classall__values.html#af8421f518831a46f289636242adc6291">  245</a></span>&#160;    <a class="code" href="classall__values.html#af8421f518831a46f289636242adc6291">all_values</a>(<a class="code" href="classxyz.html">xyz</a> acc, <a class="code" href="classxyz.html">xyz</a> gyr, int16_t temp):</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    acc(acc),</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;    gyr(gyr),</div>
 <div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;    temp(temp)</div>
 <div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;    {}</div>
 <div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160; </div>
 <div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;};</div>
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160; </div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160; </div>
-<div class="line"><a name="l00254"></a><span class="lineno"><a class="line" href="class_m_p_u6050.html">  254</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_m_p_u6050.html">MPU6050</a> {</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;<span class="keyword">private</span>: </div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    int16_t  gyrosensitivity  = 131;   </div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    int16_t  accelsensitivity = 16384;</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    <span class="keywordtype">bool</span> interrupt_en =<span class="keyword">false</span>;</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;    uint8_t   address;</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    <span class="keywordtype">bool</span>  A0;</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    int16_t fs_range = 0;</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;    hwlib::i2c_bus_bit_banged_scl_sda &amp; I2C_bus;</div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;    <a class="code" href="class_m_p_u6050.html">MPU6050</a>(hwlib::i2c_bus_bit_banged_scl_sda &amp; I2C_bus, <span class="keywordtype">bool</span>  A0=0):</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;    A0(A0),</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;    I2C_bus(I2C_bus)</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;    { </div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;        address = 0x68 + (int)A0; <span class="comment">//The setting of A0 pin sets the adrress to 0x68 when low or 0x69 when high</span></div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    } </div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;    <span class="keywordtype">void</span> writeRegister(uint8_t sub_adrr, uint8_t  data);</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;    uint8_t* readRegister(uint8_t sub_addr, uint8_t* data, uint8_t size);</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;    <span class="keywordtype">void</span> setup(uint8_t range_setting);</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;    <a class="code" href="classxyz.html">xyz</a> getAccdata(<span class="keywordtype">int</span> desired_range);</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;    <a class="code" href="classxyz.html">xyz</a> getGyrodata(<span class="keywordtype">int</span> desired_range);</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;    int16_t getTempdata();</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;    <a class="code" href="classall__values.html">all_values</a> getAlldata(<span class="keywordtype">int</span> desired_range);</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;    <a class="code" href="classxyz.html">xyz</a> getAccdata_raw();</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;    <a class="code" href="classxyz.html">xyz</a> getGyrodata_raw();</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    int16_t getTempdata_raw();</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    <a class="code" href="classall__values.html">all_values</a> getAlldata_raw();</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;    <span class="keywordtype">void</span> interrupt_enable();</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;    <span class="keywordtype">void</span> interrupt_disable();</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;    <span class="keywordtype">bool</span> check_interrupt(hwlib::pin_in &amp; interrupt_pin);</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;    <span class="keywordtype">void</span> read_interrupt(uint8_t data[1]);</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;    <span class="keywordtype">void</span> test(hwlib::pin_in &amp; button, hwlib::glcd_oled &amp;  oled);</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;    <span class="keywordtype">void</span> fifo_enable();</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    <a class="code" href="classall__values.html">all_values</a> fifo_read(uint8_t desired_range);</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    <a class="code" href="classall__values.html">all_values</a> fifo_read_raw();</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    <span class="keywordtype">void</span> fifo_disable();</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;};</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160; </div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160; </div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="ttc" id="aclass_m_p_u6050_html"><div class="ttname"><a href="class_m_p_u6050.html">MPU6050</a></div><div class="ttdef"><b>Definition:</b> MPU.hpp:254</div></div>
+<div class="line"><a name="l00257"></a><span class="lineno"><a class="line" href="class_m_p_u6050.html">  257</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_m_p_u6050.html">MPU6050</a> {</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;<span class="keyword">private</span>: </div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;    <span class="keywordtype">double</span>  gyrosensitivity  = 0;  <span class="comment">//has decimal values </span></div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    int16_t  accelsensitivity = 0; <span class="comment">// only has whole values</span></div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    uint8_t   address;</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;    <span class="keywordtype">bool</span>  A0;</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;    int16_t fs_range = 0;</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;    hwlib::i2c_bus_bit_banged_scl_sda &amp; I2C_bus;</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;    <a class="code" href="classall__values.html">all_values</a> fifo_read_test();</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160; </div>
+<div class="line"><a name="l00274"></a><span class="lineno"><a class="line" href="class_m_p_u6050.html#a0c398fad46f4e6c57bb31fcf45f79280">  274</a></span>&#160;    <a class="code" href="class_m_p_u6050.html#a0c398fad46f4e6c57bb31fcf45f79280">MPU6050</a>(hwlib::i2c_bus_bit_banged_scl_sda &amp; I2C_bus, <span class="keywordtype">bool</span>  A0=0 ):</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;    A0(A0),</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;    I2C_bus(I2C_bus)</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;    { </div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        address = 0x68 + (int)A0; <span class="comment">//The setting of A0 pin sets the adrress to 0x68 when low or 0x69 when high</span></div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    } </div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_m_p_u6050.html#a1aa59216c62823af764e4b8c11053aa4">writeRegister</a>(uint8_t sub_adrr, uint8_t  data);</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    uint8_t* <a class="code" href="class_m_p_u6050.html#a37c346b293c18be4eea667e24a873d59">readRegister</a>(uint8_t sub_addr, uint8_t* data, uint8_t size);</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_m_p_u6050.html#ad61862f310ea9b594959237f50f5784f">setup</a>(int8_t range_setting);</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;    <a class="code" href="classxyz.html">xyz</a> <a class="code" href="class_m_p_u6050.html#a0f941dce91b303d6a8f730e4172e1f7a">getAccdata_scale</a>(<span class="keywordtype">int</span> desired_range);</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;    <a class="code" href="classxyz.html">xyz</a> <a class="code" href="class_m_p_u6050.html#aebbf9515c9ad70b35272bfc5d08d2c3b">getGyrodata_scale</a>(<span class="keywordtype">int</span> desired_range);</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;    int16_t <a class="code" href="class_m_p_u6050.html#a8818e14f2c2a889f3fcee2c71b0fb0ac">getTempdata</a>();</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;    <a class="code" href="classall__values.html">all_values</a> <a class="code" href="class_m_p_u6050.html#a44c63552ef62e2294eef3afff3134d75">getAlldata_scale</a>(<span class="keywordtype">int</span> desired_range);</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;    <a class="code" href="classxyz.html">xyz</a> <a class="code" href="class_m_p_u6050.html#aaf729eadb2ade0feb0b98f2a5db5c355">getAccdata</a>();</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;    <a class="code" href="classxyz.html">xyz</a> <a class="code" href="class_m_p_u6050.html#ae63c09179a26e5965deec10ebe7a76da">getGyrodata</a>();</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;    <a class="code" href="classall__values.html">all_values</a> <a class="code" href="class_m_p_u6050.html#a728cff05cb44b3c2762b91088e29fa20">getAlldata</a>();</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;    <a class="code" href="classxyz.html">xyz</a> <a class="code" href="class_m_p_u6050.html#ad2f2de67c283e2170605d0e6e3cc75a8">getAccdata_raw</a>();</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    <a class="code" href="classxyz.html">xyz</a> <a class="code" href="class_m_p_u6050.html#a5153baa7a457d032868eec4c46cf8740">getGyrodata_raw</a>();</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    int16_t <a class="code" href="class_m_p_u6050.html#abeff99237edfd3cf33e0d269a7dbe54e">getTempdata_raw</a>();</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;    <a class="code" href="classall__values.html">all_values</a> <a class="code" href="class_m_p_u6050.html#a6018e421b66289949f596d22f81894e3">getAlldata_raw</a>();</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_m_p_u6050.html#a5d10b9f281dff21053356946023133ec">interrupt_enable</a>();</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_m_p_u6050.html#a84bb1bb152e2b067b71d96f7bedbe580">interrupt_disable</a>();</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_m_p_u6050.html#a495b17188594a792b771e809c70379ad">read_interrupt</a>(uint8_t data[1]);</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_m_p_u6050.html#adca2f783b5d65b00614fee280839ce4b">test</a>(hwlib::pin_in &amp; button, hwlib::glcd_oled &amp;oled, hwlib::pin_out &amp; data_rdy, hwlib::pin_out &amp; fifo_overflow);</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_m_p_u6050.html#ad0a0a899156d6ea1ee879e25ac2185db">fifo_enable</a>();</div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;    <a class="code" href="classall__values.html">all_values</a> <a class="code" href="class_m_p_u6050.html#adf22491b40df35632afbaa136fc7e4be">fifo_read</a>();</div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_m_p_u6050.html#a34729be34698798c2fbfb5a07099ca70">fifo_disable</a>();</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_m_p_u6050.html#a56c00f4e7ddaff57a9ac799ba65a37f1">fifo_reset</a>();</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;};</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160; </div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160; </div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="aclass_m_p_u6050_html"><div class="ttname"><a href="class_m_p_u6050.html">MPU6050</a></div><div class="ttdoc">A class to control the mpu6050 chip.</div><div class="ttdef"><b>Definition:</b> MPU.hpp:257</div></div>
+<div class="ttc" id="aclass_m_p_u6050_html_a0c398fad46f4e6c57bb31fcf45f79280"><div class="ttname"><a href="class_m_p_u6050.html#a0c398fad46f4e6c57bb31fcf45f79280">MPU6050::MPU6050</a></div><div class="ttdeci">MPU6050(hwlib::i2c_bus_bit_banged_scl_sda &amp;I2C_bus, bool A0=0)</div><div class="ttdoc">Constructor for the mpu6050 class, takes a bus and a boolian.</div><div class="ttdef"><b>Definition:</b> MPU.hpp:274</div></div>
+<div class="ttc" id="aclass_m_p_u6050_html_a0f941dce91b303d6a8f730e4172e1f7a"><div class="ttname"><a href="class_m_p_u6050.html#a0f941dce91b303d6a8f730e4172e1f7a">MPU6050::getAccdata_scale</a></div><div class="ttdeci">xyz getAccdata_scale(int desired_range)</div><div class="ttdoc">Reads accelerometer data and returns an xyz.</div><div class="ttdef"><b>Definition:</b> MPU.cpp:156</div></div>
+<div class="ttc" id="aclass_m_p_u6050_html_a1aa59216c62823af764e4b8c11053aa4"><div class="ttname"><a href="class_m_p_u6050.html#a1aa59216c62823af764e4b8c11053aa4">MPU6050::writeRegister</a></div><div class="ttdeci">void writeRegister(uint8_t sub_adrr, uint8_t data)</div><div class="ttdoc">Writes a byte to a register.</div><div class="ttdef"><b>Definition:</b> MPU.cpp:137</div></div>
+<div class="ttc" id="aclass_m_p_u6050_html_a34729be34698798c2fbfb5a07099ca70"><div class="ttname"><a href="class_m_p_u6050.html#a34729be34698798c2fbfb5a07099ca70">MPU6050::fifo_disable</a></div><div class="ttdeci">void fifo_disable()</div><div class="ttdoc">Disables fifo for accelerometer and the gyroscope.</div><div class="ttdef"><b>Definition:</b> MPU.cpp:356</div></div>
+<div class="ttc" id="aclass_m_p_u6050_html_a37c346b293c18be4eea667e24a873d59"><div class="ttname"><a href="class_m_p_u6050.html#a37c346b293c18be4eea667e24a873d59">MPU6050::readRegister</a></div><div class="ttdeci">uint8_t * readRegister(uint8_t sub_addr, uint8_t *data, uint8_t size)</div><div class="ttdoc">Reads data from a register.</div><div class="ttdef"><b>Definition:</b> MPU.cpp:145</div></div>
+<div class="ttc" id="aclass_m_p_u6050_html_a44c63552ef62e2294eef3afff3134d75"><div class="ttname"><a href="class_m_p_u6050.html#a44c63552ef62e2294eef3afff3134d75">MPU6050::getAlldata_scale</a></div><div class="ttdeci">all_values getAlldata_scale(int desired_range)</div><div class="ttdoc">Reads sensor data and returns an all_values.</div><div class="ttdef"><b>Definition:</b> MPU.cpp:183</div></div>
+<div class="ttc" id="aclass_m_p_u6050_html_a495b17188594a792b771e809c70379ad"><div class="ttname"><a href="class_m_p_u6050.html#a495b17188594a792b771e809c70379ad">MPU6050::read_interrupt</a></div><div class="ttdeci">void read_interrupt(uint8_t data[1])</div><div class="ttdoc">Reads interrupt register.</div><div class="ttdef"><b>Definition:</b> MPU.cpp:346</div></div>
+<div class="ttc" id="aclass_m_p_u6050_html_a5153baa7a457d032868eec4c46cf8740"><div class="ttname"><a href="class_m_p_u6050.html#a5153baa7a457d032868eec4c46cf8740">MPU6050::getGyrodata_raw</a></div><div class="ttdeci">xyz getGyrodata_raw()</div><div class="ttdoc">Reads gyroscope data and returns an xyz.</div><div class="ttdef"><b>Definition:</b> MPU.cpp:221</div></div>
+<div class="ttc" id="aclass_m_p_u6050_html_a56c00f4e7ddaff57a9ac799ba65a37f1"><div class="ttname"><a href="class_m_p_u6050.html#a56c00f4e7ddaff57a9ac799ba65a37f1">MPU6050::fifo_reset</a></div><div class="ttdeci">void fifo_reset()</div><div class="ttdoc">Resets the fifo buffer.</div><div class="ttdef"><b>Definition:</b> MPU.cpp:408</div></div>
+<div class="ttc" id="aclass_m_p_u6050_html_a5d10b9f281dff21053356946023133ec"><div class="ttname"><a href="class_m_p_u6050.html#a5d10b9f281dff21053356946023133ec">MPU6050::interrupt_enable</a></div><div class="ttdeci">void interrupt_enable()</div><div class="ttdoc">Enables interrupts.</div><div class="ttdef"><b>Definition:</b> MPU.cpp:335</div></div>
+<div class="ttc" id="aclass_m_p_u6050_html_a6018e421b66289949f596d22f81894e3"><div class="ttname"><a href="class_m_p_u6050.html#a6018e421b66289949f596d22f81894e3">MPU6050::getAlldata_raw</a></div><div class="ttdeci">all_values getAlldata_raw()</div><div class="ttdoc">Reads all data and returns an all_values.</div><div class="ttdef"><b>Definition:</b> MPU.cpp:239</div></div>
+<div class="ttc" id="aclass_m_p_u6050_html_a728cff05cb44b3c2762b91088e29fa20"><div class="ttname"><a href="class_m_p_u6050.html#a728cff05cb44b3c2762b91088e29fa20">MPU6050::getAlldata</a></div><div class="ttdeci">all_values getAlldata()</div><div class="ttdoc">Reads sensor data and returns an all_values.</div><div class="ttdef"><b>Definition:</b> MPU.cpp:207</div></div>
+<div class="ttc" id="aclass_m_p_u6050_html_a84bb1bb152e2b067b71d96f7bedbe580"><div class="ttname"><a href="class_m_p_u6050.html#a84bb1bb152e2b067b71d96f7bedbe580">MPU6050::interrupt_disable</a></div><div class="ttdeci">void interrupt_disable()</div><div class="ttdoc">Disables interrupts.</div><div class="ttdef"><b>Definition:</b> MPU.cpp:340</div></div>
+<div class="ttc" id="aclass_m_p_u6050_html_a8818e14f2c2a889f3fcee2c71b0fb0ac"><div class="ttname"><a href="class_m_p_u6050.html#a8818e14f2c2a889f3fcee2c71b0fb0ac">MPU6050::getTempdata</a></div><div class="ttdeci">int16_t getTempdata()</div><div class="ttdoc">Reads temperature data and returns an integer.</div><div class="ttdef"><b>Definition:</b> MPU.cpp:174</div></div>
+<div class="ttc" id="aclass_m_p_u6050_html_aaf729eadb2ade0feb0b98f2a5db5c355"><div class="ttname"><a href="class_m_p_u6050.html#aaf729eadb2ade0feb0b98f2a5db5c355">MPU6050::getAccdata</a></div><div class="ttdeci">xyz getAccdata()</div><div class="ttdoc">Reads accelerometer data and returns an xyz.</div><div class="ttdef"><b>Definition:</b> MPU.cpp:188</div></div>
+<div class="ttc" id="aclass_m_p_u6050_html_abeff99237edfd3cf33e0d269a7dbe54e"><div class="ttname"><a href="class_m_p_u6050.html#abeff99237edfd3cf33e0d269a7dbe54e">MPU6050::getTempdata_raw</a></div><div class="ttdeci">int16_t getTempdata_raw()</div><div class="ttdoc">Reads temperature data and returns an integer.</div><div class="ttdef"><b>Definition:</b> MPU.cpp:230</div></div>
+<div class="ttc" id="aclass_m_p_u6050_html_ad0a0a899156d6ea1ee879e25ac2185db"><div class="ttname"><a href="class_m_p_u6050.html#ad0a0a899156d6ea1ee879e25ac2185db">MPU6050::fifo_enable</a></div><div class="ttdeci">void fifo_enable()</div><div class="ttdoc">Enables fifo for accelerometer and the gyroscope.</div><div class="ttdef"><b>Definition:</b> MPU.cpp:351</div></div>
+<div class="ttc" id="aclass_m_p_u6050_html_ad2f2de67c283e2170605d0e6e3cc75a8"><div class="ttname"><a href="class_m_p_u6050.html#ad2f2de67c283e2170605d0e6e3cc75a8">MPU6050::getAccdata_raw</a></div><div class="ttdeci">xyz getAccdata_raw()</div><div class="ttdoc">Reads accelerometer data and returns an xyz.</div><div class="ttdef"><b>Definition:</b> MPU.cpp:212</div></div>
+<div class="ttc" id="aclass_m_p_u6050_html_ad61862f310ea9b594959237f50f5784f"><div class="ttname"><a href="class_m_p_u6050.html#ad61862f310ea9b594959237f50f5784f">MPU6050::setup</a></div><div class="ttdeci">void setup(int8_t range_setting)</div><div class="ttdoc">Intializes the chip and sets the fs_range and afs_range.</div><div class="ttdef"><b>Definition:</b> MPU.cpp:74</div></div>
+<div class="ttc" id="aclass_m_p_u6050_html_adca2f783b5d65b00614fee280839ce4b"><div class="ttname"><a href="class_m_p_u6050.html#adca2f783b5d65b00614fee280839ce4b">MPU6050::test</a></div><div class="ttdeci">void test(hwlib::pin_in &amp;button, hwlib::glcd_oled &amp;oled, hwlib::pin_out &amp;data_rdy, hwlib::pin_out &amp;fifo_overflow)</div><div class="ttdoc">Tests the library.</div><div class="ttdef"><b>Definition:</b> MPU.cpp:244</div></div>
+<div class="ttc" id="aclass_m_p_u6050_html_adf22491b40df35632afbaa136fc7e4be"><div class="ttname"><a href="class_m_p_u6050.html#adf22491b40df35632afbaa136fc7e4be">MPU6050::fifo_read</a></div><div class="ttdeci">all_values fifo_read()</div><div class="ttdoc">Reads the fifo register.</div><div class="ttdef"><b>Definition:</b> MPU.cpp:361</div></div>
+<div class="ttc" id="aclass_m_p_u6050_html_ae63c09179a26e5965deec10ebe7a76da"><div class="ttname"><a href="class_m_p_u6050.html#ae63c09179a26e5965deec10ebe7a76da">MPU6050::getGyrodata</a></div><div class="ttdeci">xyz getGyrodata()</div><div class="ttdoc">Reads gyroscope data and returns an xyz.</div><div class="ttdef"><b>Definition:</b> MPU.cpp:197</div></div>
+<div class="ttc" id="aclass_m_p_u6050_html_aebbf9515c9ad70b35272bfc5d08d2c3b"><div class="ttname"><a href="class_m_p_u6050.html#aebbf9515c9ad70b35272bfc5d08d2c3b">MPU6050::getGyrodata_scale</a></div><div class="ttdeci">xyz getGyrodata_scale(int desired_range)</div><div class="ttdoc">Reads gyroscope data and returns an xyz.</div><div class="ttdef"><b>Definition:</b> MPU.cpp:165</div></div>
 <div class="ttc" id="aclassall__values_html"><div class="ttname"><a href="classall__values.html">all_values</a></div><div class="ttdoc">a container for the full range output of the chip</div><div class="ttdef"><b>Definition:</b> MPU.hpp:236</div></div>
-<div class="ttc" id="aclassall__values_html_ae5ea8823a4b36c5b8120f856d45a2999"><div class="ttname"><a href="classall__values.html#ae5ea8823a4b36c5b8120f856d45a2999">all_values::all_values</a></div><div class="ttdeci">all_values(xyz gyr, xyz acc, int16_t temp)</div><div class="ttdoc">this function takes the desired values and stores them int the class</div><div class="ttdef"><b>Definition:</b> MPU.hpp:245</div></div>
+<div class="ttc" id="aclassall__values_html_af8421f518831a46f289636242adc6291"><div class="ttname"><a href="classall__values.html#af8421f518831a46f289636242adc6291">all_values::all_values</a></div><div class="ttdeci">all_values(xyz acc, xyz gyr, int16_t temp)</div><div class="ttdoc">this function takes the desired values and stores them int the class</div><div class="ttdef"><b>Definition:</b> MPU.hpp:245</div></div>
 <div class="ttc" id="aclassxyz_html"><div class="ttname"><a href="classxyz.html">xyz</a></div><div class="ttdoc">custom datatype for storing 3-dimentional values</div><div class="ttdef"><b>Definition:</b> MPU.hpp:160</div></div>
-<div class="ttc" id="aclassxyz_html_a19e447752141e5ac6ecc9b33cf912e76"><div class="ttname"><a href="classxyz.html#a19e447752141e5ac6ecc9b33cf912e76">xyz::operator-</a></div><div class="ttdeci">xyz operator-(xyz &amp;rhs)</div><div class="ttdoc">a operator- for the xyz datatype</div><div class="ttdef"><b>Definition:</b> MPU.cpp:30</div></div>
-<div class="ttc" id="aclassxyz_html_a1d674bb5aaaa0dfb1cec7d077883607e"><div class="ttname"><a href="classxyz.html#a1d674bb5aaaa0dfb1cec7d077883607e">xyz::operator-=</a></div><div class="ttdeci">xyz operator-=(xyz &amp;rhs)</div><div class="ttdoc">a operator-= for the xyz datatype</div><div class="ttdef"><b>Definition:</b> MPU.cpp:34</div></div>
+<div class="ttc" id="aclassxyz_html_a19e447752141e5ac6ecc9b33cf912e76"><div class="ttname"><a href="classxyz.html#a19e447752141e5ac6ecc9b33cf912e76">xyz::operator-</a></div><div class="ttdeci">xyz operator-(xyz &amp;rhs)</div><div class="ttdoc">a operator- for the xyz datatype</div><div class="ttdef"><b>Definition:</b> MPU.cpp:28</div></div>
+<div class="ttc" id="aclassxyz_html_a1d674bb5aaaa0dfb1cec7d077883607e"><div class="ttname"><a href="classxyz.html#a1d674bb5aaaa0dfb1cec7d077883607e">xyz::operator-=</a></div><div class="ttdeci">xyz operator-=(xyz &amp;rhs)</div><div class="ttdoc">a operator-= for the xyz datatype</div><div class="ttdef"><b>Definition:</b> MPU.cpp:33</div></div>
 <div class="ttc" id="aclassxyz_html_a2191adbb7ee643c4e11b500fe97d19d1"><div class="ttname"><a href="classxyz.html#a2191adbb7ee643c4e11b500fe97d19d1">xyz::operator+</a></div><div class="ttdeci">xyz operator+(xyz &amp;rhs)</div><div class="ttdoc">a operator+ for the xyz datatype</div><div class="ttdef"><b>Definition:</b> MPU.cpp:40</div></div>
 <div class="ttc" id="aclassxyz_html_a33f4fce94d368ed81bd92efa2faee160"><div class="ttname"><a href="classxyz.html#a33f4fce94d368ed81bd92efa2faee160">xyz::xyz</a></div><div class="ttdeci">xyz(int16_t x, int16_t y, int16_t z)</div><div class="ttdoc">constructor for the xyz data type</div><div class="ttdef"><b>Definition:</b> MPU.hpp:167</div></div>
 <div class="ttc" id="aclassxyz_html_a4616b7330d5298fb62ee5ef07b3d2248"><div class="ttname"><a href="classxyz.html#a4616b7330d5298fb62ee5ef07b3d2248">xyz::xyz</a></div><div class="ttdeci">xyz()</div><div class="ttdoc">constructor for the xyz data type</div><div class="ttdef"><b>Definition:</b> MPU.hpp:176</div></div>
-<div class="ttc" id="aclassxyz_html_a60e1c4721ea502d76547379300c88641"><div class="ttname"><a href="classxyz.html#a60e1c4721ea502d76547379300c88641">xyz::operator*=</a></div><div class="ttdeci">xyz operator*=(xyz &amp;rhs)</div><div class="ttdoc">a operator*= for the xyz datatype</div><div class="ttdef"><b>Definition:</b> MPU.cpp:53</div></div>
-<div class="ttc" id="aclassxyz_html_ad156c71d8508d65cf0f8faa8d47b11f5"><div class="ttname"><a href="classxyz.html#ad156c71d8508d65cf0f8faa8d47b11f5">xyz::operator+=</a></div><div class="ttdeci">xyz operator+=(xyz &amp;rhs)</div><div class="ttdoc">a operator+= for the xyz datatype</div><div class="ttdef"><b>Definition:</b> MPU.cpp:43</div></div>
-<div class="ttc" id="aclassxyz_html_af258b24ec1b3866658def08cafdb36d4"><div class="ttname"><a href="classxyz.html#af258b24ec1b3866658def08cafdb36d4">xyz::operator*</a></div><div class="ttdeci">xyz operator*(xyz &amp;rhs)</div><div class="ttdoc">a operator* for the xyz datatype</div><div class="ttdef"><b>Definition:</b> MPU.cpp:49</div></div>
+<div class="ttc" id="aclassxyz_html_a60e1c4721ea502d76547379300c88641"><div class="ttname"><a href="classxyz.html#a60e1c4721ea502d76547379300c88641">xyz::operator*=</a></div><div class="ttdeci">xyz operator*=(xyz &amp;rhs)</div><div class="ttdoc">a operator*= for the xyz datatype</div><div class="ttdef"><b>Definition:</b> MPU.cpp:55</div></div>
+<div class="ttc" id="aclassxyz_html_ad156c71d8508d65cf0f8faa8d47b11f5"><div class="ttname"><a href="classxyz.html#ad156c71d8508d65cf0f8faa8d47b11f5">xyz::operator+=</a></div><div class="ttdeci">xyz operator+=(xyz &amp;rhs)</div><div class="ttdoc">a operator+= for the xyz datatype</div><div class="ttdef"><b>Definition:</b> MPU.cpp:44</div></div>
+<div class="ttc" id="aclassxyz_html_af258b24ec1b3866658def08cafdb36d4"><div class="ttname"><a href="classxyz.html#af258b24ec1b3866658def08cafdb36d4">xyz::operator*</a></div><div class="ttdeci">xyz operator*(xyz &amp;rhs)</div><div class="ttdoc">a operator* for the xyz datatype</div><div class="ttdef"><b>Definition:</b> MPU.cpp:51</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

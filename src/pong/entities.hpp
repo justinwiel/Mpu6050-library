@@ -32,10 +32,13 @@ using namespace hwlib;
 class sprite {
 protected:
     window & w;
+
 public:
     xy start;
     xy end;
     xy bounce;
+    xy org_end = end;
+    xy org_start = start;
     sprite(window & w,xy  start, xy  end, xy bounce):
         w(w),
         start(start),
@@ -45,14 +48,15 @@ public:
     virtual void draw() = 0;
     virtual void update() = 0;
     virtual void interact(const sprite & other);
+    virtual void reset() = 0;
 
 };
 
 class ball :public sprite{
 protected:
-
 public:
     xy speed;
+    xy org_speed = speed;
     ball(window & w,xy  start, xy  end, xy  speed, xy bounce= xy(0,0)):
         sprite(w,  start,  end, bounce),
         speed(speed)
@@ -62,24 +66,23 @@ public:
     void check_next_pos( const sprite & ai);
     bool overlaps(const sprite & other);
     void interact(const sprite & other) ;
+    void reset();
 
     
     
 };
 
 class border :public sprite{
-private:
-    xy org_start = start;
-    xy org_end = end;
 public:
     border(window & w,xy  start, xy  end, xy bounce):
         sprite(w,  start,  end, bounce)
         {}
-    void draw() ;
-    void update() ;
+    virtual void update() override;
+    virtual void interact(const sprite & other)override ;
+    virtual void draw() ;
+
     bool overlaps(const sprite & other);
-    virtual void interact(const sprite & other) ;
-    void reset();
+    virtual void reset();
 
 };
 
@@ -95,7 +98,7 @@ public:
     void interact(const sprite & other) ;
     void gameOver() ;
     void gameWon();
-
+    void reset() override;
     
 };
 #endif
