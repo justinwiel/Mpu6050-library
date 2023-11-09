@@ -39,120 +39,127 @@
 ///  to use the library it's important you read the documentation and understand the way it outputs data
 /// -------------------------------------
 
+#include <cstdint>
+#include "sdkconfig.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "esp_chip_info.h"
+#include "esp_flash.h"
+#include "esp_system.h"
 #ifndef MPU_HPP
 #define MPU_HPP
 
-        #define  SELF_TEST_X_ACCEL   0x0D //adaptation of the #define list from: https://github.com/simondlevy/MPU/blob/master/src/MPU.h
-        #define  SELF_TEST_Y_ACCEL   0x0E    
-        #define  SELF_TEST_Z_ACCEL   0x0F
-        #define  SELF_TEST_A         0x10
-        #define  XG_OFFSET_H         0x13 
-        #define  XG_OFFSET_L         0x14
-        #define  YG_OFFSET_H         0x15
-        #define  YG_OFFSET_L         0x16
-        #define  ZG_OFFSET_H         0x17
-        #define  ZG_OFFSET_L         0x18
-        #define  SMPLRT_DIV          0x19
-        #define  I2C_MST_EN          0x20
-        #define  ACCEL_CONFIG2       0x1D
-        #define  LP_ACCEL_ODR        0x1E
-        #define  MOT_THR             0x1F   
-        #define  MOT_DUR             0x20  
-        #define  CONFIG              0x1A
-        #define  GYRO_CONFIG         0x1B
-        #define  ACCEL_CONFIG        0x1C
-        #define  ZMOT_THR            0x21  
-        #define  ZRMOT_DUR           0x22  
-        #define  FIFO_EN             0x23
-        #define  I2C_MST_CTRL        0x24
-        #define  I2C_SLV0_ADDR       0x25
-        #define  I2C_SLV0_REG        0x26
-        #define  I2C_SLV0_CTRL       0x27
-        #define  I2C_SLV1_ADDR       0x28
-        #define  I2C_SLV1_REG        0x29
-        #define  I2C_SLV1_CTRL       0x2A
-        #define  I2C_SLV2_ADDR       0x2B
-        #define  I2C_SLV2_REG        0x2C
-        #define  I2C_SLV2_CTRL       0x2D
-        #define  I2C_SLV3_ADDR       0x2E
-        #define  I2C_SLV3_REG        0x2F
-        #define  I2C_SLV3_CTRL       0x30
-        #define  I2C_SLV4_ADDR       0x31
-        #define  I2C_SLV4_REG        0x32
-        #define  I2C_SLV4_DO         0x33
-        #define  I2C_SLV4_CTRL       0x34
-        #define  I2C_SLV4_DI         0x35
-        #define  I2C_MST_STATUS      0x36
-        #define  INT_PIN_CFG         0x37
-        #define  INT_ENABLE          0x38
-        #define  DMP_INT_STATUS      0x39  // Check DMP interrupt
-        #define  INT_STATUS          0x3A
-        #define  ACCEL_XOUT_H        0x3B
-        #define  ACCEL_XOUT_L        0x3C
-        #define  ACCEL_YOUT_H        0x3D
-        #define  ACCEL_YOUT_L        0x3E
-        #define  ACCEL_ZOUT_H        0x3F
-        #define  ACCEL_ZOUT_L        0x40
-        #define  TEMP_OUT_H          0x41
-        #define  TEMP_OUT_L          0x42
-        #define  GYRO_XOUT_H         0x43
-        #define  GYRO_XOUT_L         0x44
-        #define  GYRO_YOUT_H         0x45
-        #define  GYRO_YOUT_L         0x46
-        #define  GYRO_ZOUT_H         0x47
-        #define  GYRO_ZOUT_L         0x48
-        #define  EXT_SENS_DATA_00    0x49
-        #define  EXT_SENS_DATA_01    0x4A
-        #define  EXT_SENS_DATA_02    0x4B
-        #define  EXT_SENS_DATA_03    0x4C
-        #define  EXT_SENS_DATA_04    0x4D
-        #define  EXT_SENS_DATA_05    0x4E
-        #define  EXT_SENS_DATA_06    0x4F
-        #define  EXT_SENS_DATA_07    0x50
-        #define  EXT_SENS_DATA_08    0x51
-        #define  EXT_SENS_DATA_09    0x52
-        #define  EXT_SENS_DATA_10    0x53
-        #define  EXT_SENS_DATA_11    0x54
-        #define  EXT_SENS_DATA_12    0x55
-        #define  EXT_SENS_DATA_13    0x56
-        #define  EXT_SENS_DATA_14    0x57
-        #define  EXT_SENS_DATA_15    0x58
-        #define  EXT_SENS_DATA_16    0x59
-        #define  EXT_SENS_DATA_17    0x5A
-        #define  EXT_SENS_DATA_18    0x5B
-        #define  EXT_SENS_DATA_19    0x5C
-        #define  EXT_SENS_DATA_20    0x5D
-        #define  EXT_SENS_DATA_21    0x5E
-        #define  EXT_SENS_DATA_22    0x5F
-        #define  EXT_SENS_DATA_23    0x60
-        #define  MOT_DETECT_STATUS   0x61
-        #define  I2C_SLV0_DO         0x63
-        #define  I2C_SLV1_DO         0x64
-        #define  I2C_SLV2_DO         0x65
-        #define  I2C_SLV3_DO         0x66
-        #define  I2C_MST_DELAY_CTRL  0x67
-        #define  SIGNAL_PATH_RESET   0x68
-        #define  MOT_DETECT_CTRL     0x69
-        #define  USER_CTRL           0x6A  
-        #define  PWR_MGMT_1          0x6B 
-        #define  PWR_MGMT_2          0x6C
-        #define  DMP_BANK            0x6D 
-        #define  DMP_RW_PNT          0x6E
-        #define  DMP_REG             0x6F
-        #define  DMP_REG_1           0x70
-        #define  DMP_REG_2           0x71
-        #define  FIFO_COUNTH         0x72
-        #define  FIFO_COUNTL         0x73
-        #define  FIFO_R_W            0x74
-        #define  WHO_AM_I            0x75 
-        #define  XA_OFFSET_H         0x77
-        #define  XA_OFFSET_L         0x78
-        #define  YA_OFFSET_H         0x7A
-        #define  YA_OFFSET_L         0x7B
-        #define  ZA_OFFSET_H         0x7D
-        #define  ZA_OFFSET_L         0x7E
-        #define  I2C_SLV0_EN         0x80
-        #define  I2C_READ_FLAG       0x80
+        constexpr int  SELF_TEST_X_ACCEL =   0x0D; //adaptation of the constexpr int list from: https://github.com/simondlevy/MPU/blob/master/src/MPU.h
+        constexpr int  SELF_TEST_Y_ACCEL =  0x0E;   
+        constexpr int  SELF_TEST_Z_ACCEL =  0x0F;
+        constexpr int  SELF_TEST_A     =    0x10;
+        constexpr int  XG_OFFSET_H      =   0x13;
+        constexpr int  XG_OFFSET_L      =   0x14;
+        constexpr int  YG_OFFSET_H      =   0x15;
+        constexpr int  YG_OFFSET_L      =   0x16;
+        constexpr int  ZG_OFFSET_H      =   0x17;
+        constexpr int  ZG_OFFSET_L      =   0x18;
+        constexpr int  SMPLRT_DIV       =   0x19;
+        constexpr int  I2C_MST_EN       =   0x20;
+        constexpr int  ACCEL_CONFIG2    =   0x1D;
+        constexpr int  LP_ACCEL_ODR     =   0x1E;
+        constexpr int  MOT_THR          =   0x1F;   
+        constexpr int  MOT_DUR          =   0x20;  
+        constexpr int  CONFIG           =   0x1A;
+        constexpr int  GYRO_CONFIG      =   0x1B;
+        constexpr int  ACCEL_CONFIG     =   0x1C;
+        constexpr int  ZMOT_THR         =   0x21;  
+        constexpr int  ZRMOT_DUR        =   0x22;  
+        constexpr int  FIFO_EN          =   0x23;
+        constexpr int  I2C_MST_CTRL     =   0x24;
+        constexpr int  I2C_SLV0_ADDR    =   0x25;
+        constexpr int  I2C_SLV0_REG     =   0x26;
+        constexpr int  I2C_SLV0_CTRL    =   0x27;
+        constexpr int  I2C_SLV1_ADDR    =   0x28;
+        constexpr int  I2C_SLV1_REG     =   0x29;
+        constexpr int  I2C_SLV1_CTRL    =   0x2A;
+        constexpr int  I2C_SLV2_ADDR    =   0x2B;
+        constexpr int  I2C_SLV2_REG     =   0x2C;
+        constexpr int  I2C_SLV2_CTRL    =   0x2D;
+        constexpr int  I2C_SLV3_ADDR    =   0x2E;
+        constexpr int  I2C_SLV3_REG     =   0x2F;
+        constexpr int  I2C_SLV3_CTRL    =   0x30;
+        constexpr int  I2C_SLV4_ADDR    =   0x31;
+        constexpr int  I2C_SLV4_REG     =   0x32;
+        constexpr int  I2C_SLV4_DO      =   0x33;
+        constexpr int  I2C_SLV4_CTRL    =   0x34;
+        constexpr int  I2C_SLV4_DI      =   0x35;
+        constexpr int  I2C_MST_STATUS   =   0x36;
+        constexpr int  INT_PIN_CFG      =   0x37;
+        constexpr int  INT_ENABLE        =  0x38;
+        constexpr int  DMP_INT_STATUS    =  0x39;  // Check DMP interrupt
+        constexpr int  INT_STATUS        =  0x3A;
+        constexpr int  ACCEL_XOUT_H      =  0x3B;
+        constexpr int  ACCEL_XOUT_L      =  0x3C;
+        constexpr int  ACCEL_YOUT_H      =  0x3D;
+        constexpr int  ACCEL_YOUT_L      =  0x3E;
+        constexpr int  ACCEL_ZOUT_H      =  0x3F;
+        constexpr int  ACCEL_ZOUT_L      =  0x40;
+        constexpr int  TEMP_OUT_H        =  0x41;
+        constexpr int  TEMP_OUT_L        =  0x42;
+        constexpr int  GYRO_XOUT_H       =  0x43;
+        constexpr int  GYRO_XOUT_L       =  0x44;
+        constexpr int  GYRO_YOUT_H       =  0x45;
+        constexpr int  GYRO_YOUT_L       =  0x46;
+        constexpr int  GYRO_ZOUT_H       =  0x47;
+        constexpr int  GYRO_ZOUT_L       =  0x48;
+        constexpr int  EXT_SENS_DATA_00  =  0x49;
+        constexpr int  EXT_SENS_DATA_01  =  0x4A;
+        constexpr int  EXT_SENS_DATA_02  =  0x4B;
+        constexpr int  EXT_SENS_DATA_03  =  0x4C;
+        constexpr int  EXT_SENS_DATA_04  =  0x4D;
+        constexpr int  EXT_SENS_DATA_05  =  0x4E;
+        constexpr int  EXT_SENS_DATA_06  =  0x4F;
+        constexpr int  EXT_SENS_DATA_07  =  0x50;
+        constexpr int  EXT_SENS_DATA_08  =  0x51;
+        constexpr int  EXT_SENS_DATA_09  =  0x52;
+        constexpr int  EXT_SENS_DATA_10  =  0x53;
+        constexpr int  EXT_SENS_DATA_11  =  0x54;
+        constexpr int  EXT_SENS_DATA_12  =  0x55;
+        constexpr int  EXT_SENS_DATA_13  =  0x56;
+        constexpr int  EXT_SENS_DATA_14  =  0x57;
+        constexpr int  EXT_SENS_DATA_15  =  0x58;
+        constexpr int  EXT_SENS_DATA_16  =  0x59;
+        constexpr int  EXT_SENS_DATA_17  =  0x5A;
+        constexpr int  EXT_SENS_DATA_18  =  0x5B;
+        constexpr int  EXT_SENS_DATA_19  =  0x5C;
+        constexpr int  EXT_SENS_DATA_20  =  0x5D;
+        constexpr int  EXT_SENS_DATA_21  =  0x5E;
+        constexpr int  EXT_SENS_DATA_22  =  0x5F;
+        constexpr int  EXT_SENS_DATA_23  =  0x60;
+        constexpr int  MOT_DETECT_STATUS =  0x61;
+        constexpr int  I2C_SLV0_DO       =  0x63;
+        constexpr int  I2C_SLV1_DO      =   0x64;
+        constexpr int  I2C_SLV2_DO      =   0x65;
+        constexpr int  I2C_SLV3_DO      =   0x66;
+        constexpr int  I2C_MST_DELAY_CTRL =  0x67;
+        constexpr int  SIGNAL_PATH_RESET=   0x68;
+        constexpr int  MOT_DETECT_CTRL  =   0x69;
+        constexpr int  USER_CTRL        =   0x6A;  
+        constexpr int  PWR_MGMT_1       =   0x6B; 
+        constexpr int  PWR_MGMT_2       =   0x6C;
+        constexpr int  DMP_BANK         =   0x6D; 
+        constexpr int  DMP_RW_PNT       =   0x6E;
+        constexpr int  DMP_REG          =   0x6F;
+        constexpr int  DMP_REG_1        =   0x70;
+        constexpr int  DMP_REG_2        =   0x71;
+        constexpr int  FIFO_COUNTH      =   0x72;
+        constexpr int  FIFO_COUNTL      =   0x73;
+        constexpr int  FIFO_R_W         =   0x74;
+        constexpr int  WHO_AM_I         =   0x75; 
+        constexpr int  XA_OFFSET_H      =   0x77;
+        constexpr int  XA_OFFSET_L      =   0x78;
+        constexpr int  YA_OFFSET_H      =   0x7A;
+        constexpr int  YA_OFFSET_L      =   0x7B;
+        constexpr int  ZA_OFFSET_H      =   0x7D;
+        constexpr int  ZA_OFFSET_L      =   0x7E;
+        constexpr int  I2C_SLV0_EN      =   0x80;
+        constexpr int  I2C_READ_FLAG    =   0x80;
 
 
 /// \brief
@@ -264,7 +271,6 @@ private:
     uint8_t   address;
     bool  A0;
     int16_t fs_range = 0;
-    hwlib::i2c_bus_bit_banged_scl_sda & I2C_bus;
     all_values fifo_read_test();
 public:
     /// \brief
@@ -274,9 +280,8 @@ public:
     /// if the A0 pin of the chip is either not connected or connected to ground, set this to 0.
     /// If the A0 pin of the chip is connected to VCC set this to 1
 
-    MPU6050(hwlib::i2c_bus_bit_banged_scl_sda & I2C_bus, bool  A0=0 ):
-    A0(A0),
-    I2C_bus(I2C_bus)
+    MPU6050(bool  A0=0 ):
+    A0(A0)
     { 
         address = 0x68 + (int)A0; //The setting of A0 pin sets the adrress to 0x68 when low or 0x69 when high
     } 
@@ -284,7 +289,7 @@ public:
     /// Writes a byte to a register
     /// \details
     /// Takes the sub-address of the register you want to write and the data you want to write to it, if you write more than one byte, the chip auto-increments the address(except the for fifo register)
-    void writeRegister(uint8_t sub_adrr, uint8_t  data);
+    void writeRegister(uint8_t sub_addr, uint8_t  data);
     /// \brief 
     /// Reads data from a register
     /// \details 
@@ -374,11 +379,6 @@ public:
     /// \details
     /// Reads the interrupt status register and writes the output into a buffer 
     void read_interrupt(uint8_t data[1]);
-    /// \brief 
-    /// Tests the library
-    /// \details
-    /// A function to test this library, a full guide to this test will be provided on the github page of this project, the two pin_outs are meant to be connected to two leds
-    void test(hwlib::pin_in & button, hwlib::glcd_oled &oled, hwlib::pin_out & data_rdy, hwlib::pin_out & fifo_overflow);
     /// \brief
     /// Enables fifo for accelerometer and the gyroscope
     /// \details
@@ -401,6 +401,8 @@ public:
     /// \details 
     /// Sets the fifo reset flag in the user control register to 1, this flag returns to 0 after triggering the reset
     void fifo_reset();
+
+    esp_err_t InitI2C();
 };
 
 

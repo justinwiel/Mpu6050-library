@@ -23,10 +23,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 //-------------------------------
-// author: Justin van der Wiel 2021
+// author: Justin van der Wiel 2023
 //--------------------------------
 
 #include "MPU.hpp"
+#include "driver/i2c.h"
 
 xyz xyz::operator-(xyz &rhs)
 {
@@ -114,17 +115,17 @@ void MPU6050::setup(int8_t range_setting)
     }
     auto to_write = (range_setting << 3); // first three bytes are ignored as such the value needs to be shifted 3 before being written
     writeRegister(PWR_MGMT_1, 0x80);
-    hwlib::wait_ms(100);
+    vTaskDelay(100/portTICK_PERIOD_MS);
     writeRegister(PWR_MGMT_1, 0b0001);
     writeRegister(PWR_MGMT_2, 0x00);
-    hwlib::wait_ms(200);
+    vTaskDelay(200/portTICK_PERIOD_MS);
     writeRegister(INT_ENABLE, 0x00);
     writeRegister(FIFO_EN, 0x00);
     writeRegister(PWR_MGMT_1, 0x00);
     writeRegister(I2C_MST_CTRL, 0x00);
     writeRegister(USER_CTRL, 0x00);
     writeRegister(USER_CTRL, 0x0c);
-    hwlib::wait_ms(15);
+    vTaskDelay(15/portTICK_PERIOD_MS);
     writeRegister(CONFIG, 0b00000001);
     writeRegister(SMPLRT_DIV, 0);
     writeRegister(GYRO_CONFIG, to_write);
@@ -137,22 +138,29 @@ void MPU6050::setup(int8_t range_setting)
     writeRegister(INT_PIN_CFG, 0b00100010);
 }
 
-void MPU6050::writeRegister(uint8_t sub_adrr, uint8_t data)
+void MPU6050::writeRegister(uint8_t sub_addr, uint8_t data)
 {
-    auto wbus = hwlib::i2c_write_transaction(I2C_bus, address);
-    wbus.write(sub_adrr);
-    wbus.write(data);
-    wbus.~i2c_write_transaction();
+    i2c_cmd_handle_t handle = i2c_cmd_link_create();
+    i2c_master_start(handle);
+    i2c_master_write_byte(handle,address,true);
+    i2c_master_write_byte(handle,sub_addr,true);
+    i2c_master_write_byte(handle,data,true);
+    i2c_master_stop(handle);
+    i2c_master_cmd_begin(I2C_NUM_0,handle,1000/portTICK_PERIOD_MS);
+    i2c_cmd_link_delete(handle);
 }
 
 uint8_t *MPU6050::readRegister(uint8_t sub_addr, uint8_t *data, uint8_t size)
 {
-    auto wbus = hwlib::i2c_write_transaction(I2C_bus, address);
-    wbus.write(sub_addr); //send the adrress we want to read
-    wbus.~i2c_write_transaction();
-    auto rbus = hwlib::i2c_read_transaction(I2C_bus, address);
-    rbus.read(data, size); //read the register, if you read more than once the chip auto increments the register address
-    rbus.~i2c_read_transaction();
+
+    i2c_cmd_handle_t handle = i2c_cmd_link_create();
+    i2c_master_start(handle);
+    i2c_master_write_byte(handle,address,true);
+    i2c_master_write_byte(handle,sub_addr,true);
+    i2c_master_read_byte(handle,data,I2C_MASTER_ACK);
+    i2c_master_stop(handle);
+    i2c_master_cmd_begin(I2C_NUM_0,handle,1000/portTICK_PERIOD_MS);
+    i2c_cmd_link_delete(handle);
     return data;
 }
 
@@ -244,96 +252,6 @@ all_values MPU6050::getAlldata_raw()
     return all_values(getAccdata_raw(), getGyrodata_raw(), getTempdata_raw());
 }
 
-void MPU6050::test(hwlib::pin_in &button, hwlib::glcd_oled &oled, hwlib::pin_out &data_rdy, hwlib::pin_out &fifo_overflow)
-{
-
-    setup(3);
-    hwlib::wait_ms(2000); //wait a while to allow data to get written out to the registers
-    interrupt_enable();
-    for (;;)
-    {
-        auto f1 = hwlib::font_default_8x8();
-        auto d1 = hwlib::terminal_from(oled, f1);
-        uint8_t data[1];
-        hwlib::wait_ms(10); //wait to give the sensor some time to start
-        auto all_data = getAlldata();
-        if (button.read())
-        {
-            fifo_disable();       //shut off fifo
-            fifo_reset();         //clear fifo
-            read_interrupt(data); //read once to clear register
-            read_interrupt(data); //read again to get data
-            data_rdy.write(0);
-            hwlib::wait_ms(10);
-
-            if ((data[0] & 0b00010000) != 0)
-            { //fifo overflow interrupt
-                fifo_overflow.write(1);
-                hwlib::wait_ms(10);
-            }
-            else
-            {
-                fifo_overflow.write(0);
-                hwlib::wait_ms(10);
-            }
-            interrupt_disable(); //shut off interrupt
-            return;
-        }
-        oled.clear();
-        read_interrupt(data);
-        if ((data[0] & 0b00000001) != 0)
-        { //data ready interrupt
-            data_rdy.write(1);
-            hwlib::wait_ms(10);
-        }
-        else
-        {
-            data_rdy.write(0);
-            hwlib::wait_ms(10);
-        }
-        if ((data[0] & 0b00010000) != 0)
-        { //fifo overflow interrupt
-            fifo_overflow.write(1);
-            hwlib::wait_ms(10);
-        }
-        else
-        {
-            fifo_overflow.write(0);
-            hwlib::wait_ms(10);
-        }//output results to the oled and to the terminal
-        hwlib::cout << "\n\nacc_x: " << all_data.acc.x << "   std"
-                    << "\nacc_y: " << all_data.acc.y
-                    << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z;
-        d1 << '\f' << "acc_x: " << all_data.acc.x << "   std"
-           << "\nacc_y: " << all_data.acc.y
-           << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z << hwlib::flush;
-        hwlib::wait_ms(500);
-        all_data = fifo_read_test();
-        hwlib::cout << "\n\nacc_x: " << all_data.acc.x << "   fifo"
-                    << "\nacc_y: " << all_data.acc.y
-                    << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z;
-        d1 << '\f' << "acc_x: " << all_data.acc.x << "  fifo"
-           << "\nacc_y: " << all_data.acc.y
-           << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z << hwlib::flush;
-        hwlib::wait_ms(500);
-        all_data = getAlldata_scale(10);
-        hwlib::cout << "\n\nacc_x: " << all_data.acc.x << "   scale"
-                    << "\nacc_y: " << all_data.acc.y
-                    << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z;
-        d1 << '\f' << "acc_x: " << all_data.acc.x << "  scale"
-           << "\nacc_y: " << all_data.acc.y
-           << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z << hwlib::flush;
-        hwlib::wait_ms(500);
-        all_data = getAlldata_raw();
-        hwlib::cout << "\n\nacc_x: " << all_data.acc.x << "   raw"
-                    << "\nacc_y: " << all_data.acc.y
-                    << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z;
-        d1 << '\f' << "acc_x: " << all_data.acc.x << "  raw"
-           << "\nacc_y: " << all_data.acc.y
-           << "\nacc_z: " << all_data.acc.z << "\ntemp: " << all_data.temp << "\ngyro_x: " << all_data.gyr.x << "\ngyro_y: " << all_data.gyr.y << "\ngyro_z: " << all_data.gyr.z << hwlib::flush;
-        hwlib::wait_ms(500);
-    }
-}
 
 void MPU6050::interrupt_enable()
 {
@@ -364,7 +282,7 @@ void MPU6050::fifo_disable()
 all_values MPU6050::fifo_read()
 {
     fifo_enable();//open fifo 
-    hwlib::wait_ms(50);
+    vTaskDelay(50/portTICK_PERIOD_MS);
     uint8_t count[2];
     readRegister(FIFO_COUNTH, count, 2); //read the amount of bytes in fifo buffer
     int16_t packetcount = (count[0] << 8) | count[1];
@@ -387,7 +305,7 @@ all_values MPU6050::fifo_read()
 all_values MPU6050::fifo_read_test()
 {
     fifo_enable();//open
-    hwlib::wait_ms(20);
+    vTaskDelay(20/portTICK_PERIOD_MS);
     uint8_t count[2];
     readRegister(FIFO_COUNTH, count, 2);//read the amount of bytes in fifo buffer
     int16_t packetcount = (count[0] << 8) | count[1];
@@ -411,4 +329,21 @@ all_values MPU6050::fifo_read_test()
 void MPU6050::fifo_reset()
 {
     writeRegister(USER_CTRL, 0b00000100);
+}
+
+
+esp_err_t MPU6050::InitI2C(){
+    i2c_port_t i2c_master_port = I2C_NUM_0;
+    i2c_config_t conf;
+    conf.mode = I2C_MODE_MASTER;
+    conf.sda_io_num = 21    ;    // select SDA GPIO specific to your project
+    conf.sda_pullup_en = GPIO_PULLUP_ENABLE;
+    conf.scl_io_num = 22;        // select SCL GPIO specific to your project
+    conf.scl_pullup_en = GPIO_PULLUP_ENABLE;
+    conf.master.clk_speed = 400000;  // select frequency specific to your project
+    conf.clk_flags = 0;                          // optional; you can use I2C_SCLK_SRC_FLAG_* flags to choose i2c source clock here
+
+    i2c_param_config(i2c_master_port, &conf);
+
+    return i2c_driver_install(i2c_master_port, conf.mode, 0, 0, 0);
 }
