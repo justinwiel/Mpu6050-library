@@ -40,7 +40,6 @@
 /// -------------------------------------
 
 #ifndef MPU_HPP
-#include "hwlib.hpp"
 #define MPU_HPP
 
         #define  SELF_TEST_X_ACCEL   0x0D //adaptation of the #define list from: https://github.com/simondlevy/MPU/blob/master/src/MPU.h

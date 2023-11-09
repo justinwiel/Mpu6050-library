@@ -27,7 +27,6 @@
 //--------------------------------
 
 #include "MPU.hpp"
-#include "hwlib.hpp"
 
 xyz xyz::operator-(xyz &rhs)
 {
