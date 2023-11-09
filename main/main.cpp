@@ -31,7 +31,7 @@
 #include "esp_log.h"
 static const char *TAG = "main";
 
-int main(){
+void app_main(){
   ESP_LOGI(TAG, "Starting main");
 }
 
