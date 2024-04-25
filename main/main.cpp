@@ -27,6 +27,7 @@
 //--------------------------------
 
 #include "../components/mpuLib/include/MPU.hpp"
+#include "..\components\Display\include\SSD1306_OLED.hpp"
 #include "esp_log.h"
 #include "driver/i2c.h"
 static const char *TAG = "main";
