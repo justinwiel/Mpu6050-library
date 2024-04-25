@@ -28,6 +28,7 @@
 
 #include "MPU.hpp"
 #include "driver/i2c.h"
+#include "esp_log.h"
 
 xyz xyz::operator-(xyz &rhs)
 {
@@ -77,36 +78,39 @@ xyz xyz::operator*=(int16_t &rhs)
 
 void MPU6050::setup(int8_t range_setting)
 {
+    uint8_t result;
+    readRegister(WHO_AM_I, &result, 1);
+    ESP_LOGI("MPU", "WHO_AM_I: %X", result);
     switch (range_setting)
     {
     case 0:
         fs_range = 250;
-        gyrosensitivity = 131;    //lsb per second  sensitivty values from: https://invensense.tdk.com/wp-content/uploads/2015/02/MPU-6000-Datasheet1.pdf part 6.1 and 6.2
-        accelsensitivity = 16384; //lsb per second
+        gyrosensitivity = 131;    // lsb per second  sensitivty values from: https://invensense.tdk.com/wp-content/uploads/2015/02/MPU-6000-Datasheet1.pdf part 6.1 and 6.2
+        accelsensitivity = 16384; // lsb per second
         break;
     case 1:
         fs_range = 500;
-        gyrosensitivity = 65.5;  //lsb per second
-        accelsensitivity = 8192; //lsb per second
+        gyrosensitivity = 65.5;  // lsb per second
+        accelsensitivity = 8192; // lsb per second
         break;
     case 2:
         fs_range = 1000;
-        gyrosensitivity = 32.8;  //lsb per second
-        accelsensitivity = 4096; //lsb per second
+        gyrosensitivity = 32.8;  // lsb per second
+        accelsensitivity = 4096; // lsb per second
         break;
     case 3:
         fs_range = 2000;
-        gyrosensitivity = 16.4;  //lsb per second
-        accelsensitivity = 2048; //lsb per second
+        gyrosensitivity = 16.4;  // lsb per second
+        accelsensitivity = 2048; // lsb per second
         break;
     default:
-        if (range_setting > 3) //if greater than 3 do the same as for 3
+        if (range_setting > 3) // if greater than 3 do the same as for 3
         {
             fs_range = 2000;
             gyrosensitivity = 16.4;
             accelsensitivity = 2048;
         }
-        else //if smaller than 0 do the same as for 0
+        else // if smaller than 0 do the same as for 0
         {
             fs_range = 250;
             gyrosensitivity = 131;
@@ -115,17 +119,17 @@ void MPU6050::setup(int8_t range_setting)
     }
     auto to_write = (range_setting << 3); // first three bytes are ignored as such the value needs to be shifted 3 before being written
     writeRegister(PWR_MGMT_1, 0x80);
-    vTaskDelay(100/portTICK_PERIOD_MS);
+    vTaskDelay(100 / portTICK_PERIOD_MS);
     writeRegister(PWR_MGMT_1, 0b0001);
     writeRegister(PWR_MGMT_2, 0x00);
-    vTaskDelay(200/portTICK_PERIOD_MS);
+    vTaskDelay(200 / portTICK_PERIOD_MS);
     writeRegister(INT_ENABLE, 0x00);
     writeRegister(FIFO_EN, 0x00);
     writeRegister(PWR_MGMT_1, 0x00);
     writeRegister(I2C_MST_CTRL, 0x00);
     writeRegister(USER_CTRL, 0x00);
     writeRegister(USER_CTRL, 0x0c);
-    vTaskDelay(15/portTICK_PERIOD_MS);
+    vTaskDelay(15 / portTICK_PERIOD_MS);
     writeRegister(CONFIG, 0b00000001);
     writeRegister(SMPLRT_DIV, 0);
     writeRegister(GYRO_CONFIG, to_write);
@@ -141,12 +145,13 @@ void MPU6050::setup(int8_t range_setting)
 void MPU6050::writeRegister(uint8_t sub_addr, uint8_t data)
 {
     i2c_cmd_handle_t handle = i2c_cmd_link_create();
+    ESP_LOGI("MPU", "Writing to register %X", address);
     i2c_master_start(handle);
-    i2c_master_write_byte(handle,address,true);
-    i2c_master_write_byte(handle,sub_addr,true);
-    i2c_master_write_byte(handle,data,true);
+    i2c_master_write_byte(handle, (address << 1) | I2C_MASTER_WRITE, true);
+    i2c_master_write_byte(handle, sub_addr, true);
+    i2c_master_write_byte(handle, data, true);
     i2c_master_stop(handle);
-    i2c_master_cmd_begin(I2C_NUM_0,handle,1000/portTICK_PERIOD_MS);
+    i2c_master_cmd_begin(I2C_NUM_0, handle, 1000 / portTICK_PERIOD_MS);
     i2c_cmd_link_delete(handle);
 }
 
@@ -155,11 +160,17 @@ uint8_t *MPU6050::readRegister(uint8_t sub_addr, uint8_t *data, uint8_t size)
 
     i2c_cmd_handle_t handle = i2c_cmd_link_create();
     i2c_master_start(handle);
-    i2c_master_write_byte(handle,address,true);
-    i2c_master_write_byte(handle,sub_addr,true);
-    i2c_master_read_byte(handle,data,I2C_MASTER_ACK);
+    i2c_master_write_byte(handle, (address << 1) | I2C_MASTER_WRITE, true);
+    i2c_master_write_byte(handle, sub_addr, true);
+    i2c_master_start(handle);
+    i2c_master_write_byte(handle, (address << 1) | I2C_MASTER_READ, true);
+    if (size > 1)
+    {
+        i2c_master_read(handle, data, size - 1, I2C_MASTER_ACK);
+    }
+    i2c_master_read_byte(handle, data + size - 1, I2C_MASTER_NACK);
     i2c_master_stop(handle);
-    i2c_master_cmd_begin(I2C_NUM_0,handle,1000/portTICK_PERIOD_MS);
+    i2c_master_cmd_begin(I2C_NUM_0, handle, 1000 / portTICK_PERIOD_MS);
     i2c_cmd_link_delete(handle);
     return data;
 }
@@ -167,8 +178,8 @@ uint8_t *MPU6050::readRegister(uint8_t sub_addr, uint8_t *data, uint8_t size)
 xyz MPU6050::getAccdata_scale(int desired_range)
 {
     uint8_t data[6];
-    readRegister(ACCEL_XOUT_H, data, 6);//read acclerometer data registers
-    int16_t x = (data[0] << 8) | data[1]; //create 16 bit signed integers from your read 8 bit unsigned integers
+    readRegister(ACCEL_XOUT_H, data, 6);  // read acclerometer data registers
+    int16_t x = (data[0] << 8) | data[1]; // create 16 bit signed integers from your read 8 bit unsigned integers
     int16_t y = (data[2] << 8) | data[3];
     int16_t z = (data[4] << 8) | data[5];
     return xyz((x / (fs_range / desired_range)) % (desired_range + 1), (y / (fs_range / desired_range)) % (desired_range + 1), (z / (fs_range / desired_range)) % (desired_range + 1));
@@ -176,12 +187,38 @@ xyz MPU6050::getAccdata_scale(int desired_range)
 xyz MPU6050::getGyrodata_scale(int desired_range)
 {
     uint8_t data[6];
-    readRegister(GYRO_XOUT_H, data, 6);//read gyroscope data registers
-    int16_t x = (data[0] << 8) | data[1];//create 16 bit signed integers from your read 8 bit unsigned integers
+    readRegister(GYRO_XOUT_H, data, 6);   // read gyroscope data registers
+    int16_t x = (data[0] << 8) | data[1]; // create 16 bit signed integers from your read 8 bit unsigned integers
     int16_t y = (data[2] << 8) | data[3];
     int16_t z = (data[4] << 8) | data[5];
     return xyz((x / (fs_range / desired_range)) % (desired_range + 1), (y / (fs_range / desired_range)) % (desired_range + 1), (z / (fs_range / desired_range)) % (desired_range + 1));
 }
+
+void MPU6050::getAccdata_scale(const int &desired_range, xyz *acc)
+{
+    uint8_t data[6];
+    uint16_t range_local = getfs_range();
+    readRegister(ACCEL_XOUT_H, data, 6);  // read acclerometer data registers
+    int16_t x = (data[0] << 8) | data[1]; // create 16 bit signed integers from your read 8 bit unsigned integers
+    int16_t y = (data[2] << 8) | data[3];
+    int16_t z = (data[4] << 8) | data[5];
+    acc->x = (((data[0] << 8) | data[1]) / (range_local / desired_range)) % (desired_range + 1);
+    acc->y = (((data[2] << 8) | data[3]) / (range_local / desired_range)) % (desired_range + 1);
+    acc->z = (((data[4] << 8) | data[5]) / (range_local / desired_range)) % (desired_range + 1);
+}
+void MPU6050::getGyrodata_scale(const int &desired_range, xyz *gyr)
+{
+    uint8_t data[6];
+    readRegister(GYRO_XOUT_H, data, 6); // read gyroscope data registers
+    uint16_t range_local = getfs_range();
+    int16_t x = (data[0] << 8) | data[1]; // create 16 bit signed integers from your read 8 bit unsigned integers
+    int16_t y = (data[2] << 8) | data[3];
+    int16_t z = (data[4] << 8) | data[5];
+    gyr->x = (((data[0] << 8) | data[1]) / (range_local / desired_range)) % (desired_range + 1);
+    gyr->y = (((data[2] << 8) | data[3]) / (range_local / desired_range)) % (desired_range + 1);
+    gyr->z = (((data[4] << 8) | data[5]) / (range_local / desired_range)) % (desired_range + 1);
+}
+
 int16_t MPU6050::getTempdata()
 {
     uint8_t data[2];
@@ -205,6 +242,26 @@ xyz MPU6050::getAccdata()
     int16_t z = (data[4] << 8) | data[5];
     return xyz(x / accelsensitivity, y / accelsensitivity, z / accelsensitivity);
 }
+
+uint16_t fromTwosComplemntToInt(uint16_t data){
+    if(data & 0x8000){
+        return (data ^ 0xFFFF) + 1;
+    }
+    return data;
+
+}
+
+void MPU6050::getAccdata(xyz *acc)
+{
+    uint8_t data[6];
+    readRegister(ACCEL_XOUT_H, data, 6);
+    int16_t x = ((data[0] << 8) | data[1]);
+    int16_t y = ((data[2] << 8) | data[3]);
+    int16_t z = ((data[4] << 8) | data[5]);
+    acc->x = fromTwosComplemntToInt(x);
+    acc->y = fromTwosComplemntToInt(y);
+    acc->z =  fromTwosComplemntToInt(z);
+}
 xyz MPU6050::getGyrodata()
 {
     uint8_t data[6];
@@ -215,9 +272,21 @@ xyz MPU6050::getGyrodata()
     return xyz(x / gyrosensitivity, y / gyrosensitivity, z / gyrosensitivity);
 }
 
+void MPU6050::getGyrodata(xyz *gyr)
+{
+    uint8_t data[6];
+    readRegister(GYRO_XOUT_H, data, 6);
+    int16_t x = (data[0] << 8) | data[1];
+    int16_t y = (data[2] << 8) | data[3];
+    int16_t z = (data[4] << 8) | data[5];
+    gyr->x = x ;
+    gyr->y = y ;
+    gyr->z = z ;
+}
+
 all_values MPU6050::getAlldata()
 {
-    return all_values(getAccdata(), getGyrodata(), getTempdata()); //get all values and put them in an all_values
+    return all_values(getAccdata(), getGyrodata(), getTempdata()); // get all values and put them in an all_values
 }
 
 xyz MPU6050::getAccdata_raw()
@@ -252,16 +321,15 @@ all_values MPU6050::getAlldata_raw()
     return all_values(getAccdata_raw(), getGyrodata_raw(), getTempdata_raw());
 }
 
-
 void MPU6050::interrupt_enable()
 {
     writeRegister(INT_PIN_CFG, 0b11110000);
-    writeRegister(INT_ENABLE, 0b00010001); //all interrupts except i2c master enabled
+    writeRegister(INT_ENABLE, 0b00010001); // all interrupts except i2c master enabled
 }
 void MPU6050::interrupt_disable()
 {
     writeRegister(INT_PIN_CFG, 0b00000000);
-    writeRegister(INT_ENABLE, 0b0000000); //all interrupts disabled
+    writeRegister(INT_ENABLE, 0b0000000); // all interrupts disabled
 }
 
 void MPU6050::read_interrupt(uint8_t data[1])
@@ -271,23 +339,23 @@ void MPU6050::read_interrupt(uint8_t data[1])
 
 void MPU6050::fifo_enable()
 {
-    writeRegister(FIFO_EN, 0b11111000); //set accelerometer and gyroscope fifo_en flags to 1
+    writeRegister(FIFO_EN, 0b11111000); // set accelerometer and gyroscope fifo_en flags to 1
 }
 
 void MPU6050::fifo_disable()
 {
-    writeRegister(FIFO_EN, 0b00000000); //set accelerometer and gyroscope fifo_en flags to 0
+    writeRegister(FIFO_EN, 0b00000000); // set accelerometer and gyroscope fifo_en flags to 0
 }
 
 all_values MPU6050::fifo_read()
 {
-    fifo_enable();//open fifo 
-    vTaskDelay(50/portTICK_PERIOD_MS);
+    fifo_enable(); // open fifo
+    vTaskDelay(50 / portTICK_PERIOD_MS);
     uint8_t count[2];
-    readRegister(FIFO_COUNTH, count, 2); //read the amount of bytes in fifo buffer
+    readRegister(FIFO_COUNTH, count, 2); // read the amount of bytes in fifo buffer
     int16_t packetcount = (count[0] << 8) | count[1];
     int16_t data[7];
-    if (packetcount > 0) //don't read if it's empty
+    if (packetcount > 0) // don't read if it's empty
     {
         uint8_t temp[14];
         readRegister(FIFO_R_W, temp, 14);
@@ -299,18 +367,18 @@ all_values MPU6050::fifo_read()
         data[5] = (temp[10] << 8) | temp[11];
         data[6] = (temp[12] << 8) | temp[13];
     }
-    fifo_disable(); //close to prevent overflow
+    fifo_disable(); // close to prevent overflow
     return all_values(xyz(data[0] / accelsensitivity, data[1] / accelsensitivity, data[2] / accelsensitivity), xyz(data[4] / gyrosensitivity, data[5] / gyrosensitivity, data[6] / gyrosensitivity), data[3] / 340 + 36.53);
 }
 all_values MPU6050::fifo_read_test()
 {
-    fifo_enable();//open
-    vTaskDelay(20/portTICK_PERIOD_MS);
+    fifo_enable(); // open
+    vTaskDelay(20 / portTICK_PERIOD_MS);
     uint8_t count[2];
-    readRegister(FIFO_COUNTH, count, 2);//read the amount of bytes in fifo buffer
+    readRegister(FIFO_COUNTH, count, 2); // read the amount of bytes in fifo buffer
     int16_t packetcount = (count[0] << 8) | count[1];
     int16_t data[7];
-    if (packetcount > 0) //don't read if it's empty
+    if (packetcount > 0) // don't read if it's empty
     {
         uint8_t temp[14];
         readRegister(FIFO_R_W, temp, 14);
@@ -322,7 +390,7 @@ all_values MPU6050::fifo_read_test()
         data[5] = (temp[10] << 8) | temp[11];
         data[6] = (temp[12] << 8) | temp[13];
     }
-    //don't close to test oveflow interrupt
+    // don't close to test oveflow interrupt
     return all_values(xyz(data[0] / accelsensitivity, data[1] / accelsensitivity, data[2] / accelsensitivity), xyz(data[4] / gyrosensitivity, data[5] / gyrosensitivity, data[6] / gyrosensitivity), data[3] / 340 + 36.53);
 }
 
@@ -331,19 +399,13 @@ void MPU6050::fifo_reset()
     writeRegister(USER_CTRL, 0b00000100);
 }
 
+esp_err_t MPU6050::InitI2C()
+{
 
-esp_err_t MPU6050::InitI2C(){
-    i2c_port_t i2c_master_port = I2C_NUM_0;
-    i2c_config_t conf;
-    conf.mode = I2C_MODE_MASTER;
-    conf.sda_io_num = 21    ;    // select SDA GPIO specific to your project
-    conf.sda_pullup_en = GPIO_PULLUP_ENABLE;
-    conf.scl_io_num = 22;        // select SCL GPIO specific to your project
-    conf.scl_pullup_en = GPIO_PULLUP_ENABLE;
-    conf.master.clk_speed = 400000;  // select frequency specific to your project
-    conf.clk_flags = 0;                          // optional; you can use I2C_SCLK_SRC_FLAG_* flags to choose i2c source clock here
+    return ESP_OK;
+}
 
-    i2c_param_config(i2c_master_port, &conf);
-
-    return i2c_driver_install(i2c_master_port, conf.mode, 0, 0, 0);
+int16_t MPU6050::getfs_range()
+{
+    return fs_range;
 }

@@ -44,7 +44,6 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_chip_info.h"
-#include "esp_flash.h"
 #include "esp_system.h"
 #ifndef MPU_HPP
 #define MPU_HPP
@@ -283,7 +282,7 @@ public:
     MPU6050(bool  A0=0 ):
     A0(A0)
     { 
-        address = 0x68 + (int)A0; //The setting of A0 pin sets the adrress to 0x68 when low or 0x69 when high
+        address = 0x68 + A0;
     } 
     /// \brief
     /// Writes a byte to a register
@@ -312,12 +311,14 @@ public:
     /// This function reads all accelerometer data registers and turns them into 3 usable integers on a scale that can be specified by the user, the greater the scale the more unstable the data
     /// \n NOTE: The chosen scale should not go above the range chosen in the setup function 
     xyz getAccdata_scale(int desired_range);
+    void getAccdata_scale(const int& desired_range,xyz*acc);
     /// \brief
     /// Reads gyroscope data and returns an xyz
     /// \details
     /// This function reads all gyroscope data registers and turns them into 3 usable integers on a scale that can be specified by the user, the greater the scale the more unstable the data
     /// \n NOTE: The chosen scale should not go above the range chosen in the setup function 
     xyz getGyrodata_scale(int desired_range);
+    void getGyrodata_scale(const int& desired_range,xyz*gyr);
     /// \brief
     /// Reads temperature data and returns an integer
     /// \details
@@ -333,11 +334,13 @@ public:
     /// Reads accelerometer data and returns an xyz
     /// \details
     /// Reads accelerometer data registers and processes the data in the way specified in the datasheet and returns it as an xyz
+    void getAccdata(xyz* acc);
     xyz getAccdata();
     /// \brief
     /// Reads gyroscope data and returns an xyz
     /// \details
     /// Reads gyroscope data registers and processes the data in the way specified in the datasheet and returns it as an xyz
+    void getGyrodata(xyz* gyr);
     xyz getGyrodata();
     /// \brief
     /// Reads sensor data and returns an all_values
@@ -403,6 +406,8 @@ public:
     void fifo_reset();
 
     esp_err_t InitI2C();
+
+    int16_t getfs_range();
 };
 
 

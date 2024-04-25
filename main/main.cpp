@@ -26,12 +26,123 @@
 // author: Justin van der Wiel 2021
 //--------------------------------
 
-#include <array>
-#include "lib/MPU.hpp"
+#include "../components/mpuLib/include/MPU.hpp"
 #include "esp_log.h"
+#include "driver/i2c.h"
 static const char *TAG = "main";
 
-extern void app_main(){
+struct RGB{
+  uint8_t r;
+  uint8_t g;
+  uint8_t b;
+};
+
+constexpr gpio_num_t data = GPIO_NUM_32;
+constexpr gpio_num_t clock = GPIO_NUM_33;
+
+void apa_102_send_start(gpio_num_t DI, gpio_num_t CI){
+  gpio_set_level(DI, 0);
+  for(int i = 0; i < 32; i++){
+    gpio_set_level(CI, 1);
+    vTaskDelay(5 / portTICK_PERIOD_MS);
+    gpio_set_level(CI, 0);
+    vTaskDelay(5 / portTICK_PERIOD_MS);
+  }
+  gpio_set_level(CI, 0);
+  vTaskDelay(5 / portTICK_PERIOD_MS);
+}
+
+void apa_102_send_end(gpio_num_t DI, gpio_num_t CI){
+  gpio_set_level(DI, 1);
+  for(int i = 0; i < 32; i++){
+    gpio_set_level(CI, 1);
+    vTaskDelay(5 / portTICK_PERIOD_MS);
+    gpio_set_level(CI, 0);
+    vTaskDelay(5 / portTICK_PERIOD_MS);
+  }
+  gpio_set_level(CI, 0);
+  vTaskDelay(5 / portTICK_PERIOD_MS);
+}
+
+void apa_102_send_byte(uint8_t byte, gpio_num_t DI, gpio_num_t CI){
+  gpio_set_level(CI, 0);
+  ESP_LOGI(TAG, "byte: %d", byte);
+  for(int i = 0; i < 8; i++){
+    uint8_t bit = (byte >> (7-i)) & 1;
+    bool bitBool = (byte >> (7-i)) & 1;
+    ESP_LOGI(TAG, "bit: %d", bit);
+    ESP_LOGI(TAG, "bitBool: %d", bitBool);
+    gpio_set_level(DI, bit);
+    vTaskDelay(5 / portTICK_PERIOD_MS);
+    gpio_set_level(CI, 1);
+    vTaskDelay(5 / portTICK_PERIOD_MS);
+    gpio_set_level(CI, 0);
+    gpio_set_level(DI, 0);
+    vTaskDelay(5 / portTICK_PERIOD_MS);
+  }
+}
+
+void apa_102_send_pixel(RGB setting, gpio_num_t DI, gpio_num_t CI){
+  apa_102_send_byte(0b11100000, DI, CI);
+  apa_102_send_byte(setting.b, DI, CI);
+  apa_102_send_byte(setting.g, DI, CI);
+  apa_102_send_byte(setting.r, DI, CI);
+
+}
+
+void write_apa102(RGB setting){
+  gpio_config_t DI_conf;
+  DI_conf.intr_type = GPIO_INTR_DISABLE;
+  DI_conf.mode = GPIO_MODE_OUTPUT;
+  DI_conf.pin_bit_mask = (1ULL<<data);
+  DI_conf.pull_down_en = GPIO_PULLDOWN_DISABLE;
+  DI_conf.pull_up_en = GPIO_PULLUP_DISABLE;
+  gpio_config(&DI_conf);
+
+  gpio_config_t CI_conf;
+  CI_conf.intr_type = GPIO_INTR_DISABLE;
+  CI_conf.mode = GPIO_MODE_OUTPUT;
+  CI_conf.pin_bit_mask = (1ULL<<clock);
+  CI_conf.pull_down_en = GPIO_PULLDOWN_DISABLE;
+  CI_conf.pull_up_en = GPIO_PULLUP_DISABLE;
+  gpio_config(&CI_conf);
+
+  apa_102_send_start(data, clock);
+  for(int i = 0; i < 8; i++)
+    apa_102_send_pixel(setting, data, clock);
+  for (int i = 0; i < 4; i++){
+    apa_102_send_byte(0xFF, data, clock);
+  }
+
+  
+}
+
+extern "C" void app_main(){
+  MPU6050 mpu(0);
+  i2c_port_t i2c_master_port = I2C_NUM_0;
+  i2c_config_t conf;
+  conf.mode = I2C_MODE_MASTER;
+  conf.sda_io_num = GPIO_NUM_21    ;    // select SDA GPIO specific to your project
+  conf.sda_pullup_en = GPIO_PULLUP_ENABLE;
+  conf.scl_io_num = GPIO_NUM_22;        // select SCL GPIO specific to your project
+  conf.scl_pullup_en = GPIO_PULLUP_ENABLE;
+  conf.master.clk_speed = 10000;  // select frequency specific to your project(Hz)
+  conf.clk_flags = I2C_SCLK_SRC_FLAG_FOR_NOMAL;                          // optional; you can use I2C_SCLK_SRC_FLAG_* flags to choose i2c source clock here
+
+  write_apa102(RGB{255,255,255});
+
+  i2c_param_config(i2c_master_port, &conf);
+  i2c_driver_install(i2c_master_port, conf.mode, 0, 0, ESP_CPU_INTR_TYPE_NA);
+  xyz acc;
+  xyz gyro;
+  mpu.setup(0);
+  while(1){
+    mpu.getAccdata_scale(100,&acc);
+    mpu.getGyrodata_scale(100,&gyro);
+    ESP_LOGI(TAG, "Accel: x: %d y: %d z: %d", acc.x, acc.y, acc.z);
+    ESP_LOGI(TAG, "Gyro: x: %d y: %d z: %d", gyro.x, gyro.y, gyro.z);
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+  }
   ESP_LOGI(TAG, "Starting main");
 }
 
