@@ -1,0 +1,3 @@
+[submodule "components/Display"]
+	path = components/Display
+	url = https://github.com/gavinlyonsrepo/SSD1306_OLED_RPI
