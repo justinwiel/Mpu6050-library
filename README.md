@@ -1,15 +1,7 @@
-# IPASS
-
-IPASS project made by Justin van der Wiel
-
-
 Simple game controlled by MPU6050 gyroscope and accelerometer
 
 
-documentation included: /lib/html/index.html (only works if downloaded)
+documentation included: /lib/html/index.html 
 
-lib contains the library, and test which is part of the libary
+library HAS been rewritten to work with ESP-IDF on branch rewriteToEsp, currently the game is not functional, this is still a work in progress. 
 
-src contains the application
-
-lib also contains a guide to use the test function and expected outputs
