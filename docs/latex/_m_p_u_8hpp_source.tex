@@ -1,0 +1,243 @@
+\doxysection{MPU.\+hpp}
+\hypertarget{_m_p_u_8hpp_source}{}\label{_m_p_u_8hpp_source}\index{components/mpuLib/include/MPU.hpp@{components/mpuLib/include/MPU.hpp}}
+\mbox{\hyperlink{_m_p_u_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Boost\ Software\ License\ -\/\ Version\ 1.0\ -\/\ August\ 17th,\ 2003}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ Permission\ is\ hereby\ granted,\ free\ of\ charge,\ to\ any\ person\ or\ organization}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//\ obtaining\ a\ copy\ of\ the\ software\ and\ accompanying\ documentation\ covered\ by}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ this\ license\ (the\ "{}Software"{})\ to\ use,\ reproduce,\ display,\ distribute,}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ execute,\ and\ transmit\ the\ Software,\ and\ to\ prepare\ derivative\ works\ of\ the}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//\ Software,\ and\ to\ permit\ third-\/parties\ to\ whom\ the\ Software\ is\ furnished\ to}}
+\DoxyCodeLine{00008\ \textcolor{comment}{//\ do\ so,\ all\ subject\ to\ the\ following:}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ The\ copyright\ notices\ in\ the\ Software\ and\ this\ entire\ statement,\ including}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ the\ above\ license\ grant,\ this\ restriction\ and\ the\ following\ disclaimer,}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ must\ be\ included\ in\ all\ copies\ of\ the\ Software,\ in\ whole\ or\ in\ part,\ and}}
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ all\ derivative\ works\ of\ the\ Software,\ unless\ such\ copies\ or\ derivative}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//\ works\ are\ solely\ in\ the\ form\ of\ machine-\/executable\ object\ code\ generated\ by}}
+\DoxyCodeLine{00015\ \textcolor{comment}{//\ a\ source\ language\ processor.}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ THE\ SOFTWARE\ IS\ PROVIDED\ "{}AS\ IS"{},\ WITHOUT\ WARRANTY\ OF\ ANY\ KIND,\ EXPRESS\ OR}}
+\DoxyCodeLine{00018\ \textcolor{comment}{//\ IMPLIED,\ INCLUDING\ BUT\ NOT\ LIMITED\ TO\ THE\ WARRANTIES\ OF\ MERCHANTABILITY,}}
+\DoxyCodeLine{00019\ \textcolor{comment}{//\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE,\ TITLE\ AND\ NON-\/INFRINGEMENT.\ IN\ NO\ EVENT}}
+\DoxyCodeLine{00020\ \textcolor{comment}{//\ SHALL\ THE\ COPYRIGHT\ HOLDERS\ OR\ ANYONE\ DISTRIBUTING\ THE\ SOFTWARE\ BE\ LIABLE}}
+\DoxyCodeLine{00021\ \textcolor{comment}{//\ FOR\ ANY\ DAMAGES\ OR\ OTHER\ LIABILITY,\ WHETHER\ IN\ CONTRACT,\ TORT\ OR\ OTHERWISE,}}
+\DoxyCodeLine{00022\ \textcolor{comment}{//\ ARISING\ FROM,\ OUT\ OF\ OR\ IN\ CONNECTION\ WITH\ THE\ SOFTWARE\ OR\ THE\ USE\ OR\ OTHER}}
+\DoxyCodeLine{00023\ \textcolor{comment}{//\ DEALINGS\ IN\ THE\ SOFTWARE.}}
+\DoxyCodeLine{00024\ \textcolor{comment}{//}}
+\DoxyCodeLine{00025\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00026\ \textcolor{comment}{//\ author:\ Justin\ van\ der\ Wiel\ 2021}}
+\DoxyCodeLine{00027\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#include\ <cstdint>}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#include\ "{}sdkconfig.h"{}}}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#include\ "{}freertos/FreeRTOS.h"{}}}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#include\ "{}freertos/task.h"{}}}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#include\ "{}esp\_chip\_info.h"{}}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#include\ "{}esp\_system.h"{}}}
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#ifndef\ MPU\_HPP}}
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#define\ MPU\_HPP}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ SELF\_TEST\_X\_ACCEL\ =\ \ \ 0x0D;\ \textcolor{comment}{//adaptation\ of\ the\ constexpr\ int\ list\ from:\ https://github.com/simondlevy/MPU/blob/master/src/MPU.h}}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ SELF\_TEST\_Y\_ACCEL\ =\ \ 0x0E;\ \ \ }
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ SELF\_TEST\_Z\_ACCEL\ =\ \ 0x0F;}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ SELF\_TEST\_A\ \ \ \ \ =\ \ \ \ 0x10;}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ XG\_OFFSET\_H\ \ \ \ \ \ =\ \ \ 0x13;}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ XG\_OFFSET\_L\ \ \ \ \ \ =\ \ \ 0x14;}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ YG\_OFFSET\_H\ \ \ \ \ \ =\ \ \ 0x15;}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ YG\_OFFSET\_L\ \ \ \ \ \ =\ \ \ 0x16;}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ ZG\_OFFSET\_H\ \ \ \ \ \ =\ \ \ 0x17;}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ ZG\_OFFSET\_L\ \ \ \ \ \ =\ \ \ 0x18;}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ SMPLRT\_DIV\ \ \ \ \ \ \ =\ \ \ 0x19;}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ I2C\_MST\_EN\ \ \ \ \ \ \ =\ \ \ 0x20;}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ ACCEL\_CONFIG2\ \ \ \ =\ \ \ 0x1D;}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ LP\_ACCEL\_ODR\ \ \ \ \ =\ \ \ 0x1E;}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ MOT\_THR\ \ \ \ \ \ \ \ \ \ =\ \ \ 0x1F;\ \ \ }
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ MOT\_DUR\ \ \ \ \ \ \ \ \ \ =\ \ \ 0x20;\ \ }
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ CONFIG\ \ \ \ \ \ \ \ \ \ \ =\ \ \ 0x1A;}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ GYRO\_CONFIG\ \ \ \ \ \ =\ \ \ 0x1B;}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ ACCEL\_CONFIG\ \ \ \ \ =\ \ \ 0x1C;}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ ZMOT\_THR\ \ \ \ \ \ \ \ \ =\ \ \ 0x21;\ \ }
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ ZRMOT\_DUR\ \ \ \ \ \ \ \ =\ \ \ 0x22;\ \ }
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ FIFO\_EN\ \ \ \ \ \ \ \ \ \ =\ \ \ 0x23;}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ I2C\_MST\_CTRL\ \ \ \ \ =\ \ \ 0x24;}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ I2C\_SLV0\_ADDR\ \ \ \ =\ \ \ 0x25;}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ I2C\_SLV0\_REG\ \ \ \ \ =\ \ \ 0x26;}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ I2C\_SLV0\_CTRL\ \ \ \ =\ \ \ 0x27;}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ I2C\_SLV1\_ADDR\ \ \ \ =\ \ \ 0x28;}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ I2C\_SLV1\_REG\ \ \ \ \ =\ \ \ 0x29;}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ I2C\_SLV1\_CTRL\ \ \ \ =\ \ \ 0x2A;}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ I2C\_SLV2\_ADDR\ \ \ \ =\ \ \ 0x2B;}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ I2C\_SLV2\_REG\ \ \ \ \ =\ \ \ 0x2C;}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ I2C\_SLV2\_CTRL\ \ \ \ =\ \ \ 0x2D;}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ I2C\_SLV3\_ADDR\ \ \ \ =\ \ \ 0x2E;}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ I2C\_SLV3\_REG\ \ \ \ \ =\ \ \ 0x2F;}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ I2C\_SLV3\_CTRL\ \ \ \ =\ \ \ 0x30;}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ I2C\_SLV4\_ADDR\ \ \ \ =\ \ \ 0x31;}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ I2C\_SLV4\_REG\ \ \ \ \ =\ \ \ 0x32;}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ I2C\_SLV4\_DO\ \ \ \ \ \ =\ \ \ 0x33;}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ I2C\_SLV4\_CTRL\ \ \ \ =\ \ \ 0x34;}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ I2C\_SLV4\_DI\ \ \ \ \ \ =\ \ \ 0x35;}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ I2C\_MST\_STATUS\ \ \ =\ \ \ 0x36;}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ INT\_PIN\_CFG\ \ \ \ \ \ =\ \ \ 0x37;}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ INT\_ENABLE\ \ \ \ \ \ \ \ =\ \ 0x38;}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ DMP\_INT\_STATUS\ \ \ \ =\ \ 0x39;\ \ \textcolor{comment}{//\ Check\ DMP\ interrupt}}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ INT\_STATUS\ \ \ \ \ \ \ \ =\ \ 0x3A;}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ ACCEL\_XOUT\_H\ \ \ \ \ \ =\ \ 0x3B;}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ ACCEL\_XOUT\_L\ \ \ \ \ \ =\ \ 0x3C;}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ ACCEL\_YOUT\_H\ \ \ \ \ \ =\ \ 0x3D;}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ ACCEL\_YOUT\_L\ \ \ \ \ \ =\ \ 0x3E;}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ ACCEL\_ZOUT\_H\ \ \ \ \ \ =\ \ 0x3F;}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ ACCEL\_ZOUT\_L\ \ \ \ \ \ =\ \ 0x40;}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ TEMP\_OUT\_H\ \ \ \ \ \ \ \ =\ \ 0x41;}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ TEMP\_OUT\_L\ \ \ \ \ \ \ \ =\ \ 0x42;}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ GYRO\_XOUT\_H\ \ \ \ \ \ \ =\ \ 0x43;}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ GYRO\_XOUT\_L\ \ \ \ \ \ \ =\ \ 0x44;}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ GYRO\_YOUT\_H\ \ \ \ \ \ \ =\ \ 0x45;}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ GYRO\_YOUT\_L\ \ \ \ \ \ \ =\ \ 0x46;}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ GYRO\_ZOUT\_H\ \ \ \ \ \ \ =\ \ 0x47;}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ GYRO\_ZOUT\_L\ \ \ \ \ \ \ =\ \ 0x48;}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ EXT\_SENS\_DATA\_00\ \ =\ \ 0x49;}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ EXT\_SENS\_DATA\_01\ \ =\ \ 0x4A;}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ EXT\_SENS\_DATA\_02\ \ =\ \ 0x4B;}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ EXT\_SENS\_DATA\_03\ \ =\ \ 0x4C;}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ EXT\_SENS\_DATA\_04\ \ =\ \ 0x4D;}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ EXT\_SENS\_DATA\_05\ \ =\ \ 0x4E;}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ EXT\_SENS\_DATA\_06\ \ =\ \ 0x4F;}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ EXT\_SENS\_DATA\_07\ \ =\ \ 0x50;}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ EXT\_SENS\_DATA\_08\ \ =\ \ 0x51;}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ EXT\_SENS\_DATA\_09\ \ =\ \ 0x52;}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ EXT\_SENS\_DATA\_10\ \ =\ \ 0x53;}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ EXT\_SENS\_DATA\_11\ \ =\ \ 0x54;}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ EXT\_SENS\_DATA\_12\ \ =\ \ 0x55;}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ EXT\_SENS\_DATA\_13\ \ =\ \ 0x56;}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ EXT\_SENS\_DATA\_14\ \ =\ \ 0x57;}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ EXT\_SENS\_DATA\_15\ \ =\ \ 0x58;}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ EXT\_SENS\_DATA\_16\ \ =\ \ 0x59;}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ EXT\_SENS\_DATA\_17\ \ =\ \ 0x5A;}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ EXT\_SENS\_DATA\_18\ \ =\ \ 0x5B;}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ EXT\_SENS\_DATA\_19\ \ =\ \ 0x5C;}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ EXT\_SENS\_DATA\_20\ \ =\ \ 0x5D;}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ EXT\_SENS\_DATA\_21\ \ =\ \ 0x5E;}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ EXT\_SENS\_DATA\_22\ \ =\ \ 0x5F;}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ EXT\_SENS\_DATA\_23\ \ =\ \ 0x60;}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ MOT\_DETECT\_STATUS\ =\ \ 0x61;}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ I2C\_SLV0\_DO\ \ \ \ \ \ \ =\ \ 0x63;}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ I2C\_SLV1\_DO\ \ \ \ \ \ =\ \ \ 0x64;}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ I2C\_SLV2\_DO\ \ \ \ \ \ =\ \ \ 0x65;}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ I2C\_SLV3\_DO\ \ \ \ \ \ =\ \ \ 0x66;}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ I2C\_MST\_DELAY\_CTRL\ =\ \ 0x67;}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ SIGNAL\_PATH\_RESET=\ \ \ 0x68;}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ MOT\_DETECT\_CTRL\ \ =\ \ \ 0x69;}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ USER\_CTRL\ \ \ \ \ \ \ \ =\ \ \ 0x6A;\ \ }
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ PWR\_MGMT\_1\ \ \ \ \ \ \ =\ \ \ 0x6B;\ }
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ PWR\_MGMT\_2\ \ \ \ \ \ \ =\ \ \ 0x6C;}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ DMP\_BANK\ \ \ \ \ \ \ \ \ =\ \ \ 0x6D;\ }
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ DMP\_RW\_PNT\ \ \ \ \ \ \ =\ \ \ 0x6E;}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ DMP\_REG\ \ \ \ \ \ \ \ \ \ =\ \ \ 0x6F;}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ DMP\_REG\_1\ \ \ \ \ \ \ \ =\ \ \ 0x70;}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ DMP\_REG\_2\ \ \ \ \ \ \ \ =\ \ \ 0x71;}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ FIFO\_COUNTH\ \ \ \ \ \ =\ \ \ 0x72;}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ FIFO\_COUNTL\ \ \ \ \ \ =\ \ \ 0x73;}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ FIFO\_R\_W\ \ \ \ \ \ \ \ \ =\ \ \ 0x74;}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ WHO\_AM\_I\ \ \ \ \ \ \ \ \ =\ \ \ 0x75;\ }
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ XA\_OFFSET\_H\ \ \ \ \ \ =\ \ \ 0x77;}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ XA\_OFFSET\_L\ \ \ \ \ \ =\ \ \ 0x78;}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ YA\_OFFSET\_H\ \ \ \ \ \ =\ \ \ 0x7A;}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ YA\_OFFSET\_L\ \ \ \ \ \ =\ \ \ 0x7B;}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ ZA\_OFFSET\_H\ \ \ \ \ \ =\ \ \ 0x7D;}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ ZA\_OFFSET\_L\ \ \ \ \ \ =\ \ \ 0x7E;}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ I2C\_SLV0\_EN\ \ \ \ \ \ =\ \ \ 0x80;}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \ I2C\_READ\_FLAG\ \ \ \ =\ \ \ 0x80;}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00167\ \textcolor{comment}{//\ xyz\ contains\ 3\ int16\_t\ variables\ which\ can\ be\ used\ to\ store\ the\ (processed\ or\ raw)\ output\ of\ the\ sensor}}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classxyz}{xyz}}\{}
+\DoxyCodeLine{00170\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00171\ \ \ \ \ int16\_t\ x,y,z;}
+\DoxyCodeLine{00176\ \ \ \ \ \mbox{\hyperlink{classxyz_a33f4fce94d368ed81bd92efa2faee160}{xyz}}(int16\_t\ x,\ int16\_t\ y,\ int16\_t\ z):}
+\DoxyCodeLine{00177\ \ \ \ \ x(x),}
+\DoxyCodeLine{00178\ \ \ \ \ y(y),}
+\DoxyCodeLine{00179\ \ \ \ \ z(z)}
+\DoxyCodeLine{00180\ \ \ \ \ \{\}}
+\DoxyCodeLine{00185\ \ \ \ \ \mbox{\hyperlink{classxyz_a4616b7330d5298fb62ee5ef07b3d2248}{xyz}}():}
+\DoxyCodeLine{00186\ \ \ \ \ x(0),}
+\DoxyCodeLine{00187\ \ \ \ \ y(0),}
+\DoxyCodeLine{00188\ \ \ \ \ z(0)}
+\DoxyCodeLine{00189\ \ \ \ \ \{\}}
+\DoxyCodeLine{00195\ \ \ \ \ \mbox{\hyperlink{classxyz}{xyz}}\ \mbox{\hyperlink{classxyz_a19e447752141e5ac6ecc9b33cf912e76}{operator-\/}}(\mbox{\hyperlink{classxyz}{xyz}}\ \&\ rhs);}
+\DoxyCodeLine{00201\ \ \ \ \ \mbox{\hyperlink{classxyz}{xyz}}\ \mbox{\hyperlink{classxyz_a1d674bb5aaaa0dfb1cec7d077883607e}{operator-\/=}}(\mbox{\hyperlink{classxyz}{xyz}}\ \&\ rhs);}
+\DoxyCodeLine{00207\ \ \ \ \ \mbox{\hyperlink{classxyz}{xyz}}\ \mbox{\hyperlink{classxyz_a2191adbb7ee643c4e11b500fe97d19d1}{operator+}}(\mbox{\hyperlink{classxyz}{xyz}}\ \&\ rhs);}
+\DoxyCodeLine{00213\ \ \ \ \ \mbox{\hyperlink{classxyz}{xyz}}\ \mbox{\hyperlink{classxyz_ad156c71d8508d65cf0f8faa8d47b11f5}{operator+=}}(\mbox{\hyperlink{classxyz}{xyz}}\ \&\ rhs);\ \ \ \ }
+\DoxyCodeLine{00219\ \ \ \ \ \mbox{\hyperlink{classxyz}{xyz}}\ \mbox{\hyperlink{classxyz_af258b24ec1b3866658def08cafdb36d4}{operator*}}(\mbox{\hyperlink{classxyz}{xyz}}\ \&\ rhs);}
+\DoxyCodeLine{00225\ \ \ \ \ \mbox{\hyperlink{classxyz}{xyz}}\ \mbox{\hyperlink{classxyz_a60e1c4721ea502d76547379300c88641}{operator*=}}(\mbox{\hyperlink{classxyz}{xyz}}\ \&\ rhs);}
+\DoxyCodeLine{00231\ \ \ \ \ \mbox{\hyperlink{classxyz}{xyz}}\ \mbox{\hyperlink{classxyz_af258b24ec1b3866658def08cafdb36d4}{operator*}}(int16\_t\ \&\ rhs);}
+\DoxyCodeLine{00237\ \ \ \ \ \mbox{\hyperlink{classxyz}{xyz}}\ \mbox{\hyperlink{classxyz_a60e1c4721ea502d76547379300c88641}{operator*=}}(int16\_t\ \&\ rhs);}
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00239\ \};}
+\DoxyCodeLine{00245\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classall__values}{all\_values}}\ \ \{}
+\DoxyCodeLine{00246\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00247\ \ \ \ \ \mbox{\hyperlink{classxyz}{xyz}}\ acc;}
+\DoxyCodeLine{00248\ \ \ \ \ \mbox{\hyperlink{classxyz}{xyz}}\ gyr;}
+\DoxyCodeLine{00249\ \ \ \ \ int16\_t\ temp;}
+\DoxyCodeLine{00254\ \ \ \ \ \mbox{\hyperlink{classall__values_af8421f518831a46f289636242adc6291}{all\_values}}(\mbox{\hyperlink{classxyz}{xyz}}\ acc,\ \mbox{\hyperlink{classxyz}{xyz}}\ gyr,\ int16\_t\ temp):}
+\DoxyCodeLine{00255\ \ \ \ \ acc(acc),}
+\DoxyCodeLine{00256\ \ \ \ \ gyr(gyr),}
+\DoxyCodeLine{00257\ \ \ \ \ temp(temp)}
+\DoxyCodeLine{00258\ \ \ \ \ \{\}}
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00260\ \};}
+\DoxyCodeLine{00261\ }
+\DoxyCodeLine{00266\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_m_p_u6050}{MPU6050}}\ \{}
+\DoxyCodeLine{00267\ \textcolor{keyword}{private}:\ }
+\DoxyCodeLine{00268\ \ \ \ \ \textcolor{keywordtype}{double}\ \ gyrosensitivity\ \ =\ 0;\ \ \textcolor{comment}{//has\ decimal\ values\ }}
+\DoxyCodeLine{00269\ \ \ \ \ int16\_t\ \ accelsensitivity\ =\ 0;\ \textcolor{comment}{//\ only\ has\ whole\ values}}
+\DoxyCodeLine{00270\ \ \ \ \ uint8\_t\ \ \ address;}
+\DoxyCodeLine{00271\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ A0;}
+\DoxyCodeLine{00272\ \ \ \ \ int16\_t\ fs\_range\ =\ 0;}
+\DoxyCodeLine{00273\ \ \ \ \ \mbox{\hyperlink{classall__values}{all\_values}}\ fifo\_read\_test();}
+\DoxyCodeLine{00274\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00281\ }
+\DoxyCodeLine{00282\ \ \ \ \ \mbox{\hyperlink{class_m_p_u6050_ae7754366d93b29051421f11fa4ea424f}{MPU6050}}(\textcolor{keywordtype}{bool}\ \ A0=0\ ):}
+\DoxyCodeLine{00283\ \ \ \ \ A0(A0)}
+\DoxyCodeLine{00284\ \ \ \ \ \{\ }
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ address\ =\ 0x68\ +\ A0;}
+\DoxyCodeLine{00286\ \ \ \ \ \}\ }
+\DoxyCodeLine{00291\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_m_p_u6050_a686764c17ce9999202a53e0a7f6ebcb7}{writeRegister}}(uint8\_t\ sub\_addr,\ uint8\_t\ \ data);}
+\DoxyCodeLine{00297\ \ \ \ \ uint8\_t*\ \mbox{\hyperlink{class_m_p_u6050_a37c346b293c18be4eea667e24a873d59}{readRegister}}(uint8\_t\ sub\_addr,\ uint8\_t*\ data,\ uint8\_t\ size);}
+\DoxyCodeLine{00307\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_m_p_u6050_ad61862f310ea9b594959237f50f5784f}{setup}}(int8\_t\ range\_setting);}
+\DoxyCodeLine{00313\ \ \ \ \ \mbox{\hyperlink{classxyz}{xyz}}\ \mbox{\hyperlink{class_m_p_u6050_a0f941dce91b303d6a8f730e4172e1f7a}{getAccdata\_scale}}(\textcolor{keywordtype}{int}\ desired\_range);}
+\DoxyCodeLine{00314\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_m_p_u6050_a0f941dce91b303d6a8f730e4172e1f7a}{getAccdata\_scale}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\&\ desired\_range,\mbox{\hyperlink{classxyz}{xyz}}*acc);}
+\DoxyCodeLine{00320\ \ \ \ \ \mbox{\hyperlink{classxyz}{xyz}}\ \mbox{\hyperlink{class_m_p_u6050_aebbf9515c9ad70b35272bfc5d08d2c3b}{getGyrodata\_scale}}(\textcolor{keywordtype}{int}\ desired\_range);}
+\DoxyCodeLine{00321\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_m_p_u6050_aebbf9515c9ad70b35272bfc5d08d2c3b}{getGyrodata\_scale}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\&\ desired\_range,\mbox{\hyperlink{classxyz}{xyz}}*gyr);}
+\DoxyCodeLine{00326\ \ \ \ \ int16\_t\ \mbox{\hyperlink{class_m_p_u6050_a8818e14f2c2a889f3fcee2c71b0fb0ac}{getTempdata}}();}
+\DoxyCodeLine{00332\ \ \ \ \ \mbox{\hyperlink{classall__values}{all\_values}}\ \mbox{\hyperlink{class_m_p_u6050_a44c63552ef62e2294eef3afff3134d75}{getAlldata\_scale}}(\textcolor{keywordtype}{int}\ desired\_range);}
+\DoxyCodeLine{00337\ \ \ \ \ \textcolor{keywordtype}{void}\ getAccdata(\mbox{\hyperlink{classxyz}{xyz}}*\ acc);}
+\DoxyCodeLine{00338\ \ \ \ \ \mbox{\hyperlink{classxyz}{xyz}}\ getAccdata();}
+\DoxyCodeLine{00343\ \ \ \ \ \textcolor{keywordtype}{void}\ getGyrodata(\mbox{\hyperlink{classxyz}{xyz}}*\ gyr);}
+\DoxyCodeLine{00344\ \ \ \ \ \mbox{\hyperlink{classxyz}{xyz}}\ getGyrodata();}
+\DoxyCodeLine{00349\ \ \ \ \ \mbox{\hyperlink{classall__values}{all\_values}}\ \mbox{\hyperlink{class_m_p_u6050_a728cff05cb44b3c2762b91088e29fa20}{getAlldata}}();}
+\DoxyCodeLine{00354\ \ \ \ \ \mbox{\hyperlink{classxyz}{xyz}}\ \mbox{\hyperlink{class_m_p_u6050_ad2f2de67c283e2170605d0e6e3cc75a8}{getAccdata\_raw}}();}
+\DoxyCodeLine{00359\ \ \ \ \ \mbox{\hyperlink{classxyz}{xyz}}\ \mbox{\hyperlink{class_m_p_u6050_a5153baa7a457d032868eec4c46cf8740}{getGyrodata\_raw}}();}
+\DoxyCodeLine{00364\ \ \ \ \ int16\_t\ \mbox{\hyperlink{class_m_p_u6050_abeff99237edfd3cf33e0d269a7dbe54e}{getTempdata\_raw}}();}
+\DoxyCodeLine{00369\ \ \ \ \ \mbox{\hyperlink{classall__values}{all\_values}}\ \mbox{\hyperlink{class_m_p_u6050_a6018e421b66289949f596d22f81894e3}{getAlldata\_raw}}();}
+\DoxyCodeLine{00374\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_m_p_u6050_a5d10b9f281dff21053356946023133ec}{interrupt\_enable}}();}
+\DoxyCodeLine{00379\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_m_p_u6050_a84bb1bb152e2b067b71d96f7bedbe580}{interrupt\_disable}}();}
+\DoxyCodeLine{00384\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_m_p_u6050_a495b17188594a792b771e809c70379ad}{read\_interrupt}}(uint8\_t\ data[1]);}
+\DoxyCodeLine{00390\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_m_p_u6050_ad0a0a899156d6ea1ee879e25ac2185db}{fifo\_enable}}();}
+\DoxyCodeLine{00395\ \ \ \ \ \mbox{\hyperlink{classall__values}{all\_values}}\ \mbox{\hyperlink{class_m_p_u6050_adf22491b40df35632afbaa136fc7e4be}{fifo\_read}}();}
+\DoxyCodeLine{00401\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_m_p_u6050_a34729be34698798c2fbfb5a07099ca70}{fifo\_disable}}();}
+\DoxyCodeLine{00406\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_m_p_u6050_a56c00f4e7ddaff57a9ac799ba65a37f1}{fifo\_reset}}();}
+\DoxyCodeLine{00407\ }
+\DoxyCodeLine{00408\ \ \ \ \ esp\_err\_t\ InitI2C();}
+\DoxyCodeLine{00409\ }
+\DoxyCodeLine{00410\ \ \ \ \ int16\_t\ getfs\_range();}
+\DoxyCodeLine{00411\ \};}
+\DoxyCodeLine{00412\ }
+\DoxyCodeLine{00413\ }
+\DoxyCodeLine{00414\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}
