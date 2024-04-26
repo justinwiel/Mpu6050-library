@@ -1,7 +1,9 @@
 var searchData=
 [
-  ['init_0',['init',['../class_o_l_e_d.html#a7db5c6f3cbd71e8f4ceee3c2466b6901',1,'OLED']]],
-  ['interrupt_5fdisable_1',['interrupt_disable',['../class_m_p_u6050.html#a84bb1bb152e2b067b71d96f7bedbe580',1,'MPU6050']]],
-  ['interrupt_5fenable_2',['interrupt_enable',['../class_m_p_u6050.html#a5d10b9f281dff21053356946023133ec',1,'MPU6050']]],
-  ['invert_5fdisplay_3',['invert_display',['../class_o_l_e_d.html#acbaf119d11ce8148cbc96a7be6af8f1d',1,'OLED']]]
+  ['operator_2a_0',['operator*',['../classxyz.html#af258b24ec1b3866658def08cafdb36d4',1,'xyz::operator*(xyz &amp;rhs)'],['../classxyz.html#ab88841c6f321af5473e8ccc4ec320ee3',1,'xyz::operator*(int16_t &amp;rhs)']]],
+  ['operator_2a_3d_1',['operator*=',['../classxyz.html#a60e1c4721ea502d76547379300c88641',1,'xyz::operator*=(xyz &amp;rhs)'],['../classxyz.html#a7d19d04ee4c8bfca65540f18e4ce0596',1,'xyz::operator*=(int16_t &amp;rhs)']]],
+  ['operator_2b_2',['operator+',['../classxyz.html#a2191adbb7ee643c4e11b500fe97d19d1',1,'xyz']]],
+  ['operator_2b_3d_3',['operator+=',['../classxyz.html#ad156c71d8508d65cf0f8faa8d47b11f5',1,'xyz']]],
+  ['operator_2d_4',['operator-',['../classxyz.html#a19e447752141e5ac6ecc9b33cf912e76',1,'xyz']]],
+  ['operator_2d_3d_5',['operator-=',['../classxyz.html#a1d674bb5aaaa0dfb1cec7d077883607e',1,'xyz']]]
 ];

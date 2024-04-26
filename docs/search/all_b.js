@@ -1,19 +1,9 @@
 var searchData=
 [
-  ['get_5ffont_5fc_0',['get_font_c',['../class_o_l_e_d.html#a1eba2b2dab8afcfd9f99bf8aa043ec64',1,'OLED']]],
-  ['get_5ffont_5fheight_1',['get_font_height',['../class_o_l_e_d.html#aba5e07fcdf895faf0dac79caba9f5868',1,'OLED']]],
-  ['get_5fheight_2',['get_height',['../class_o_l_e_d.html#a26d9e47ee8eaae23730444ad83ca38f0',1,'OLED']]],
-  ['get_5fwidth_3',['get_width',['../class_o_l_e_d.html#aed06420792e53bb320a21457a73e8fc9',1,'OLED']]],
-  ['getaccdata_4',['getAccdata',['../class_m_p_u6050.html#a0b12e01905fb118495df7b3e4eca010c',1,'MPU6050']]],
-  ['getaccdata_5fraw_5',['getAccdata_raw',['../class_m_p_u6050.html#ad2f2de67c283e2170605d0e6e3cc75a8',1,'MPU6050']]],
-  ['getaccdata_5fscale_6',['getAccdata_scale',['../class_m_p_u6050.html#a0f941dce91b303d6a8f730e4172e1f7a',1,'MPU6050']]],
-  ['getalldata_7',['getAlldata',['../class_m_p_u6050.html#a728cff05cb44b3c2762b91088e29fa20',1,'MPU6050']]],
-  ['getalldata_5fraw_8',['getAlldata_raw',['../class_m_p_u6050.html#a6018e421b66289949f596d22f81894e3',1,'MPU6050']]],
-  ['getalldata_5fscale_9',['getAlldata_scale',['../class_m_p_u6050.html#a44c63552ef62e2294eef3afff3134d75',1,'MPU6050']]],
-  ['getgyrodata_10',['getGyrodata',['../class_m_p_u6050.html#aa5cb9de7eb61300f13e4eeebddce1389',1,'MPU6050']]],
-  ['getgyrodata_5fraw_11',['getGyrodata_raw',['../class_m_p_u6050.html#a5153baa7a457d032868eec4c46cf8740',1,'MPU6050']]],
-  ['getgyrodata_5fscale_12',['getGyrodata_scale',['../class_m_p_u6050.html#aebbf9515c9ad70b35272bfc5d08d2c3b',1,'MPU6050']]],
-  ['gettempdata_13',['getTempdata',['../class_m_p_u6050.html#a8818e14f2c2a889f3fcee2c71b0fb0ac',1,'MPU6050']]],
-  ['gettempdata_5fraw_14',['getTempdata_raw',['../class_m_p_u6050.html#abeff99237edfd3cf33e0d269a7dbe54e',1,'MPU6050']]],
-  ['guidelines_15',['Enforcement Guidelines',['../md__c_o_d_e___o_f___c_o_n_d_u_c_t.html#autotoc_md6',1,'']]]
+  ['i2c_20master_20capabilities_20or_20the_20auxilary_20bus_20of_20the_20mpu6050_0',['This library is meant to be used with the mpu6050 chip, it does not include the i2c master capabilities or the auxilary bus of the MPU6050',['../index.html#autotoc_md13',1,'']]],
+  ['include_20the_20i2c_20master_20capabilities_20or_20the_20auxilary_20bus_20of_20the_20mpu6050_1',['This library is meant to be used with the mpu6050 chip, it does not include the i2c master capabilities or the auxilary bus of the MPU6050',['../index.html#autotoc_md13',1,'']]],
+  ['interrupt_5fdisable_2',['interrupt_disable',['../class_m_p_u6050.html#a84bb1bb152e2b067b71d96f7bedbe580',1,'MPU6050']]],
+  ['interrupt_5fenable_3',['interrupt_enable',['../class_m_p_u6050.html#a5d10b9f281dff21053356946023133ec',1,'MPU6050']]],
+  ['is_20meant_20to_20be_20used_20with_20the_20mpu6050_20chip_20it_20does_20not_20include_20the_20i2c_20master_20capabilities_20or_20the_20auxilary_20bus_20of_20the_20mpu6050_4',['This library is meant to be used with the mpu6050 chip, it does not include the i2c master capabilities or the auxilary bus of the MPU6050',['../index.html#autotoc_md13',1,'']]],
+  ['it_20does_20not_20include_20the_20i2c_20master_20capabilities_20or_20the_20auxilary_20bus_20of_20the_20mpu6050_5',['This library is meant to be used with the mpu6050 chip, it does not include the i2c master capabilities or the auxilary bus of the MPU6050',['../index.html#autotoc_md13',1,'']]]
 ];

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['library_20for_20esp_20idf_0',['MPU6050 Library for esp IDF',['../index.html',1,'']]],
-  ['library_20it_20s_20important_20you_20read_20the_20documentation_20and_20understand_20the_20way_20it_20outputs_20data_1',['to use the library it&apos;s important you read the documentation and understand the way it outputs data',['../index.html#autotoc_md13',1,'']]]
+  ['not_20include_20the_20i2c_20master_20capabilities_20or_20the_20auxilary_20bus_20of_20the_20mpu6050_0',['This library is meant to be used with the mpu6050 chip, it does not include the i2c master capabilities or the auxilary bus of the MPU6050',['../index.html#autotoc_md13',1,'']]]
 ];

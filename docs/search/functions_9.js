@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['select_5ffont_0',['select_font',['../class_o_l_e_d.html#a48542db4626fcc66b7dce1d071bfc8c0',1,'OLED']]],
-  ['setup_1',['setup',['../class_m_p_u6050.html#ad61862f310ea9b594959237f50f5784f',1,'MPU6050']]]
+  ['xyz_0',['xyz',['../classxyz.html#a33f4fce94d368ed81bd92efa2faee160',1,'xyz::xyz(int16_t x, int16_t y, int16_t z)'],['../classxyz.html#a4616b7330d5298fb62ee5ef07b3d2248',1,'xyz::xyz()']]]
 ];

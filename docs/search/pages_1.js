@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['esp_20idf_0',['MPU6050 Library for esp IDF',['../index.html',1,'']]]
+  ['mpulib_0',['MpuLib',['../index.html',1,'']]]
 ];
