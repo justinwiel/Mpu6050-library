@@ -28,15 +28,14 @@
 
 /// @file
 /// \brief 
-/// c++ library for basic interaction with the mpu6050
+/// c++ library for basic interaction with the mpu6050 using ESP-IDF
 /// \mainpage
 /// \author Justin van der Wiel
-/// \version 1.0 (last edited 29-6-2021)
+/// \version 2.0 (last edited 26-4-2024)
 /// \copyright boost license
 ///
 /// ------------------------------------
-///  This library is meant to be used with the mpu6050 chip, it does not include the i2c master capabilities or the auxilary bus
-///  to use the library it's important you read the documentation and understand the way it outputs data
+///  This library is meant to be used with the mpu6050 chip, it does not include the i2c master capabilities or the auxilary bus of the MPU6050
 /// -------------------------------------
 
 #include <cstdint>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>MPU6050 Library for esp IDF: MPU6050 Class Reference</title>
+<title>MpuLib: MPU6050 Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,9 +27,9 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">MPU6050 Library for esp IDF<span id="projectnumber">&#160;1.0</span>
+   <div id="projectname">MpuLib<span id="projectnumber">&#160;2.0</span>
    </div>
-   <div id="projectbrief">MPU6050 Library for esp IDF</div>
+   <div id="projectbrief">Library to use the MPU6050 with ESP-IDF</div>
   </td>
  </tr>
  </tbody>
@@ -121,14 +121,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0f941dce91b303d6a8f730e4172e1f7a" id="r_a0f941dce91b303d6a8f730e4172e1f7a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classxyz.html">xyz</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0f941dce91b303d6a8f730e4172e1f7a">getAccdata_scale</a> (int desired_range)</td></tr>
 <tr class="memdesc:a0f941dce91b303d6a8f730e4172e1f7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads accelerometer data and returns an xyz.  <br /></td></tr>
 <tr class="separator:a0f941dce91b303d6a8f730e4172e1f7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a32f59c96a877e68b2c23cba2c064d19c" id="r_a32f59c96a877e68b2c23cba2c064d19c"><td class="memItemLeft" align="right" valign="top"><a id="a32f59c96a877e68b2c23cba2c064d19c" name="a32f59c96a877e68b2c23cba2c064d19c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>getAccdata_scale</b> (const int &amp;desired_range, <a class="el" href="classxyz.html">xyz</a> *acc)</td></tr>
+<tr class="memitem:a32f59c96a877e68b2c23cba2c064d19c" id="r_a32f59c96a877e68b2c23cba2c064d19c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a32f59c96a877e68b2c23cba2c064d19c">getAccdata_scale</a> (const int &amp;desired_range, <a class="el" href="classxyz.html">xyz</a> *acc)</td></tr>
 <tr class="separator:a32f59c96a877e68b2c23cba2c064d19c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aebbf9515c9ad70b35272bfc5d08d2c3b" id="r_aebbf9515c9ad70b35272bfc5d08d2c3b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classxyz.html">xyz</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aebbf9515c9ad70b35272bfc5d08d2c3b">getGyrodata_scale</a> (int desired_range)</td></tr>
 <tr class="memdesc:aebbf9515c9ad70b35272bfc5d08d2c3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads gyroscope data and returns an xyz.  <br /></td></tr>
 <tr class="separator:aebbf9515c9ad70b35272bfc5d08d2c3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ba995dc7b47e11b62a44f9f661a651c" id="r_a6ba995dc7b47e11b62a44f9f661a651c"><td class="memItemLeft" align="right" valign="top"><a id="a6ba995dc7b47e11b62a44f9f661a651c" name="a6ba995dc7b47e11b62a44f9f661a651c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>getGyrodata_scale</b> (const int &amp;desired_range, <a class="el" href="classxyz.html">xyz</a> *gyr)</td></tr>
+<tr class="memitem:a6ba995dc7b47e11b62a44f9f661a651c" id="r_a6ba995dc7b47e11b62a44f9f661a651c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6ba995dc7b47e11b62a44f9f661a651c">getGyrodata_scale</a> (const int &amp;desired_range, <a class="el" href="classxyz.html">xyz</a> *gyr)</td></tr>
 <tr class="separator:a6ba995dc7b47e11b62a44f9f661a651c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8818e14f2c2a889f3fcee2c71b0fb0ac" id="r_a8818e14f2c2a889f3fcee2c71b0fb0ac"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8818e14f2c2a889f3fcee2c71b0fb0ac">getTempdata</a> ()</td></tr>
 <tr class="memdesc:a8818e14f2c2a889f3fcee2c71b0fb0ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads temperature data and returns an integer.  <br /></td></tr>
@@ -139,14 +137,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>getGyrodata_scale</b>
 <tr class="memitem:a0b12e01905fb118495df7b3e4eca010c" id="r_a0b12e01905fb118495df7b3e4eca010c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0b12e01905fb118495df7b3e4eca010c">getAccdata</a> (<a class="el" href="classxyz.html">xyz</a> *acc)</td></tr>
 <tr class="memdesc:a0b12e01905fb118495df7b3e4eca010c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads accelerometer data and returns an xyz.  <br /></td></tr>
 <tr class="separator:a0b12e01905fb118495df7b3e4eca010c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf729eadb2ade0feb0b98f2a5db5c355" id="r_aaf729eadb2ade0feb0b98f2a5db5c355"><td class="memItemLeft" align="right" valign="top"><a id="aaf729eadb2ade0feb0b98f2a5db5c355" name="aaf729eadb2ade0feb0b98f2a5db5c355"></a>
-<a class="el" href="classxyz.html">xyz</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getAccdata</b> ()</td></tr>
+<tr class="memitem:aaf729eadb2ade0feb0b98f2a5db5c355" id="r_aaf729eadb2ade0feb0b98f2a5db5c355"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classxyz.html">xyz</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaf729eadb2ade0feb0b98f2a5db5c355">getAccdata</a> ()</td></tr>
 <tr class="separator:aaf729eadb2ade0feb0b98f2a5db5c355"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5cb9de7eb61300f13e4eeebddce1389" id="r_aa5cb9de7eb61300f13e4eeebddce1389"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa5cb9de7eb61300f13e4eeebddce1389">getGyrodata</a> (<a class="el" href="classxyz.html">xyz</a> *gyr)</td></tr>
 <tr class="memdesc:aa5cb9de7eb61300f13e4eeebddce1389"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads gyroscope data and returns an xyz.  <br /></td></tr>
 <tr class="separator:aa5cb9de7eb61300f13e4eeebddce1389"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae63c09179a26e5965deec10ebe7a76da" id="r_ae63c09179a26e5965deec10ebe7a76da"><td class="memItemLeft" align="right" valign="top"><a id="ae63c09179a26e5965deec10ebe7a76da" name="ae63c09179a26e5965deec10ebe7a76da"></a>
-<a class="el" href="classxyz.html">xyz</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getGyrodata</b> ()</td></tr>
+<tr class="memitem:ae63c09179a26e5965deec10ebe7a76da" id="r_ae63c09179a26e5965deec10ebe7a76da"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classxyz.html">xyz</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae63c09179a26e5965deec10ebe7a76da">getGyrodata</a> ()</td></tr>
 <tr class="separator:ae63c09179a26e5965deec10ebe7a76da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a728cff05cb44b3c2762b91088e29fa20" id="r_a728cff05cb44b3c2762b91088e29fa20"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classall__values.html">all_values</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a728cff05cb44b3c2762b91088e29fa20">getAlldata</a> ()</td></tr>
 <tr class="memdesc:a728cff05cb44b3c2762b91088e29fa20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads sensor data and returns an <a class="el" href="classall__values.html" title="a container for the full range output of the chip">all_values</a>.  <br /></td></tr>
@@ -184,16 +180,16 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>getGyrodata_scale</b>
 <tr class="memitem:a56c00f4e7ddaff57a9ac799ba65a37f1" id="r_a56c00f4e7ddaff57a9ac799ba65a37f1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a56c00f4e7ddaff57a9ac799ba65a37f1">fifo_reset</a> ()</td></tr>
 <tr class="memdesc:a56c00f4e7ddaff57a9ac799ba65a37f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets the fifo buffer.  <br /></td></tr>
 <tr class="separator:a56c00f4e7ddaff57a9ac799ba65a37f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a935c3bfb8ddd78e2a4ece1fb66d7c319" id="r_a935c3bfb8ddd78e2a4ece1fb66d7c319"><td class="memItemLeft" align="right" valign="top"><a id="a935c3bfb8ddd78e2a4ece1fb66d7c319" name="a935c3bfb8ddd78e2a4ece1fb66d7c319"></a>
-esp_err_t&#160;</td><td class="memItemRight" valign="bottom"><b>InitI2C</b> ()</td></tr>
+<tr class="memitem:a935c3bfb8ddd78e2a4ece1fb66d7c319" id="r_a935c3bfb8ddd78e2a4ece1fb66d7c319"><td class="memItemLeft" align="right" valign="top">esp_err_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a935c3bfb8ddd78e2a4ece1fb66d7c319">InitI2C</a> ()</td></tr>
 <tr class="separator:a935c3bfb8ddd78e2a4ece1fb66d7c319"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae11509d37be308a326788963cd2b011b" id="r_ae11509d37be308a326788963cd2b011b"><td class="memItemLeft" align="right" valign="top"><a id="ae11509d37be308a326788963cd2b011b" name="ae11509d37be308a326788963cd2b011b"></a>
-int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getfs_range</b> ()</td></tr>
+<tr class="memitem:ae11509d37be308a326788963cd2b011b" id="r_ae11509d37be308a326788963cd2b011b"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae11509d37be308a326788963cd2b011b">getfs_range</a> ()</td></tr>
 <tr class="separator:ae11509d37be308a326788963cd2b011b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A class to control the mpu6050 chip. </p>
 <p>Contains a number of functions to activate differerent and use different functions of the mpu6050 gyroscope/accelerometer </p>
+
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8hpp_source.html#l00265">265</a> of file <a class="el" href="_m_p_u_8hpp_source.html">MPU.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ae7754366d93b29051421f11fa4ea424f" name="ae7754366d93b29051421f11fa4ea424f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae7754366d93b29051421f11fa4ea424f">&#9670;&#160;</a></span>MPU6050()</h2>
@@ -221,6 +217,8 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getfs_range</b> ()
 <p>Constructor for the mpu6050 class, takes a bus and a boolian. </p>
 <p>This constructor for the mpu6050 class takes a bus to write to and a boolian used to determine the chip address. if the A0 pin of the chip is either not connected or connected to ground, set this to 0. If the A0 pin of the chip is connected to VCC set this to 1 </p>
 
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8hpp_source.html#l00281">281</a> of file <a class="el" href="_m_p_u_8hpp_source.html">MPU.hpp</a>.</p>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -243,6 +241,8 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getfs_range</b> ()
 <p>Writes to the fifo enable register and sets the enable flags for the gyroscope and accelerometer to 0 <br  />
  NOTE: The fifo_read function triggers this function on it's own this is preferable over manual activation and deactivation, the buffer can get overflowed if not read enough while left open </p>
 
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8cpp_source.html#l00345">345</a> of file <a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a>.</p>
+
 </div>
 </div>
 <a id="ad0a0a899156d6ea1ee879e25ac2185db" name="ad0a0a899156d6ea1ee879e25ac2185db"></a>
@@ -263,6 +263,8 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getfs_range</b> ()
 <p>Enables fifo for accelerometer and the gyroscope. </p>
 <p>Writes to the fifo enable register and sets the enable flags for the gyroscope and accelerometer to 1 <br  />
  NOTE: The fifo_read function triggers this function on it's own this is preferable over manual activation and deactivation, the buffer can get overflowed if not read enough while left open </p>
+
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8cpp_source.html#l00340">340</a> of file <a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a>.</p>
 
 </div>
 </div>
@@ -285,6 +287,8 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getfs_range</b> ()
 <p>This function enables the fifo register, reads the register and then disables the register <br  />
  </p>
 
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8cpp_source.html#l00350">350</a> of file <a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a>.</p>
+
 </div>
 </div>
 <a id="a56c00f4e7ddaff57a9ac799ba65a37f1" name="a56c00f4e7ddaff57a9ac799ba65a37f1"></a>
@@ -305,10 +309,31 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getfs_range</b> ()
 <p>Resets the fifo buffer. </p>
 <p>Sets the fifo reset flag in the user control register to 1, this flag returns to 0 after triggering the reset </p>
 
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8cpp_source.html#l00397">397</a> of file <a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a>.</p>
+
+</div>
+</div>
+<a id="aaf729eadb2ade0feb0b98f2a5db5c355" name="aaf729eadb2ade0feb0b98f2a5db5c355"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf729eadb2ade0feb0b98f2a5db5c355">&#9670;&#160;</a></span>getAccdata() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classxyz.html">xyz</a> MPU6050::getAccdata </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8cpp_source.html#l00236">236</a> of file <a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a>.</p>
+
 </div>
 </div>
 <a id="a0b12e01905fb118495df7b3e4eca010c" name="a0b12e01905fb118495df7b3e4eca010c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0b12e01905fb118495df7b3e4eca010c">&#9670;&#160;</a></span>getAccdata()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b12e01905fb118495df7b3e4eca010c">&#9670;&#160;</a></span>getAccdata() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -324,6 +349,8 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getfs_range</b> ()
 
 <p>Reads accelerometer data and returns an xyz. </p>
 <p>Reads accelerometer data registers and processes the data in the way specified in the datasheet and returns it as an xyz </p>
+
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8cpp_source.html#l00254">254</a> of file <a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a>.</p>
 
 </div>
 </div>
@@ -345,10 +372,35 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getfs_range</b> ()
 <p>Reads accelerometer data and returns an xyz. </p>
 <p>Reads the accelerometer data registers and returns the raw xyz values </p>
 
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8cpp_source.html#l00292">292</a> of file <a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a32f59c96a877e68b2c23cba2c064d19c" name="a32f59c96a877e68b2c23cba2c064d19c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32f59c96a877e68b2c23cba2c064d19c">&#9670;&#160;</a></span>getAccdata_scale() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void MPU6050::getAccdata_scale </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>desired_range</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classxyz.html">xyz</a> *</td>          <td class="paramname"><span class="paramname"><em>acc</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8cpp_source.html#l00197">197</a> of file <a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a>.</p>
+
 </div>
 </div>
 <a id="a0f941dce91b303d6a8f730e4172e1f7a" name="a0f941dce91b303d6a8f730e4172e1f7a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0f941dce91b303d6a8f730e4172e1f7a">&#9670;&#160;</a></span>getAccdata_scale()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f941dce91b303d6a8f730e4172e1f7a">&#9670;&#160;</a></span>getAccdata_scale() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -366,6 +418,8 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getfs_range</b> ()
 <p>This function reads all accelerometer data registers and turns them into 3 usable integers on a scale that can be specified by the user, the greater the scale the more unstable the data <br  />
  NOTE: The chosen scale should not go above the range chosen in the setup function <br  />
  </p>
+
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8cpp_source.html#l00178">178</a> of file <a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a>.</p>
 
 </div>
 </div>
@@ -387,6 +441,8 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getfs_range</b> ()
 <p>Reads sensor data and returns an <a class="el" href="classall__values.html" title="a container for the full range output of the chip">all_values</a>. </p>
 <p>This function reads all sensor data registers, processes them in the way specified in the datasheet and returns them as 2 xyz variables and an integer combined into an <a class="el" href="classall__values.html" title="a container for the full range output of the chip">all_values</a> container </p>
 
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8cpp_source.html#l00287">287</a> of file <a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a>.</p>
+
 </div>
 </div>
 <a id="a6018e421b66289949f596d22f81894e3" name="a6018e421b66289949f596d22f81894e3"></a>
@@ -406,6 +462,8 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getfs_range</b> ()
 
 <p>Reads all data and returns an <a class="el" href="classall__values.html" title="a container for the full range output of the chip">all_values</a>. </p>
 <p>Reads the all data registers and returns the raw xyz values and a raw integer combined into an <a class="el" href="classall__values.html" title="a container for the full range output of the chip">all_values</a> </p>
+
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8cpp_source.html#l00319">319</a> of file <a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a>.</p>
 
 </div>
 </div>
@@ -429,10 +487,50 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getfs_range</b> ()
  NOTE: The chosen scale should not go above the range chosen in the setup function <br  />
  </p>
 
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8cpp_source.html#l00231">231</a> of file <a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ae11509d37be308a326788963cd2b011b" name="ae11509d37be308a326788963cd2b011b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae11509d37be308a326788963cd2b011b">&#9670;&#160;</a></span>getfs_range()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int16_t MPU6050::getfs_range </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8cpp_source.html#l00408">408</a> of file <a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ae63c09179a26e5965deec10ebe7a76da" name="ae63c09179a26e5965deec10ebe7a76da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae63c09179a26e5965deec10ebe7a76da">&#9670;&#160;</a></span>getGyrodata() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classxyz.html">xyz</a> MPU6050::getGyrodata </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8cpp_source.html#l00265">265</a> of file <a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a>.</p>
+
 </div>
 </div>
 <a id="aa5cb9de7eb61300f13e4eeebddce1389" name="aa5cb9de7eb61300f13e4eeebddce1389"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa5cb9de7eb61300f13e4eeebddce1389">&#9670;&#160;</a></span>getGyrodata()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5cb9de7eb61300f13e4eeebddce1389">&#9670;&#160;</a></span>getGyrodata() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -448,6 +546,8 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getfs_range</b> ()
 
 <p>Reads gyroscope data and returns an xyz. </p>
 <p>Reads gyroscope data registers and processes the data in the way specified in the datasheet and returns it as an xyz </p>
+
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8cpp_source.html#l00275">275</a> of file <a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a>.</p>
 
 </div>
 </div>
@@ -469,10 +569,35 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getfs_range</b> ()
 <p>Reads gyroscope data and returns an xyz. </p>
 <p>Reads the gyroscope data registers and returns the raw xyz values </p>
 
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8cpp_source.html#l00301">301</a> of file <a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a6ba995dc7b47e11b62a44f9f661a651c" name="a6ba995dc7b47e11b62a44f9f661a651c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ba995dc7b47e11b62a44f9f661a651c">&#9670;&#160;</a></span>getGyrodata_scale() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void MPU6050::getGyrodata_scale </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>desired_range</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classxyz.html">xyz</a> *</td>          <td class="paramname"><span class="paramname"><em>gyr</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8cpp_source.html#l00209">209</a> of file <a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a>.</p>
+
 </div>
 </div>
 <a id="aebbf9515c9ad70b35272bfc5d08d2c3b" name="aebbf9515c9ad70b35272bfc5d08d2c3b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aebbf9515c9ad70b35272bfc5d08d2c3b">&#9670;&#160;</a></span>getGyrodata_scale()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aebbf9515c9ad70b35272bfc5d08d2c3b">&#9670;&#160;</a></span>getGyrodata_scale() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -490,6 +615,8 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getfs_range</b> ()
 <p>This function reads all gyroscope data registers and turns them into 3 usable integers on a scale that can be specified by the user, the greater the scale the more unstable the data <br  />
  NOTE: The chosen scale should not go above the range chosen in the setup function <br  />
  </p>
+
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8cpp_source.html#l00187">187</a> of file <a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a>.</p>
 
 </div>
 </div>
@@ -511,6 +638,8 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getfs_range</b> ()
 <p>Reads temperature data and returns an integer. </p>
 <p>This function reads all temperature data registers and processes the output with the calculation specified in the datasheet </p>
 
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8cpp_source.html#l00222">222</a> of file <a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a>.</p>
+
 </div>
 </div>
 <a id="abeff99237edfd3cf33e0d269a7dbe54e" name="abeff99237edfd3cf33e0d269a7dbe54e"></a>
@@ -530,6 +659,27 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getfs_range</b> ()
 
 <p>Reads temperature data and returns an integer. </p>
 <p>Reads the temperature data registers and returns the raw integer value </p>
+
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8cpp_source.html#l00310">310</a> of file <a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a935c3bfb8ddd78e2a4ece1fb66d7c319" name="a935c3bfb8ddd78e2a4ece1fb66d7c319"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a935c3bfb8ddd78e2a4ece1fb66d7c319">&#9670;&#160;</a></span>InitI2C()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">esp_err_t MPU6050::InitI2C </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8cpp_source.html#l00402">402</a> of file <a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a>.</p>
 
 </div>
 </div>
@@ -551,6 +701,8 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getfs_range</b> ()
 <p>Disables interrupts. </p>
 <p>Writes to the interrupt enable register and sets the flags for data ready and fifo overflow interrupt to 0 </p>
 
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8cpp_source.html#l00329">329</a> of file <a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a>.</p>
+
 </div>
 </div>
 <a id="a5d10b9f281dff21053356946023133ec" name="a5d10b9f281dff21053356946023133ec"></a>
@@ -570,6 +722,8 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getfs_range</b> ()
 
 <p>Enables interrupts. </p>
 <p>Writes to the interrupt enable register and sets the flags for data ready and fifo overflow interrupt to 1 </p>
+
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8cpp_source.html#l00324">324</a> of file <a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a>.</p>
 
 </div>
 </div>
@@ -591,6 +745,8 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getfs_range</b> ()
 <p>Reads interrupt register. </p>
 <p>Reads the interrupt status register and writes the output into a buffer <br  />
  </p>
+
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8cpp_source.html#l00335">335</a> of file <a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a>.</p>
 
 </div>
 </div>
@@ -622,6 +778,8 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getfs_range</b> ()
 <p>Takes the sub-address of the register you want to read, a buffer and the amount of data you want to read, if you read more than one byte, the chip auto-increments the address(except the for fifo register) <br  />
  The data gets written into the buffer directly, optionally you can also choose to have the data returned into a second or the same buffer </p>
 
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8cpp_source.html#l00158">158</a> of file <a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a>.</p>
+
 </div>
 </div>
 <a id="ad61862f310ea9b594959237f50f5784f" name="ad61862f310ea9b594959237f50f5784f"></a>
@@ -647,6 +805,8 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getfs_range</b> ()
  3 = 2000 highest range lowest sensitivity; <br  />
  Sets up everything that needs to be setup for normal operation, this function should always be the first called function in an application using this library </p>
 
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8cpp_source.html#l00079">79</a> of file <a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a>.</p>
+
 </div>
 </div>
 <a id="a686764c17ce9999202a53e0a7f6ebcb7" name="a686764c17ce9999202a53e0a7f6ebcb7"></a>
@@ -671,11 +831,13 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getfs_range</b> ()
 <p>Writes a byte to a register. </p>
 <p>Takes the sub-address of the register you want to write and the data you want to write to it, if you write more than one byte, the chip auto-increments the address(except the for fifo register) </p>
 
+<p class="definition">Definition at line <a class="el" href="_m_p_u_8cpp_source.html#l00145">145</a> of file <a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a>.</p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>components/mpuLib/include/<a class="el" href="_m_p_u_8hpp_source.html">MPU.hpp</a></li>
-<li>components/mpuLib/src/<b>MPU.cpp</b></li>
+<li>components/mpuLib/src/<a class="el" href="_m_p_u_8cpp_source.html">MPU.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

@@ -1,10 +1,7 @@
 var searchData=
 [
-  ['read_20the_20documentation_20and_20understand_20the_20way_20it_20outputs_20data_0',['to use the library it&apos;s important you read the documentation and understand the way it outputs data',['../index.html#autotoc_md13',1,'']]],
-  ['read_5finterrupt_1',['read_interrupt',['../class_m_p_u6050.html#a495b17188594a792b771e809c70379ad',1,'MPU6050']]],
-  ['readme_2',['README',['../md_components_2_display_2_r_e_a_d_m_e.html',1,'README'],['../md__r_e_a_d_m_e.html',1,'README']]],
-  ['readregister_3',['readRegister',['../class_m_p_u6050.html#a37c346b293c18be4eea667e24a873d59',1,'MPU6050']]],
-  ['refresh_4',['refresh',['../class_o_l_e_d.html#a3ad5f190ca11bb306d13dffdc7c6aa26',1,'OLED']]],
-  ['responsibilities_5',['Enforcement Responsibilities',['../md__c_o_d_e___o_f___c_o_n_d_u_c_t.html#autotoc_md3',1,'']]],
-  ['rgb_6',['RGB',['../struct_r_g_b.html',1,'']]]
+  ['temporary_20ban_0',['3. Temporary Ban',['../md__c_o_d_e___o_f___c_o_n_d_u_c_t.html#autotoc_md9',1,'']]],
+  ['the_20mpu6050_20chip_20it_20does_20not_20include_20the_20i2c_20master_20capabilities_20or_20the_20auxilary_20bus_20of_20the_20mpu6050_1',['This library is meant to be used with the mpu6050 chip, it does not include the i2c master capabilities or the auxilary bus of the MPU6050',['../index.html#autotoc_md13',1,'']]],
+  ['this_20library_20is_20meant_20to_20be_20used_20with_20the_20mpu6050_20chip_20it_20does_20not_20include_20the_20i2c_20master_20capabilities_20or_20the_20auxilary_20bus_20of_20the_20mpu6050_2',['This library is meant to be used with the mpu6050 chip, it does not include the i2c master capabilities or the auxilary bus of the MPU6050',['../index.html#autotoc_md13',1,'']]],
+  ['to_20be_20used_20with_20the_20mpu6050_20chip_20it_20does_20not_20include_20the_20i2c_20master_20capabilities_20or_20the_20auxilary_20bus_20of_20the_20mpu6050_3',['This library is meant to be used with the mpu6050 chip, it does not include the i2c master capabilities or the auxilary bus of the MPU6050',['../index.html#autotoc_md13',1,'']]]
 ];

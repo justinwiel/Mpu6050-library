@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['understand_20the_20way_20it_20outputs_20data_0',['to use the library it&apos;s important you read the documentation and understand the way it outputs data',['../index.html#autotoc_md13',1,'']]],
-  ['update_5fbuffer_1',['update_buffer',['../class_o_l_e_d.html#a280df03e6244884a138c9907a0ebaf24',1,'OLED']]],
-  ['use_20the_20library_20it_20s_20important_20you_20read_20the_20documentation_20and_20understand_20the_20way_20it_20outputs_20data_2',['to use the library it&apos;s important you read the documentation and understand the way it outputs data',['../index.html#autotoc_md13',1,'']]]
+  ['xyz_0',['xyz',['../classxyz.html',1,'xyz'],['../classxyz.html#a33f4fce94d368ed81bd92efa2faee160',1,'xyz::xyz(int16_t x, int16_t y, int16_t z)'],['../classxyz.html#a4616b7330d5298fb62ee5ef07b3d2248',1,'xyz::xyz()']]]
 ];

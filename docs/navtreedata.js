@@ -24,9 +24,9 @@
 */
 var NAVTREE =
 [
-  [ "MPU6050 Library for esp IDF", "index.html", [
+  [ "MpuLib", "index.html", [
     [ "Contributor Covenant Code of Conduct", "md__c_o_d_e___o_f___c_o_n_d_u_c_t.html", [
-      [ "to use the library it's important you read the documentation and understand the way it outputs data", "index.html#autotoc_md13", null ],
+      [ "This library is meant to be used with the mpu6050 chip, it does not include the i2c master capabiliti...", "index.html#autotoc_md13", null ],
       [ "Our Pledge", "md__c_o_d_e___o_f___c_o_n_d_u_c_t.html#autotoc_md1", null ],
       [ "Our Standards", "md__c_o_d_e___o_f___c_o_n_d_u_c_t.html#autotoc_md2", null ],
       [ "Enforcement Responsibilities", "md__c_o_d_e___o_f___c_o_n_d_u_c_t.html#autotoc_md3", null ],
@@ -40,7 +40,6 @@ var NAVTREE =
       ] ],
       [ "Attribution", "md__c_o_d_e___o_f___c_o_n_d_u_c_t.html#autotoc_md11", null ]
     ] ],
-    [ "README", "md_components_2_display_2_r_e_a_d_m_e.html", null ],
     [ "CONTRIBUTING", "md__c_o_n_t_r_i_b_u_t_i_n_g.html", null ],
     [ "README", "md__r_e_a_d_m_e.html", null ],
     [ "Classes", "annotated.html", [
@@ -48,25 +47,18 @@ var NAVTREE =
       [ "Class Index", "classes.html", null ],
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", null ],
-        [ "Functions", "functions_func.html", null ],
-        [ "Variables", "functions_vars.html", null ]
+        [ "Functions", "functions_func.html", null ]
       ] ]
     ] ],
     [ "Files", "files.html", [
-      [ "File List", "files.html", "files_dup" ],
-      [ "File Members", "globals.html", [
-        [ "All", "globals.html", null ],
-        [ "Variables", "globals_vars.html", null ],
-        [ "Typedefs", "globals_type.html", null ],
-        [ "Macros", "globals_defs.html", null ]
-      ] ]
+      [ "File List", "files.html", "files_dup" ]
     ] ]
   ] ]
 ];
 
 var NAVTREEINDEX =
 [
-"_m_p_u_8hpp.html"
+"_c_make_files_23_824_80_2_compiler_id_c_2_c_make_c_compiler_id_8c_source.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

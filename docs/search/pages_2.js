@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['for_20esp_20idf_0',['MPU6050 Library for esp IDF',['../index.html',1,'']]]
+  ['of_20conduct_0',['Contributor Covenant Code of Conduct',['../md__c_o_d_e___o_f___c_o_n_d_u_c_t.html',1,'']]]
 ];

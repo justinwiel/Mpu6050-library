@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['i2c_0',['I2C',['../class_i2_c.html',1,'']]]
+  ['rgb_0',['RGB',['../struct_r_g_b.html',1,'']]]
 ];

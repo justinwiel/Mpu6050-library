@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['temporary_20ban_0',['3. Temporary Ban',['../md__c_o_d_e___o_f___c_o_n_d_u_c_t.html#autotoc_md9',1,'']]],
-  ['term_1',['term',['../class_o_l_e_d.html#ad1682f53aca2c07a200db34cf4c446c3',1,'OLED']]],
-  ['the_20library_20it_20s_20important_20you_20read_20the_20documentation_20and_20understand_20the_20way_20it_20outputs_20data_2',['to use the library it&apos;s important you read the documentation and understand the way it outputs data',['../index.html#autotoc_md13',1,'']]],
-  ['to_20use_20the_20library_20it_20s_20important_20you_20read_20the_20documentation_20and_20understand_20the_20way_20it_20outputs_20data_3',['to use the library it&apos;s important you read the documentation and understand the way it outputs data',['../index.html#autotoc_md13',1,'']]]
+  ['warning_0',['2. Warning',['../md__c_o_d_e___o_f___c_o_n_d_u_c_t.html#autotoc_md8',1,'']]],
+  ['with_20the_20mpu6050_20chip_20it_20does_20not_20include_20the_20i2c_20master_20capabilities_20or_20the_20auxilary_20bus_20of_20the_20mpu6050_1',['This library is meant to be used with the mpu6050 chip, it does not include the i2c master capabilities or the auxilary bus of the MPU6050',['../index.html#autotoc_md13',1,'']]],
+  ['writeregister_2',['writeRegister',['../class_m_p_u6050.html#a686764c17ce9999202a53e0a7f6ebcb7',1,'MPU6050']]]
 ];
