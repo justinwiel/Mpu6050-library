@@ -1,0 +1,56 @@
+\doxysection{components/\+Display/main/include/fonts.h File Reference}
+\hypertarget{fonts_8h}{}\label{fonts_8h}\index{components/Display/main/include/fonts.h@{components/Display/main/include/fonts.h}}
+
+
+Font description for \doxylink{class_o_l_e_d}{OLED} display, based on \href{http://www.eran.io/the-dot-factory-an-lcd-font-and-image-generator/}{\texttt{ "{}\+The\+Dot\+Factory"{}}} by Eran "{}\+Pavius"{} Duchan.  
+
+
+{\ttfamily \#include "{}stdint.\+h"{}}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct__font__char__desc}{\+\_\+font\+\_\+char\+\_\+desc}}
+\begin{DoxyCompactList}\small\item\em Character descriptor. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{struct__font__info}{\+\_\+font\+\_\+info}}
+\begin{DoxyCompactList}\small\item\em Font information. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{fonts_8h_a2c8d19f840381baec930eff523e53d1b}\label{fonts_8h_a2c8d19f840381baec930eff523e53d1b} 
+\#define {\bfseries NUM\+\_\+\+FONTS}~2
+\begin{DoxyCompactList}\small\item\em Number of built-\/in fonts. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{fonts_8h_a04d07cfdb35b7d7b1ab7264c4c74b761}\label{fonts_8h_a04d07cfdb35b7d7b1ab7264c4c74b761} 
+typedef struct \mbox{\hyperlink{struct__font__char__desc}{\+\_\+font\+\_\+char\+\_\+desc}} {\bfseries font\+\_\+char\+\_\+desc\+\_\+t}
+\begin{DoxyCompactList}\small\item\em Character descriptor. \end{DoxyCompactList}\item 
+\Hypertarget{fonts_8h_ab442da324a618e0121c5f26e3ad21ee6}\label{fonts_8h_ab442da324a618e0121c5f26e3ad21ee6} 
+typedef struct \mbox{\hyperlink{struct__font__info}{\+\_\+font\+\_\+info}} {\bfseries font\+\_\+info\+\_\+t}
+\begin{DoxyCompactList}\small\item\em Font information. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{fonts_8h_a688a56abf7f3e59ffe46469d2eb84194}\label{fonts_8h_a688a56abf7f3e59ffe46469d2eb84194} 
+const \mbox{\hyperlink{fonts_8h_ab442da324a618e0121c5f26e3ad21ee6}{font\+\_\+info\+\_\+t}} \texorpdfstring{$\ast$}{*} {\bfseries fonts} \mbox{[}\mbox{\hyperlink{fonts_8h_a2c8d19f840381baec930eff523e53d1b}{NUM\+\_\+\+FONTS}}\mbox{]}
+\begin{DoxyCompactList}\small\item\em Built-\/in fonts. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Font description for \doxylink{class_o_l_e_d}{OLED} display, based on \href{http://www.eran.io/the-dot-factory-an-lcd-font-and-image-generator/}{\texttt{ "{}\+The\+Dot\+Factory"{}}} by Eran "{}\+Pavius"{} Duchan. 
+
+\begin{DoxyAuthor}{Author}
+Baoshi \texorpdfstring{$<$}{<}mail(at)ba0sh1(dot)com\texorpdfstring{$>$}{>} 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+8 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+Jan 3, 2014 
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+
+\end{DoxyCopyright}
+Copyright (c) 2015, Baoshi Zhu. All rights reserved. Use of this source code is governed by a BSD-\/style license that can be found in the LICENSE.\+txt file.
+
+THIS SOFTWARE IS PROVIDED \textquotesingle{}AS-\/\+IS\textquotesingle{}, WITHOUT ANY EXPRESS OR IMPLIED WARRANTY. IN NO EVENT WILL THE AUTHOR(\+S) BE HELD LIABLE FOR ANY DAMAGES ARISING FROM THE USE OF THIS SOFTWARE. 

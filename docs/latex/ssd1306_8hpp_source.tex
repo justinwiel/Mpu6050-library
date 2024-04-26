@@ -1,0 +1,77 @@
+\doxysection{ssd1306.\+hpp}
+\hypertarget{ssd1306_8hpp_source}{}\label{ssd1306_8hpp_source}\index{components/Display/main/include/ssd1306.hpp@{components/Display/main/include/ssd1306.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ SSD1306\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ SSD1306\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{fonts_8h}{fonts.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}stddef.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}stdlib.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}string.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}esp\_log.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}i2c.hpp"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00014\ \ \ \ \ TRANSPARENT\ =\ -\/1,\ }
+\DoxyCodeLine{00015\ \ \ \ \ BLACK\ =\ 0,\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00016\ \ \ \ \ WHITE\ =\ 1,\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00017\ \ \ \ \ INVERT\ =\ 2,\ \ \ \ \ \ \ }
+\DoxyCodeLine{00018\ \}\ ssd1306\_color\_t;}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ SSD1306\_128x64\ =\ 1,\ }
+\DoxyCodeLine{00023\ \ \ \ \ SSD1306\_128x32\ =\ 2\ \ }
+\DoxyCodeLine{00024\ \}\ ssd1306\_panel\_type\_t;}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_o_l_e_d}{OLED}}\ \{}
+\DoxyCodeLine{00027\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{class_i2_c}{I2C}}\ *i2c;}
+\DoxyCodeLine{00029\ \ \ \ \ ssd1306\_panel\_type\_t\ type;}
+\DoxyCodeLine{00030\ \ \ \ \ uint8\_t\ address;\ \ \ \ \ \ \ \ \textcolor{comment}{//\ I2C\ address}}
+\DoxyCodeLine{00031\ \ \ \ \ uint8\_t\ *buffer;\ \ \ \ \ \ \ \ \textcolor{comment}{//\ display\ buffer}}
+\DoxyCodeLine{00032\ \ \ \ \ uint8\_t\ width;\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ panel\ width\ (128)}}
+\DoxyCodeLine{00033\ \ \ \ \ uint8\_t\ height;\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ panel\ height\ (32\ or\ 64)}}
+\DoxyCodeLine{00034\ \ \ \ \ uint8\_t\ refresh\_top\ =\ 0;\ \ \ \ \textcolor{comment}{//\ "{}Dirty"{}\ window}}
+\DoxyCodeLine{00035\ \ \ \ \ uint8\_t\ refresh\_left\ =\ 0;}
+\DoxyCodeLine{00036\ \ \ \ \ uint8\_t\ refresh\_right\ =\ 0;}
+\DoxyCodeLine{00037\ \ \ \ \ uint8\_t\ refresh\_bottom\ =\ 0;}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct__font__info}{font\_info\_t}}*\ font\ =\ NULL;\ \ \ \ \textcolor{comment}{//\ current\ font}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{void}\ command(uint8\_t\ adress,\ uint8\_t\ c);}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{void}\ data(uint8\_t\ adress,\ uint8\_t\ d);}
+\DoxyCodeLine{00041\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{class_o_l_e_d_ad46ab14c8f10565a499fe671a1c3024d}{OLED}}(gpio\_num\_t\ scl,\ gpio\_num\_t\ sda,\ ssd1306\_panel\_type\_t\ type);}
+\DoxyCodeLine{00056\ \ \ \ \ \mbox{\hyperlink{class_o_l_e_d_ad46ab14c8f10565a499fe671a1c3024d}{OLED}}(gpio\_num\_t\ scl,\ gpio\_num\_t\ sda,\ ssd1306\_panel\_type\_t\ type,}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ address);}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_o_l_e_d_a7db5c6f3cbd71e8f4ceee3c2466b6901}{init}}();}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_o_l_e_d_ad1682f53aca2c07a200db34cf4c446c3}{term}}();}
+\DoxyCodeLine{00074\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{class_o_l_e_d_aed06420792e53bb320a21457a73e8fc9}{get\_width}}();}
+\DoxyCodeLine{00079\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{class_o_l_e_d_a26d9e47ee8eaae23730444ad83ca38f0}{get\_height}}();}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_o_l_e_d_a7455cb5100bdb48b45655f4f70d24ae6}{clear}}();}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_o_l_e_d_a3ad5f190ca11bb306d13dffdc7c6aa26}{refresh}}(\textcolor{keywordtype}{bool}\ force);}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_o_l_e_d_ae730a8deb7e36cbb3ba6a1cefa5e1620}{draw\_pixel}}(int8\_t\ x,\ int8\_t\ y,\ ssd1306\_color\_t\ color);}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_o_l_e_d_adf219b53c31e9f942a842c2acd501772}{draw\_hline}}(int8\_t\ x,\ int8\_t\ y,\ uint8\_t\ w,\ ssd1306\_color\_t\ color);}
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_o_l_e_d_ae22bb6e8ca171cad8f1a5f1b1838eb0e}{draw\_vline}}(int8\_t\ x,\ int8\_t\ y,\ uint8\_t\ h,\ ssd1306\_color\_t\ color);}
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_o_l_e_d_af9a9a391d128e479318537fbb404f988}{draw\_rectangle}}(int8\_t\ x,\ int8\_t\ y,\ uint8\_t\ w,\ uint8\_t\ h,}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ ssd1306\_color\_t\ color);}
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_o_l_e_d_aab0777f39861351cb1c26e2b98de94ef}{fill\_rectangle}}(int8\_t\ x,\ int8\_t\ y,\ uint8\_t\ w,\ uint8\_t\ h,}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ ssd1306\_color\_t\ color);}
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_o_l_e_d_a3ebf7385a553837a04963d66e5c35bb9}{draw\_circle}}(int8\_t\ x0,\ int8\_t\ y0,\ uint8\_t\ r,\ ssd1306\_color\_t\ color);}
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_o_l_e_d_a4f7bd3d279df7a8473b618eaa8697e20}{fill\_circle}}(int8\_t\ x0,\ int8\_t\ y0,\ uint8\_t\ r,\ ssd1306\_color\_t\ color);}
+\DoxyCodeLine{00152\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_o_l_e_d_a48542db4626fcc66b7dce1d071bfc8c0}{select\_font}}(uint8\_t\ idx);}
+\DoxyCodeLine{00162\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{class_o_l_e_d_a565b41cf8c0edc011ec349432e86f3af}{draw\_char}}(uint8\_t\ x,\ uint8\_t\ y,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ c,}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ ssd1306\_color\_t\ foreground,\ ssd1306\_color\_t\ background);}
+\DoxyCodeLine{00173\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{class_o_l_e_d_a83d6dc3dfc22e45ebe884e12b409f06c}{draw\_string}}(uint8\_t\ x,\ uint8\_t\ y,\ std::string\ str,}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ ssd1306\_color\_t\ foreground,\ ssd1306\_color\_t\ background);}
+\DoxyCodeLine{00180\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{class_o_l_e_d_a8bb1d35420313f1128ac49569bce01b4}{measure\_string}}(std::string\ str);}
+\DoxyCodeLine{00185\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{class_o_l_e_d_aba5e07fcdf895faf0dac79caba9f5868}{get\_font\_height}}();}
+\DoxyCodeLine{00190\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{class_o_l_e_d_a1eba2b2dab8afcfd9f99bf8aa043ec64}{get\_font\_c}}();}
+\DoxyCodeLine{00195\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_o_l_e_d_acbaf119d11ce8148cbc96a7be6af8f1d}{invert\_display}}(\textcolor{keywordtype}{bool}\ invert);}
+\DoxyCodeLine{00200\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_o_l_e_d_a280df03e6244884a138c9907a0ebaf24}{update\_buffer}}(uint8\_t*\ data,\ uint16\_t\ length);}
+\DoxyCodeLine{00201\ \};}
+\DoxyCodeLine{00202\ }
+\DoxyCodeLine{00203\ \textcolor{preprocessor}{\#endif\ \ }\textcolor{comment}{/*\ SSD1306\_H\ */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00204\ }
+
+\end{DoxyCode}

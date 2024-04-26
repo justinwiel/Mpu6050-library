@@ -1,0 +1,21 @@
+\chapter{README}
+\hypertarget{md_components_2_display_2_r_e_a_d_m_e}{}\label{md_components_2_display_2_r_e_a_d_m_e}\index{README@{README}}
+\#\+ESP32 \doxylink{class_i2_c}{I2C} \doxylink{class_o_l_e_d}{OLED} SSD1306 library for esp-\/idf
+
+This is a library of i2c oled ssd1306 for \href{https://github.com/espressif/esp-idf}{\texttt{ esp-\/idf}}.
+
+Code modified from \href{https://github.com/baoshi/ESP-I2C-OLED}{\texttt{ ESP-\/\+I2\+C-\/\+OLED}}.
+
+I changed the code style into C++. So you can easily use multiple devices by create different objects. I also changed the hardware i2c driver into a software one. So you can use any two GPIO pins as SDA and SCL.
+
+{\bfseries{IMPORTANT\+:}} If you want to compile it, be sure that you add \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}"{}\+COMPONENT\+\_\+\+LDFLAGS += -\/lstdc++"{}\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*} in Makefile.
+
+Pay attention that \doxylink{class_o_l_e_d}{OLED} class has two different constructors. One with default \doxylink{class_i2_c}{I2C} address 0x78, but in the other you can set manual address.
+
+Remember to call {\bfseries{refresh}} after you draw something new on the screen.
+
+External RESET pin function is not implemented yet.
+
+{\bfseries{NOTICE1\+:}} If you want to use pure C method, please turn to branch \href{https://github.com/imxieyi/esp32-i2c-ssd1306-oled/tree/pure-c}{\texttt{ pure-\/c}}
+
+{\bfseries{NOTICE2\+:}} I\textquotesingle{}m using C++ style string, if you don\textquotesingle{}t want that, you can uncomment related code blocks in ssd1306.\+cpp and \doxylink{ssd1306_8hpp_source}{ssd1306.\+hpp}. 
