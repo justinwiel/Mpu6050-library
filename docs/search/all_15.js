@@ -1,6 +1,0 @@
-var searchData=
-[
-  ['warning_0',['2. Warning',['../md__c_o_d_e___o_f___c_o_n_d_u_c_t.html#autotoc_md8',1,'']]],
-  ['with_20the_20mpu6050_20chip_20it_20does_20not_20include_20the_20i2c_20master_20capabilities_20or_20the_20auxilary_20bus_20of_20the_20mpu6050_1',['This library is meant to be used with the mpu6050 chip, it does not include the i2c master capabilities or the auxilary bus of the MPU6050',['../index.html#autotoc_md13',1,'']]],
-  ['writeregister_2',['writeRegister',['../class_m_p_u6050.html#a686764c17ce9999202a53e0a7f6ebcb7',1,'MPU6050']]]
-];
