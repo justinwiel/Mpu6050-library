@@ -37,8 +37,8 @@ struct RGB{
   uint8_t b;
 };
 
-constexpr gpio_num_t data = GPIO_NUM_32;
-constexpr gpio_num_t clock = GPIO_NUM_33;
+constexpr gpio_num_t data = GPIO_NUM_18;
+constexpr gpio_num_t clock = GPIO_NUM_19;
 
 void apa_102_send_start(gpio_num_t DI, gpio_num_t CI){
   gpio_set_level(DI, 0);
@@ -69,9 +69,6 @@ void apa_102_send_byte(uint8_t byte, gpio_num_t DI, gpio_num_t CI){
   ESP_LOGI(TAG, "byte: %d", byte);
   for(int i = 0; i < 8; i++){
     uint8_t bit = (byte >> (7-i)) & 1;
-    bool bitBool = (byte >> (7-i)) & 1;
-    ESP_LOGI(TAG, "bit: %d", bit);
-    ESP_LOGI(TAG, "bitBool: %d", bitBool);
     gpio_set_level(DI, bit);
     vTaskDelay(5 / portTICK_PERIOD_MS);
     gpio_set_level(CI, 1);
@@ -135,12 +132,12 @@ extern "C" void app_main(){
   i2c_driver_install(i2c_master_port, conf.mode, 0, 0, ESP_CPU_INTR_TYPE_NA);
   xyz acc;
   xyz gyro;
-  mpu.setup(0);
+  mpu.setup(MPU6050::sensitiviy::fullRange);
   while(1){
     mpu.getAccdata_scale(100,&acc);
     mpu.getGyrodata_scale(100,&gyro);
-    ESP_LOGI(TAG, "Accel: x: %d y: %d z: %d", acc.x, acc.y, acc.z);
-    ESP_LOGI(TAG, "Gyro: x: %d y: %d z: %d", gyro.x, gyro.y, gyro.z);
+    ESP_LOGI(TAG, "Accel: x: %i y: %i z: %i", acc.x, acc.y, acc.z);
+    ESP_LOGI(TAG, "Gyro: x: %i y: %i z: %i", gyro.x, gyro.y, gyro.z);
     vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
   ESP_LOGI(TAG, "Starting main");
