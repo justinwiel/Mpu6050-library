@@ -190,24 +190,24 @@ void MPU6050::getAccdata_scale(const int &desired_range, xyz *acc)
     uint8_t data[6];
     uint16_t range_local = getfs_range();
     readRegister(ACCEL_XOUT_H, data, 6);  // read acclerometer data registers
-    int16_t x = (data[0] << 8) | data[1]; // create 16 bit signed integers from your read 8 bit unsigned integers
+    int16_t x = (data[0] << 8) | data[1]; // create 16 bit signed integers from the read 8 bit unsigned integers
     int16_t y = (data[2] << 8) | data[3];
     int16_t z = (data[4] << 8) | data[5];
-    acc->x = (((data[0] << 8) | data[1]) / (range_local / desired_range)) % (desired_range + 1);
-    acc->y = (((data[2] << 8) | data[3]) / (range_local / desired_range)) % (desired_range + 1);
-    acc->z = (((data[4] << 8) | data[5]) / (range_local / desired_range)) % (desired_range + 1);
+    acc->x = (x/ (range_local / desired_range)) % (desired_range + 1);
+    acc->y = (y / (range_local / desired_range)) % (desired_range + 1);
+    acc->z = (z / (range_local / desired_range)) % (desired_range + 1);
 }
 void MPU6050::getGyrodata_scale(const int &desired_range, xyz *gyr)
 {
     uint8_t data[6];
     readRegister(GYRO_XOUT_H, data, 6); // read gyroscope data registers
     uint16_t range_local = getfs_range();
-    int16_t x = (data[0] << 8) | data[1]; // create 16 bit signed integers from your read 8 bit unsigned integers
+    int16_t x = (data[0] << 8) | data[1]; // create 16 bit signed integers from the read 8 bit unsigned integers
     int16_t y = (data[2] << 8) | data[3];
     int16_t z = (data[4] << 8) | data[5];
-    gyr->x = (((data[0] << 8) | data[1]) / (range_local / desired_range)) % (desired_range + 1);
-    gyr->y = (((data[2] << 8) | data[3]) / (range_local / desired_range)) % (desired_range + 1);
-    gyr->z = (((data[4] << 8) | data[5]) / (range_local / desired_range)) % (desired_range + 1);
+    gyr->x = (x/ (range_local / desired_range)) % (desired_range + 1);
+    gyr->y = (y / (range_local / desired_range)) % (desired_range + 1);
+    gyr->z = (z / (range_local / desired_range)) % (desired_range + 1);
 }
 
 int16_t MPU6050::getTempdata()
@@ -400,4 +400,39 @@ esp_err_t MPU6050::InitI2C()
 int16_t MPU6050::getfs_range()
 {
     return fs_range;
+}
+
+
+void MPU6050::start_gyro(){
+    if(accON){
+        writeRegister(PWR_MGMT_2,0x3F);
+    }else{
+        writeRegister(PWR_MGMT_2,0x7);
+    }
+}
+
+
+void MPU6050::stop_gyro(){
+    if(accON){
+        writeRegister(PWR_MGMT_2,0x38);
+    }else{
+        writeRegister(PWR_MGMT_2,0x00);
+    }
+}
+
+void MPU6050::start_acc(){
+    if(gyrOn){
+        writeRegister(PWR_MGMT_2,0x3F);
+    }else{
+        writeRegister(PWR_MGMT_2,0x38);
+    }
+}
+
+
+void MPU6050::stop_acc(){
+    if(gyrOn){
+        writeRegister(PWR_MGMT_2,0x7);
+    }else{
+        writeRegister(PWR_MGMT_2,0x00);
+    }
 }
