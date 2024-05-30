@@ -412,13 +412,25 @@ public:
     /// \details
     /// Sets the fifo reset flag in the user control register to 1, this flag returns to 0 after triggering the reset
     void fifo_reset();
-
+    /// @brief  
+    /// starts the accelerometer 
+    /// @details
+    /// starts the accelerometer, it's started by default, calling this function is only neccesary after calling stop before. 
     void start_acc();
-
+    /// @brief  
+    /// stops the accelerometer 
+    /// @details
+    /// stops the accelerometer
     void stop_acc();
-
+    /// @brief  
+    /// starts the gyroscope 
+    /// @details
+    /// starts the gyroscope, it's started by default, calling this function is only neccesary after calling stop before. 
     void start_gyro();
-
+    /// @brief  
+    /// stops the gyroscope 
+    /// @details
+    /// stops the gyroscope
     void stop_gyro();
 
     esp_err_t InitI2C();
