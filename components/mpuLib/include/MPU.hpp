@@ -270,6 +270,8 @@ private:
     bool A0;
     int16_t fs_range = 0;
     all_values fifo_read_test();
+    bool accON = true;
+    bool gyrOn = true;
 
 public:
     enum class sensitiviy
@@ -410,6 +412,14 @@ public:
     /// \details
     /// Sets the fifo reset flag in the user control register to 1, this flag returns to 0 after triggering the reset
     void fifo_reset();
+
+    void start_acc();
+
+    void stop_acc();
+
+    void start_gyro();
+
+    void stop_gyro();
 
     esp_err_t InitI2C();
 

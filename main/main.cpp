@@ -136,9 +136,9 @@ extern "C" void app_main(){
   while(1){
     mpu.getAccdata_scale(100,&acc);
     mpu.getGyrodata_scale(100,&gyro);
-    ESP_LOGI(TAG, "Accel: x: %d y: %d z: %d", acc.x, acc.y, acc.z);
-    ESP_LOGI(TAG, "Gyro: x: %d y: %d z: %d", gyro.x, gyro.y, gyro.z);
-    vTaskDelay(2000 / portTICK_PERIOD_MS);
+    ESP_LOGI(TAG, "Accel: x: %i y: %i z: %i", acc.x, acc.y, acc.z);
+    ESP_LOGI(TAG, "Gyro: x: %i y: %i z: %i", gyro.x, gyro.y, gyro.z);
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
   ESP_LOGI(TAG, "Starting main");
 }
