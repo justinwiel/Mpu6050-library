@@ -436,6 +436,8 @@ public:
     esp_err_t InitI2C();
 
     int16_t getfs_range();
+
+    void setA0(bool A0);
 };
 
 #endif

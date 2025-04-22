@@ -119,12 +119,12 @@ extern "C" void app_main(){
   i2c_port_t i2c_master_port = I2C_NUM_0;
   i2c_config_t conf;
   conf.mode = I2C_MODE_MASTER;
-  conf.sda_io_num = GPIO_NUM_21    ;    // select SDA GPIO specific to your project
+  conf.sda_io_num = GPIO_NUM_21    ;   
   conf.sda_pullup_en = GPIO_PULLUP_ENABLE;
-  conf.scl_io_num = GPIO_NUM_22;        // select SCL GPIO specific to your project
+  conf.scl_io_num = GPIO_NUM_22;      
   conf.scl_pullup_en = GPIO_PULLUP_ENABLE;
-  conf.master.clk_speed = 10000;  // select frequency specific to your project(Hz)
-  conf.clk_flags = I2C_SCLK_SRC_FLAG_FOR_NOMAL;                          // optional; you can use I2C_SCLK_SRC_FLAG_* flags to choose i2c source clock here
+  conf.master.clk_speed = 10000;  
+  conf.clk_flags = I2C_SCLK_SRC_FLAG_FOR_NOMAL;                          
 
   write_apa102(RGB{255,255,255});
 
@@ -132,10 +132,10 @@ extern "C" void app_main(){
   i2c_driver_install(i2c_master_port, conf.mode, 0, 0, ESP_CPU_INTR_TYPE_NA);
   xyz acc;
   xyz gyro;
-  mpu.setup(MPU6050::sensitiviy::fullRange);
+  mpu.setup(MPU6050::sensitiviy::low);
   while(1){
-    mpu.getAccdata_scale(100,&acc);
-    mpu.getGyrodata_scale(100,&gyro);
+    mpu.getAccdata_scale(10,&acc);
+    mpu.getGyrodata_scale(10,&gyro);
     ESP_LOGI(TAG, "Accel: x: %i y: %i z: %i", acc.x, acc.y, acc.z);
     ESP_LOGI(TAG, "Gyro: x: %i y: %i z: %i", gyro.x, gyro.y, gyro.z);
     vTaskDelay(1000 / portTICK_PERIOD_MS);

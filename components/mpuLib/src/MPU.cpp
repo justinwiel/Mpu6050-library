@@ -315,12 +315,12 @@ all_values MPU6050::getAlldata_raw()
 
 void MPU6050::interrupt_enable()
 {
-    writeRegister(INT_PIN_CFG, 0b11110000);
+    writeRegister(INT_PIN_CFG, 0b00100001);
     writeRegister(INT_ENABLE, 0b00010001); // all interrupts except i2c master enabled
 }
 void MPU6050::interrupt_disable()
 {
-    writeRegister(INT_PIN_CFG, 0b00000000);
+    writeRegister(INT_PIN_CFG, 0b00000001);
     writeRegister(INT_ENABLE, 0b0000000); // all interrupts disabled
 }
 
@@ -435,4 +435,9 @@ void MPU6050::stop_acc(){
     }else{
         writeRegister(PWR_MGMT_2,0x00);
     }
+}
+
+
+void MPU6050::setA0(bool A0){
+    MPU6050::A0 = A0;
 }
